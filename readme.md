@@ -1,5 +1,11 @@
 # MDG-SMS
-dan-arnaiz/MDG-SMS
-MDG-SMS
+
+<p>dan-arnaiz/MDG-SMS</p>
+
+
+
+<p>MDG-SMS</p>
+
 Scholarship Management System for the Center for Scholarships and Financial Assistance at Mapúa Malayan Colleges Mindanao
-dan-arnaiz
+
+<p>dan-arnaiz</p>
