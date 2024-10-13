@@ -2,17 +2,16 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 
 export default function AdminLayout() {
-
-    const {user, token} = useStateContext()
+    const { user, token } = useStateContext();
 
     if (!token) {
-        return <Navigate to="/login" />
+        return <Navigate to="/login" />;
     }
-    
-    return(
+
+    return (
         <div>
             Admin
-            <Outlet/>
+            <Outlet />
         </div>
-    )
+    );
 }

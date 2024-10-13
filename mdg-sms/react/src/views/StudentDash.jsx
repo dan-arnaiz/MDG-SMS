@@ -1,8 +1,3 @@
 export default function StudentDash() {
-    
-    return(
-        <div>
-            Hello Student!
-        </div>
-    )
+    return <div>Hello Student!</div>;
 }
