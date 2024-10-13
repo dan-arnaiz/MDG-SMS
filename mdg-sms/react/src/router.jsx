@@ -1,5 +1,5 @@
-import {createBrowserRouter} from "react-router-dom";
-import Login from "./views/login.jsx"
+import { createBrowserRouter } from "react-router-dom";
+import Login from "./views/Login.jsx"; // Ensure this path is correct
 import NotFound from "./views/NotFound.jsx";
 import AdminLayout from "./components/AdminLayout.jsx";
 import StudentLayout from "./components/StudentLayout.jsx";
@@ -7,7 +7,6 @@ import AdminDash from "./views/AdminDash.jsx";
 import StudentDash from "./views/StudentDash.jsx";
 
 const router = createBrowserRouter([
-
     {
         path: '/login',
         element: <Login />
@@ -17,27 +16,25 @@ const router = createBrowserRouter([
         element: <NotFound />
     },
     {
-        path: '/',
-        element:<AdminLayout/>,
+        path: '/admin',
+        element: <AdminLayout />,
         children: [
-
             {
-                path: '/adashboard',
+                path: 'dashboard',
                 element: <AdminDash />
             }
         ]
     },
     {
-        path: '/',
-        element:<StudentLayout/>,
+        path: '/student',
+        element: <StudentLayout />,
         children: [
-
             {
-                path: '/sdashboard',
+                path: 'dashboard',
                 element: <StudentDash />
             }
         ]
     }
-])
+]);
 
 export default router;

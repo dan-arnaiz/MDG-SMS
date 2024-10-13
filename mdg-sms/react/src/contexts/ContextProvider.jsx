@@ -1,40 +1,35 @@
 import { createContext, useContext, useState } from "react";
 
-
 const StateContext = createContext({
-
-    currentUser: null,
+    user: null, // Changed from currentUser to user for consistency
     token: null,
     setUser: () => {},
     setToken: () => {}
+});
 
-})
-
-export const ContextProvider = ({children}) => {
-    const [user,setUser] = useState({});
-    const [token,_setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
+export const ContextProvider = ({ children }) => {
+    const [user, setUser] = useState(null); // Changed initial state to null
+    const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
 
     const setToken = (token) => {
-        _setToken(token)
+        _setToken(token);
         if (token) {
             localStorage.setItem('ACCESS_TOKEN', token);
         } else {
             localStorage.removeItem('ACCESS_TOKEN');
         }
-    }
-    
+    };
+
     return (
-        <StateContext.Provider value ={{
+        <StateContext.Provider value={{
             user,
             token,
             setUser,
             setToken
-
         }}>
             {children}
         </StateContext.Provider>
-    
-    )
-}
+    );
+};
 
-export const useStateContext = () => useContext(StateContext)
+export const useStateContext = () => useContext(StateContext);

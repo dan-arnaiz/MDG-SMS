@@ -1,15 +1,40 @@
+import { createBrowserRouter } from "react-router-dom";
+import Login from "./views/Login.jsx";
+import NotFound from "./views/NotFound.jsx";
+import AdminLayout from "./components/AdminLayout.jsx";
+import StudentLayout from "./components/StudentLayout.jsx";
+import AdminDash from "./views/AdminDash.jsx";
+import StudentDash from "./views/StudentDash.jsx";
 
-import './App.css'
+const router = createBrowserRouter([
+    {
+        path: '/login',
+        element: <Login />
+    },
+    {
+        path: '*',
+        element: <NotFound />
+    },
+    {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+            {
+                path: 'dashboard',
+                element: <AdminDash />
+            }
+        ]
+    },
+    {
+        path: '/student',
+        element: <StudentLayout />,
+        children: [
+            {
+                path: 'dashboard',
+                element: <StudentDash />
+            }
+        ]
+    }
+]);
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div className="App">        
-      </div>
-    </>
-  )
-}
-
-export default App
+export default router;
