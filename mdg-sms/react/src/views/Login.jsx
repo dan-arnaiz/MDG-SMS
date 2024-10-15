@@ -48,23 +48,27 @@ export default function Login() {
     }
 
     return(
-        <div className="Login-Form">
-            <div className="form">
-                <form onSubmit={onSubmit}>
-                    <h1 className="Title">Login</h1>
-                    {errors && <div className="alert">
-                    
-                        {Object.kets(errors).map(ley => (
-                            <p key={key}>{errors[key][0]}</p>
-                        ))}
+        <main>
+            <div className="Login-Form">
+                <div className="loginform">
+                    <form onSubmit={onSubmit}>
+                        <h1 className="Title">Sign In</h1>
+                        <hr/>
+                        {errors && <div className="alert">
+                        
+                            {Object.kets(errors).map(ley => (
+                                <p key={key}>{errors[key][0]}</p>
+                            ))}
 
-                    </div>
-                    }
-                    <input ref={emailRef} type="email" placeholder="Email"/>
-                    <input ref={passwordRef} type="password" placeholder="Password"/>
-                    <button className="Btn">Login</button>
-                </form>
+                        </div>
+                        }
+                        <input ref={emailRef} type="email" placeholder="Email"/>
+                        <input ref={passwordRef} type="password" placeholder="Password"/>
+                        <button className="Btn">Sign in</button>
+                        <p>For new accounts or password resets, please contact the administrator</p>
+                    </form>
+                </div>
             </div>
-        </div>
+        </main>
     )
 }
