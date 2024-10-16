@@ -1,0 +1,82 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+.Login-Form{
+    display:flex;
+    justify-content:flex-end;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+.loginform{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 614px;
+    height: 741px;
+    border-radius: 45px;
+    margin: 0 5%;
+    background-color: white;
+}
+.loginform form{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    width: 300px;
+    height: 50%;
+}
+
+.loginform button{
+    width: 100%;
+    margin: 50px 0px 10px 0;
+    height: 40px;
+    border-radius: 11px;
+    border: 0px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    background-color: #0F2554;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.loginform hr{
+    height: 1px;
+    background-color: black;
+    border: none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    width: 100%;   
+}
+
+.loginform h1{
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 28px;
+
+}
+
+.loginform input{
+    width: 100%;
+    box-sizing: border-box;
+    margin: 5px 0;
+    font-size: 15px;
+    height: 40px;
+    border: 0.5px solid black;
+    border-radius: 13px;
+    padding: 0px 20px;
+}
+.loginform p{
+    font-size: 11px;
+    margin-top: 20px;
+    color: black;
+    opacity: 0.4;
+}
