@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "./views/Login.jsx";
 import NotFound from "./views/NotFound.jsx";
 import AdminLayout from "./components/AdminLayout.jsx";
@@ -12,13 +12,13 @@ const router = createBrowserRouter([
         element: <Login />
     },
     {
-        path: '*',
-        element: <NotFound />
-    },
-    {
-        path: '/admin',
+        path: '/',
         element: <AdminLayout />,
         children: [
+            {
+                path: '/',
+                element: <Navigate to="/admin/dashboard" />
+            },
             {
                 path: 'dashboard',
                 element: <AdminDash />
@@ -26,14 +26,22 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: '/student',
+        path: '/',
         element: <StudentLayout />,
         children: [
+            {
+                path: '/',
+                element: <Navigate to="/student/dashboard" />
+            },
             {
                 path: 'dashboard',
                 element: <StudentDash />
             }
         ]
+    },
+    {
+        path: '*',
+        element: <NotFound />
     }
 ]);
 

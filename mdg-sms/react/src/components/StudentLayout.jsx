@@ -3,10 +3,10 @@ import { useStateContext } from "../contexts/ContextProvider";
 
 export default function StudentLayout() {
 
-    const {user, token} = useStateContext()
+    const {token} = useStateContext()
 
     if(!token) {
-        return <Navigate to="/login"/>
+        return <Navigate to="/"/>
     }
     
     return(
