@@ -1,7 +1,7 @@
-import {Outlet, Navigate} from "react-router-dom";
+import { Outlet, Navigate, Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 
-export default function StudentLayout() {
+export default function AuthLayout() {
 
     const {token} = useStateContext();
     if (token) {
