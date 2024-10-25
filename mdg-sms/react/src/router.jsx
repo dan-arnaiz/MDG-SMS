@@ -8,33 +8,33 @@ import StudentDash from "./views/StudentDash.jsx";
 
 const router = createBrowserRouter([
     {
-        path: '/login',
-        element: <Login />
+        path: "/login",
+        element: <Login />,
     },
     {
-        path: '*',
-        element: <NotFound />
+        path: "*",
+        element: <NotFound />,
     },
     {
-        path: '/admin',
+        path: "/admin",
         element: <AdminLayout />,
         children: [
             {
-                path: 'dashboard',
-                element: <AdminDash />
-            }
-        ]
+                path: "dashboard",
+                element: <AdminDash />,
+            },
+        ],
     },
     {
-        path: '/student',
+        path: "/student",
         element: <StudentLayout />,
         children: [
             {
-                path: 'dashboard',
-                element: <StudentDash />
-            }
-        ]
-    }
+                path: "dashboard",
+                element: <StudentDash />,
+            },
+        ],
+    },
 ]);
 
 export default router;

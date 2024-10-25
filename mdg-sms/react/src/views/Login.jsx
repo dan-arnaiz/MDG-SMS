@@ -19,20 +19,21 @@ export default function Login() {
         };
 
         setErrors(null);
-        axiosClient.post('/login', payload)
+        axiosClient
+            .post("/login", payload)
             .then(({ data }) => {
                 setUser(data.user);
                 setToken(data.token);
-                navigate('/dashboard'); // Navigate to /dashboard on successful login
+                navigate("/dashboard"); // Navigate to /dashboard on successful login
             })
-            .catch(err => {
+            .catch((err) => {
                 const response = err.response;
                 if (response && response.status === 422) {
                     if (response.data.errors) {
                         setErrors(response.data.errors);
                     } else {
                         setErrors({
-                            email: [response.data.message]
+                            email: [response.data.message],
                         });
                     }
                 }
@@ -46,15 +47,28 @@ export default function Login() {
                     <form onSubmit={onSubmit}>
                         <h1 className="Title">Sign In</h1>
                         <hr />
-                        {errors && <div className="alert">
-                            {Object.keys(errors).map(key => (
-                                <p key={key}>{errors[key][0]}</p>
-                            ))}
-                        </div>}
-                        <input ref={emailRef} type="email" placeholder="Email" />
-                        <input ref={passwordRef} type="password" placeholder="Password" />
+                        {errors && (
+                            <div className="alert">
+                                {Object.keys(errors).map((key) => (
+                                    <p key={key}>{errors[key][0]}</p>
+                                ))}
+                            </div>
+                        )}
+                        <input
+                            ref={emailRef}
+                            type="email"
+                            placeholder="Email"
+                        />
+                        <input
+                            ref={passwordRef}
+                            type="password"
+                            placeholder="Password"
+                        />
                         <button className="Btn">Sign in</button>
-                        <p>For new accounts or password resets, please contact the administrator</p>
+                        <p>
+                            For new accounts or password resets, please contact
+                            the administrator
+                        </p>
                     </form>
                 </div>
             </div>
