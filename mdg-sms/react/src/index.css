@@ -5,26 +5,69 @@
     box-sizing: border-box;
 }
 
+/* KEYFRAMES */
+@keyframes fade-down{
+    0%{
+        opacity: 0;
+        transform: translateY(-40px) scale(1);
+    }
 
+    100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+    }
+}
+
+/* LOGIN */
+.login-background{
+    display: flex;
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+.login-background img{
+    height: 120%;
+    transform: translateX(-500px);
+}
 .Login-Form{
     display:flex;
-    justify-content:flex-end;
+    justify-content: flex-end;
     align-items: center;
+    gap: 100px;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    position: relative;
+    z-index: 2;
+}
+.login-logo{
+    display: flex;
+
+    height: 100vh;
+    width: 50vw;
+    justify-content: center;
+    align-items: center;
+}
+.login-logo img{
+    width: 50%;
+    
+
 }
 .loginform{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 614px;
-    height: 741px;
+    width: 550px;
+    height: 640px;
     border-radius: 45px;
     margin: 0 5%;
     background-color: white;
+    animation: fade-down 0.5s;
 }
 .loginform form{
     display: flex;
@@ -32,7 +75,8 @@
     text-align: center;
     align-items: center;
     width: 300px;
-    height: 50%;
+    height: 400px;
+
 }
 
 .loginform button{
@@ -52,8 +96,7 @@
     height: 1px;
     background-color: black;
     border: none;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin: 9px;
     width: 100%;   
 }
 
@@ -69,7 +112,7 @@
     box-sizing: border-box;
     margin: 5px 0;
     font-size: 15px;
-    height: 40px;
+    height: 50px;
     border: 0.5px solid black;
     border-radius: 13px;
     padding: 0px 20px;
@@ -79,4 +122,184 @@
     margin-top: 20px;
     color: black;
     opacity: 0.4;
+}
+
+.alert{
+    display: flex;
+    flex-direction: column;
+    background: rgb(236, 58, 58);
+    border-radius: 7px;
+    width: 100%;
+    padding: 0 10px 15px 20px;
+    margin: 5px;
+}
+
+.alert p{
+    color: white;
+    font-weight: 500;
+    text-align:left;
+    opacity: 100;
+}
+
+/* ADMINLAYOUT */
+
+.adminlayout-background{
+    background: #E8E8E8;
+}
+
+header{
+    display: flex;
+    background: white;
+    height: 80px;
+    box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.2);
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    padding: 0 40px 0 90px;
+}
+
+.Head-Toolbox{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+}
+
+.Head-Toolbox a{
+
+    color: #0F2554;
+    text-decoration: none;
+    background: #D9D9D9;
+    padding: 10px 20px;
+    border-radius: 10px;
+    letter-spacing: 1.5px;
+}
+
+.header-logo img{
+    height: 70px;  
+}
+
+.navbar {
+    background: #0F2554;
+    float: left;
+    width: 20%;
+    text-align: center;
+    padding: 50px 20px;
+    height:100vh;
+}
+
+.navbar ul{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.navbar li{
+    height: 9vh;
+    border-radius: 5px;
+}
+
+.active{
+    background: rgb(255, 255, 255, 0.21);
+    border-radius: 5px;
+}
+
+.navbar a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    height: 100%;
+    width: 100%;
+    letter-spacing: 1.5px;
+}
+.adminlayout-background main{
+    height: 100vh;
+    width: 100%;
+}
+
+/* STUDENTS */
+
+.students-main{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    height: 100vh;
+}
+.students-title{
+    background: white;
+    padding: 10px 40px;
+    border-radius: 15px;
+    box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.students-title h1{
+    font-size: 2rem;
+}
+
+.students-toolbar{
+    background: white;
+    padding: 10px 25px;
+    border-radius: 15px;
+    box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.students-searchbox input{
+    font-size: 1.5rem;
+    padding: 5px 10px 5px 50px;
+    border: 0.3px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+.students-searchbox div{
+    position: absolute;
+    transform: translateY(9px) translateX(18px);
+}
+
+.students-toolbar-btns{
+    display: flex;
+    gap: 10px;
+}
+
+.students-toolbar-btns button{
+    font-size: 1rem;
+    padding: 10px 30px;
+    border-radius: 8px;
+    border: none;
+    background-color: #D9D9D9;
+    letter-spacing: 1px;
+}
+
+.addstudent-btn{
+    background-color: #0F2554 !important;
+    color: white;
+}
+
+.students-search-tools{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    padding: 5px 20px;
+}
+
+.students-list-numdisplay{
+    display: flex;
+    gap: 10px;
+}
+
+.search-tools-btns{
+    display: flex;
+    gap: 5px;   
+}
+
+.search-tools-btns button{
+    padding: 10x;
+    font-size: 1rem;
+    width: 30px;
+    height: 30px;
 }

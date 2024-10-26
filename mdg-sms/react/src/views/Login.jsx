@@ -19,6 +19,7 @@ export default function Login() {
         };
 
         setErrors(null);
+
         axiosClient.post('/login', payload)
             .then(({ data }) => {
                 setUser(data.user);
@@ -27,21 +28,29 @@ export default function Login() {
             })
             .catch(err => {
                 const response = err.response;
+                console.log(response);
                 if (response && response.status === 422) {
                     if (response.data.errors) {
                         setErrors(response.data.errors);
-                    } else {
+                    } 
+                    else {
                         setErrors({
                             email: [response.data.message]
-                        });
+                        })
                     }
                 }
             });
     };
 
     return (
-        <main>
+        <main className="login-main">
+            <div className="login-background">
+                <img src="images/Logo-Final_noname_1.png" alt="Logo"/>
+            </div>
             <div className="Login-Form">
+                <div className="login-logo">
+                    <img src="images/Logo-Final-2.png" alt="Logo"/>
+                </div>
                 <div className="loginform">
                     <form onSubmit={onSubmit}>
                         <h1 className="Title">Sign In</h1>
