@@ -1,20 +1,28 @@
 import { Outlet, Navigate, NavLink } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as Icons from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import * as Icons from '@fortawesome/free-solid-svg-icons';
+import axiosClient from "../axios-client.js";
 
 export default function AdminLayout() {
 
-    const {user, token} = useStateContext()
+    const {user, token, setToken, setUser} = useStateContext();
 
-    // commented to see viewport live
-    // if (!token) {
-    //     return <Navigate to="/login" />
-    // }
+    if (!token) {
+        return <Navigate to="/login" />
+    }
 
     const onLogout = (ev) => {
         ev.preventDefault();
+
+
+        axiosClient.post('/logout')
+        .then(({data}) => {
+            setToken(null)
+            setUser(null);
+        })
         localStorage.removeItem("ACCESS_TOKEN");
+        localStorage.removeItem("USER");
         window.location.href = "/login";
     }
     
@@ -26,9 +34,12 @@ export default function AdminLayout() {
                     <img src="images/Logo-Final-2.png" alt="Logo"/>
                 </div>
                 <div className="Head-Toolbox">
-                    <NavLink to="">need help?</NavLink>
-                    <NavLink to="">Application</NavLink>
-                    <NavLink to="">Username</NavLink>             
+                    <NavLink to="">Need help?</NavLink>
+                    <NavLink to="">Applications</NavLink>
+                    <NavLink to="">{user && user.name}</NavLink> 
+                    <div>
+                        <a href="#" onClick={onLogout} className="btn-logout">Logout (for testing)</a>
+                    </div>   
                 </div>
             </header>
             <aside className="navbar">
