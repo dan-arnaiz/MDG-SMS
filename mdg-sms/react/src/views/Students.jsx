@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
+import axiosClient from "../axios-client.js";
 import {Link} from "react-router-dom"
 
 export default function Students() {
@@ -9,7 +10,7 @@ export default function Students() {
     const[loading,setLoading] = useState(false);
 
     useEffect(() => {
-
+        getStudents();
     }, [])
 
     const getStudents = () => {
