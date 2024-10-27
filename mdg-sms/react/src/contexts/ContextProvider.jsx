@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 
 const StateContext = createContext({
@@ -11,8 +11,12 @@ const StateContext = createContext({
 })
 
 export const ContextProvider = ({children}) => {
-    const [user,setUser] = useState({});
-    const [token,_setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('USER')));
+    const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
+
+    useEffect(() => {
+        localStorage.setItem('USER', JSON.stringify(user));
+    }, [user]);
 
     const setToken = (token) => {
         _setToken(token)

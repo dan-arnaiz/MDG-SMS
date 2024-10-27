@@ -18,73 +18,88 @@
     }
 }
 
+/* Ensure the html and body elements take up the full height of the viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 /* LOGIN */
-.login-background{
+.login-background {
     display: flex;
-    position:absolute;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     align-items: center;
+    justify-content: center; /* Center the background image */
+    overflow: hidden; /* Prevent scrollbars */
 }
-.login-background img{
-    height: 120%;
-    transform: translateX(-500px);
+
+.login-background img {
+    height: 100%; /* Adjust to fit within the viewport */
+    width: auto; /* Maintain aspect ratio */
+    transform: translateX(-50%); /* Center the image horizontally */
 }
-.Login-Form{
-    display:flex;
-    justify-content: flex-end;
+
+.Login-Form {
+    display: flex;
+    justify-content: center; /* Center the form horizontally */
     align-items: center;
-    gap: 100px;
+    gap: 20px; /* Adjust gap for better responsiveness */
     height: 100vh;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
     position: relative;
     z-index: 2;
+    overflow: hidden; /* Prevent scrollbars */
 }
-.login-logo{
-    display: flex;
 
+.login-logo {
+    display: flex;
     height: 100vh;
     width: 50vw;
     justify-content: center;
     align-items: center;
 }
-.login-logo img{
-    width: 50%;
-    
 
+.login-logo img {
+    width: 50%;
 }
-.loginform{
+
+.loginform {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 550px;
-    height: 640px;
-    border-radius: 45px;
-    margin: 0 5%;
+    width: 90%; /* Adjust width for better responsiveness */
+    max-width: 450px; /* Set a max-width */
+    height: auto; /* Adjust height for better responsiveness */
+    padding: 75px 5px; /* Add padding for better spacing */
+    border-radius: 30px;
     background-color: white;
     animation: fade-down 0.5s;
 }
-.loginform form{
+
+.loginform form {
     display: flex;
     flex-direction: column;
     text-align: center;
     align-items: center;
-    width: 300px;
-    height: 400px;
-
+    width: 100%; /* Adjust width for better responsiveness */
+    max-width: 300px; /* Set a max-width */
+    height: auto; /* Adjust height for better responsiveness */
 }
 
-.loginform button{
+.loginform button {
     width: 100%;
-    margin: 50px 0px 10px 0;
+    margin: 20px 0 10px 0; /* Adjust margin for better spacing */
     height: 40px;
-    border-radius: 11px;
-    border: 0px;
+    border-radius: 8px;
+    border: 0;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
     background-color: #0F2554;
     color: white;
@@ -92,39 +107,39 @@
     cursor: pointer;
 }
 
-.loginform hr{
+.loginform hr {
     height: 1px;
     background-color: black;
     border: none;
     margin: 9px;
-    width: 100%;   
+    width: 100%;
 }
 
-.loginform h1{
+.loginform h1 {
     text-align: center;
     margin-bottom: 0;
     font-size: 28px;
-
 }
 
-.loginform input{
+.loginform input {
     width: 100%;
     box-sizing: border-box;
     margin: 5px 0;
     font-size: 15px;
     height: 50px;
-    border: 0.5px solid black;
-    border-radius: 13px;
-    padding: 0px 20px;
+    border: 0.1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    padding: 0 20px;
 }
-.loginform p{
+
+.loginform p {
     font-size: 11px;
     margin-top: 20px;
     color: black;
     opacity: 0.4;
 }
 
-.alert{
+.alert {
     display: flex;
     flex-direction: column;
     background: rgb(236, 58, 58);
@@ -134,11 +149,43 @@
     margin: 5px;
 }
 
-.alert p{
+.alert p {
     color: white;
     font-weight: 500;
-    text-align:left;
+    text-align: left;
+    font-size: 15px;
     opacity: 100;
+}
+
+/* Responsive styles for login page */
+@media (max-width: 768px) {
+    .Login-Form {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .login-logo {
+        width: 100%;
+        height: auto;
+    }
+
+    .login-logo img {
+        width: 80%;
+    }
+
+    .loginform {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        margin: 0;
+    }
+
+    .loginform form {
+        width: 100%;
+    }
 }
 
 /* ADMINLAYOUT */
@@ -161,11 +208,9 @@ header{
     display: flex;
     gap: 10px;
     align-items: center;
-
 }
 
 .Head-Toolbox a{
-
     color: #0F2554;
     text-decoration: none;
     background: #D9D9D9;
@@ -375,8 +420,6 @@ header{
         font-size: 1rem;
     }
     .Head-Toolbox a{
-
         font-size: 0.8rem;
     }
 }
-
