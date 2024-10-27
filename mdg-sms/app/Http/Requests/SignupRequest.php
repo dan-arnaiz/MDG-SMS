@@ -23,14 +23,10 @@ class SignupRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)
-                    ->letters()
-                    ->symbols()
-            ]
+            'password' => 'required|string|confirmed',
+            Password::min(8)->letters()->mixedCase()->numbers()->symbols()
         ];
     }
 }
