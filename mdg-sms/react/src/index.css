@@ -150,7 +150,6 @@
 header{
     display: flex;
     background: white;
-    height: 80px;
     box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.2);
     justify-content: space-between;
     text-align: center;
@@ -374,6 +373,10 @@ header{
 
     .students-list th{
         font-size: 1rem;
+    }
+    .Head-Toolbox a{
+
+        font-size: 0.8rem;
     }
 }
 
