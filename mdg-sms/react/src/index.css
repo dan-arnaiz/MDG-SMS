@@ -184,7 +184,7 @@ header{
     float: left;
     width: 20%;
     text-align: center;
-    padding: 50px 20px;
+    padding: 20px 20px 0 20px;
     height:100vh;
 }
 
@@ -344,3 +344,36 @@ header{
     font-size: 1.3rem;
     padding: 5px 10px;
 }
+
+@media (max-width: 1536px) {
+
+    .students-title h1{
+        font-size: 1rem;
+    }
+
+    .students-toolbar-btns button{
+        font-size: 0.8rem;
+    }
+    
+    .addstudent-btn{
+        font-size: 0.8rem;
+    }
+
+    .students-search-tools{
+        font-size: 0.8rem;
+    }
+
+    .students-searchbox input{
+        font-size: 1rem;
+    }
+
+    .students-searchbox div{
+        position: absolute;
+        transform: translateY(5px) translateX(20px);
+    } 
+
+    .students-list th{
+        font-size: 1rem;
+    }
+}
+

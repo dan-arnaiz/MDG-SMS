@@ -9,23 +9,23 @@ export default function Students() {
     const[students,setStudents] = useState([]);
     const[loading,setLoading] = useState(false);
 
-    useEffect(() => {
-        getStudents();
-    }, [])
+    // useEffect(() => {
+    //     getStudents();
+    // }, [])
 
-    const getStudents = () => {
-        setLoading(true)
-        axiosClient.get('/students')
-            .then(({data}) => {
-                setLoading(false)
-                console.log(data);
-            })
+    // const getStudents = () => {
+    //     setLoading(true)
+    //     axiosClient.get('/students')
+    //         .then(({data}) => {
+    //             setLoading(false)
+    //             console.log(data);
+    //         })
 
-            .catch(() => {
-                setLoading(false)
-            })
+    //         .catch(() => {
+    //             setLoading(false)
+    //         })
 
-    }
+    // }
     
     return(
         <div>
