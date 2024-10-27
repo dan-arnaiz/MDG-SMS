@@ -190,11 +190,13 @@ html, body {
 
 /* ADMINLAYOUT */
 
-.adminlayout-background{
+.adminlayout-background {
     background: #E8E8E8;
+    height: 100vh;
+    
 }
 
-header{
+header {
     display: flex;
     background: white;
     box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.2);
@@ -202,15 +204,18 @@ header{
     text-align: center;
     align-items: center;
     padding: 0 40px 0 90px;
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure the header is above other content */
 }
 
-.Head-Toolbox{
+.Head-Toolbox {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.Head-Toolbox a{
+.Head-Toolbox a {
     color: #0F2554;
     text-decoration: none;
     background: #D9D9D9;
@@ -219,37 +224,44 @@ header{
     letter-spacing: 1.5px;
 }
 
-.header-logo img{
-    height: 70px;  
+.header-logo img {
+    height: 70px;
+    
 }
 
 .navbar {
     background: #0F2554;
-    float: left;
     width: 20%;
     text-align: center;
     padding: 20px 20px 0 20px;
-    height:100vh;
+    height: 100vh;
+    position: fixed; /* Fix the sidebar in place */
+    top: 0;
+    left: 0; /* Ensure the sidebar is anchored to the left */
+    z-index: 999; /* Ensure the sidebar is above other content */
+    overflow: hidden; /* Prevent scrollbars on the sidebar */
 }
 
-.navbar ul{
+.navbar ul {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding-top: 40%; /* Remove default padding */
+    margin: 0; /* Remove default margin */
 }
 
-.navbar li{
+.navbar li {
     height: 5vh;
     border-radius: 5px;
 }
 
-.active{
+.active {
     background: rgb(255, 255, 255, 0.21);
     border-radius: 5px;
 }
 
-.navbar a{
+.navbar a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -259,9 +271,32 @@ header{
     width: 100%;
     letter-spacing: 1.5px;
 }
-.adminlayout-background main{
+
+.adminlayout-background main {
     height: 100vh;
     width: 100%;
+    padding-left: 20%; /* Adjust padding for the sidebar */
+    overflow-y: auto; /* Allow scrolling within the main content area */
+}
+
+/* Responsive styles for admin layout */
+@media (max-width: 768px) {
+    .navbar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        z-index: 999; /* Ensure the sidebar is above other content but below the header */
+    }
+
+    .adminlayout-background {
+        flex-direction: column;
+        padding-left: 0; /* Remove left padding for smaller screens */
+    }
+
+    .adminlayout-content {
+        width: 100%;
+        padding: 10px;
+    }
 }
 
 /* STUDENTS */
@@ -421,5 +456,67 @@ header{
     }
     .Head-Toolbox a{
         font-size: 0.8rem;
+    }
+}
+
+
+/* Dashboard */
+
+.admin-dash {
+    padding: 20px;
+}
+
+.admin-dash h1 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: calc(25% - 20px); /* Adjust width to fit 4 cards in a row */
+    box-sizing: border-box;
+    transition: transform 0.2s;
+    height: 200px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.card p {
+    margin-bottom: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+    .card {
+        width: calc(33.33% - 20px); /* Adjust width to fit 3 cards in a row */
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: calc(50% - 20px); /* Adjust width to fit 2 cards in a row */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 100%; /* Adjust width to fit 1 card in a row */
     }
 }
