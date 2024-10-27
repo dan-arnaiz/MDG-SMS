@@ -1,13 +1,16 @@
-import { Outlet, Navigate, Link } from "react-router-dom";
+import { Outlet, Navigate, NavLink } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import * as Icons from '@fortawesome/free-solid-svg-icons'
 
 export default function AdminLayout() {
 
     const {user, token} = useStateContext()
 
-    if (!token) {
-        return <Navigate to="/login" />
-    }
+    // commented to see viewport live
+    // if (!token) {
+    //     return <Navigate to="/login" />
+    // }
 
     const onLogout = (ev) => {
         ev.preventDefault();
@@ -16,28 +19,31 @@ export default function AdminLayout() {
     }
     
     return(
-        <div>
-            <aside>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="/users">Users</Link>
-            </aside>
-            
-            <h1>Admin</h1>
 
-            <div className="content">
-            <header>
-            <div>
-                Header
-            </div>
-            <div>
-                {user.name}
-                <a href="#" onClick={onLogout} className="btn-logout">Logout</a>
-            </div>
+        <div className="adminlayout-background">
+            <header className="AdminLay-Header">
+                <div className="header-logo">
+                    <img src="images/Logo-Final-2.png" alt="Logo"/>
+                </div>
+                <div className="Head-Toolbox">
+                    <NavLink to="">need help?</NavLink>
+                    <NavLink to="">Application</NavLink>
+                    <NavLink to="">Username</NavLink>             
+                </div>
             </header>
-                <main>
-                    <Outlet />
-                </main>
-             </div>
-        </div>
+            <aside className="navbar">
+                <navbar>
+                    <ul>
+                        <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+                        <li><NavLink to="/student-list">Students</NavLink></li>
+                        <li><NavLink to="/scholarship-list">Scholarships</NavLink></li>
+                        <li><NavLink to="/reports">Reports</NavLink></li>
+                    </ul>
+                </navbar>
+            </aside>
+            <main>
+                <Outlet/>
+            </main>
+        </div>      
     )
 }

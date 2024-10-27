@@ -7,6 +7,9 @@ import Login from "./views/Login.jsx";
 import NotFound from "./views/NotFound.jsx";
 import AdminDash from "./views/AdminDash.jsx";
 import StudentDash from "./views/StudentDash.jsx";
+import Students from "./views/Students.jsx";
+import AdminScholarships from "./views/AdminScholarships.jsx";
+import AdminReports from "./views/AdminReports.jsx";
 
 const router = createBrowserRouter([
     {
@@ -20,7 +23,19 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard',
                 element: <AdminDash />
-            }
+            },
+            {
+                path: '/student-list',
+                element: <Students/>
+            },
+            {
+                path: '/scholarship-list',
+                element: <AdminScholarships />
+            },
+            {
+                path: '/reports',
+                element: <AdminReports/>
+            },
         ]
     },
     {
