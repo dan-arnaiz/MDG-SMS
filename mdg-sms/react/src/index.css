@@ -35,7 +35,6 @@ html, body {
     height: 100%;
     align-items: center;
     justify-content: center; /* Center the background image */
-    overflow: hidden; /* Prevent scrollbars */
 }
 
 .login-background img {
@@ -55,7 +54,6 @@ html, body {
     backdrop-filter: blur(20px);
     position: relative;
     z-index: 2;
-    overflow: hidden; /* Prevent scrollbars */
 }
 
 .login-logo {
