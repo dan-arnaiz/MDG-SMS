@@ -1,4 +1,4 @@
-export default function AdminDash() {
+const AdminDash = () => {
     return (
         <div className="admin-dash">
             <h1>Good Morning, Admin!!</h1>
@@ -38,4 +38,6 @@ export default function AdminDash() {
             </div>
         </div>
     );
-}
+};
+
+export default AdminDash;

@@ -1,15 +1,23 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+
+// admin imports //
 import AdminLayout from "./components/AdminLayout.jsx";
+import AdminDash from "./views/AdminDash.jsx";
+import Students from "./views/AdminStudents.jsx";
+import AdminScholarships from "./views/AdminScholarships.jsx";
+import AdminReports from "./views/AdminReports.jsx";
+
+// student imports //
 import StudentLayout from "./components/StudentLayout.jsx";
+import StudentProfile from "./views/StudentProfile.jsx";
+
+// auth imports //
 import AuthLayout from "./components/AuthLayout.jsx";
 import Signup from "./views/Signup.jsx"; // Import the Signup component::Just for Overriding
 import Login from "./views/Login.jsx";
+
 import NotFound from "./views/NotFound.jsx";
-import AdminDash from "./views/AdminDash.jsx";
 import StudentDash from "./views/StudentDash.jsx";
-import Students from "./views/Students.jsx";
-import AdminScholarships from "./views/AdminScholarships.jsx";
-import AdminReports from "./views/AdminReports.jsx";
 
 const router = createBrowserRouter([
     {
@@ -25,7 +33,7 @@ const router = createBrowserRouter([
                 element: <AdminDash />
             },
             {
-                path: '/student-list',
+                path: '/students',
                 element: <Students/>
             },
             {
@@ -35,6 +43,10 @@ const router = createBrowserRouter([
             {
                 path: '/reports',
                 element: <AdminReports/>
+            },
+            {
+                path: '/student/profile/:studentId',
+                element: <StudentProfile />
             },
         ]
     },

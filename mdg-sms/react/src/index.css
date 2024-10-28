@@ -297,166 +297,88 @@ header {
     }
 }
 
-/* STUDENTS */
-
-.students-main{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.students-main {
     padding: 20px;
-    height: 100vh;
-}
-.students-title{
-    background: white;
-    padding: 10px 40px;
-    border-radius: 15px;
-    box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-.students-title h1{
-    font-size: 2rem;
+.students-title h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.students-toolbar{
-    background: white;
-    padding: 10px 25px;
-    border-radius: 15px;
-    box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
+.students-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 }
 
-.students-searchbox input{
-    font-size: 1.5rem;
-    padding: 5px 10px 5px 50px;
-    border: 0.3px solid rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-}
-.students-searchbox div{
-    position: absolute;
-    transform: translateY(9px) translateX(18px);
-}
-
-.students-toolbar-btns{
+.students-searchbox {
     display: flex;
-    gap: 10px;
+    align-items: center;
 }
 
-.students-toolbar-btns button{
-    font-size: 1rem;
-    padding: 10px 30px;
-    border-radius: 8px;
-    border: none;
-    background-color: #D9D9D9;
-    letter-spacing: 1px;
-    cursor: pointer;
+.students-searchbox input {
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
-.addstudent-btn{
-    font-size: 1rem;
-    padding: 10px 30px;
-    border-radius: 8px;
+.students-toolbar-btns button,
+.addstudent-btn {
+    margin-left: 10px;
+    padding: 10px 20px;
     border: none;
-    letter-spacing: 1px;
-    cursor: pointer;
-    background-color: #0F2554 !important;
+    border-radius: 5px;
+    background-color: #0F2554;
     color: white;
-    text-decoration: none;
+    cursor: pointer;
 }
 
-.students-search-tools{
+.students-list {
+    margin-bottom: 20px;
+}
+
+.students-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.students-list th,
+.students-list td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.students-search-tools {
     display: flex;
     justify-content: space-between;
-    font-size: 1rem;
-    padding: 5px 20px;
     align-items: center;
 }
 
-.students-search-tools p{
-    color: #8F8F8F;
-}
-
-.students-list-numdisplay{
+.students-list-numdisplay {
     display: flex;
-    gap: 10px;
     align-items: center;
 }
 
-.students-list-numdisplay select{
-    font-size: 1rem;
-    height: 30px;
-}
-
-.search-tools-btns{
-    display: flex;
-    gap: 5px;   
-}
-
-.search-tools-btns button{
-    padding: 10x;
-    font-size: 1rem;
-    width: 30px;
-    height: 30px;
-}
-
-.students-list{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-}
-
-.students-list table{
-    width: 100%;
-}
-
-.students-list thead{
-    display: flex;
-    background: #D9D9D9;
+.students-list-numdisplay select {
+    margin-left: 10px;
+    padding: 5px;
     border-radius: 5px;
+    border: 1px solid #ccc;
 }
-.students-list th{
-    font-size: 1.3rem;
+
+.search-tools-btns button {
+    margin-left: 5px;
     padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0F2554;
+    color: white;
+    cursor: pointer;
 }
-
-@media (max-width: 1536px) {
-
-    .students-title h1{
-        font-size: 1rem;
-    }
-
-    .students-toolbar-btns button{
-        font-size: 0.8rem;
-    }
-    
-    .addstudent-btn{
-        font-size: 0.8rem;
-    }
-
-    .students-search-tools{
-        font-size: 0.8rem;
-    }
-
-    .students-searchbox input{
-        font-size: 1rem;
-    }
-
-    .students-searchbox div{
-        position: absolute;
-        transform: translateY(5px) translateX(20px);
-    } 
-
-    .students-list th{
-        font-size: 1rem;
-    }
-    .Head-Toolbox a{
-        font-size: 0.8rem;
-    }
-}
-
 
 /* Dashboard */
 
@@ -486,6 +408,66 @@ header {
     box-sizing: border-box;
     transition: transform 0.2s;
     height: 200px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.card p {
+    margin-bottom: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+    .card {
+        width: calc(33.33% - 20px); /* Adjust width to fit 3 cards in a row */
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: calc(50% - 20px); /* Adjust width to fit 2 cards in a row */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 100%; /* Adjust width to fit 1 card in a row */
+    }
+}
+
+
+/* STUDENT PROFILE */
+
+.student-profile {
+    padding: 20px;
+}
+
+.student-profile h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: calc(25% - 20px); /* Adjust width to fit 4 cards in a row */
+    box-sizing: border-box;
+    transition: transform 0.2s;
 }
 
 .card:hover {
