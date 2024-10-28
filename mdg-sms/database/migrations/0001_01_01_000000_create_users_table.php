@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->foreignId('scholarship_status_id')->constrained('scholarship_statuses')->onDelete('set null');
+            $table->foreignId('role_id')->constrained('roles')->onDelete('set null');
             $table->timestamps();
         });
 
@@ -35,6 +37,21 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('scholarship_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->char('name',8);
+            $table->text('description');
+            $table->timestamps();
+        });
+
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('title',50);
+            $table->text('description');
+            $table->timestamps();
+        });
+        
     }
 
     /**
@@ -45,5 +62,7 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('scholarship_statuses');
+        Schema::dropIfExists('roles');
     }
 };
