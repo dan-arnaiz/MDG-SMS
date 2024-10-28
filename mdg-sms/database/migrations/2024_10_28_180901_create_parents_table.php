@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parents', function (Blueprint $table) {
+        Schema::create('guardians', function (Blueprint $table) {
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->string('occupation', 100);
@@ -44,7 +44,7 @@ return new class extends Migration
         });
 
         Schema::create('students', function (Blueprint $table) {
-            $table->id();
+            $table->string('id',10)->primary();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->foreignId('prev_school_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
@@ -52,16 +52,18 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('parent_relations', function (Blueprint $table) {
+        Schema::create('guardian_relations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->string('student_id',10);
+            $table->foreignId('guardian_id')->constrained()->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->timestamps();
         });
         Schema::create('sibling_relations', function (Blueprint $table) {
             $table->id();
+            $table->string('student_id',10);
             $table->foreignId('sibling_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -73,7 +75,7 @@ return new class extends Migration
         });
 
         Schema::create('employees', function (Blueprint $table) {
-            $table->id();
+            $table->string('id',10)->primary();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->foreignId('job_title_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
@@ -86,7 +88,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('parents');
+        Schema::dropIfExists('guardians');
         Schema::dropIfExists('prev_schools');
         Schema::dropIfExists('siblings');
         Schema::dropIfExists('programs');

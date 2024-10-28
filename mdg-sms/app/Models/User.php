@@ -24,6 +24,26 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function scholarshipStatus()
+    {
+        return $this->belongsTo(Scholarship_status::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

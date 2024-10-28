@@ -56,9 +56,11 @@ return new class extends Migration
         });
    
         Schema::create('applications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->foreignId('employee_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('id',10)->primary;
+            $table->string('student_id',10);
+            $table->string('employee_id',10)->nullable();
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->nullOnDelete();
             $table->foreignId('scholarship_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('term_id')->nullable()->constrained()->nullOnDelete();
             $table->datetime('date_filed');
