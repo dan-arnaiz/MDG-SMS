@@ -24,7 +24,7 @@ return new class extends Migration
 
         Schema::create('contact_nums', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained('persons')->onDelete('cascade');
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->char('title',20);
             $table->char('nums',11);  
             $table->timestamps();
@@ -42,8 +42,8 @@ return new class extends Migration
 
         Schema::create('address_person', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained('persons')->onDelete('cascade');
-            $table->foreignId('address_id')->constrained('addresses')->onDelete('cascade');
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
+            $table->foreignId('address_id')->constrained()->onDelete('cascade');
             $table->string('type', 20);
             $table->string('house_num', 10)->nullable();
             $table->timestamps();

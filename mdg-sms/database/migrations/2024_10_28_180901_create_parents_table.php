@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('parents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained('persons')->onDelete('cascade');
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->string('occupation', 100);
             $table->timestamps();
         });
 
         Schema::create('prev_schools', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('address_id')->constrained('addreses')->onDelete('set null');
+            $table->foreignId('address_id')->constrained()->onDelete('set null');
             $table->char('landline', 15);
             $table->string('name', 150);           
             $table->string('email', 100);           
@@ -29,8 +29,8 @@ return new class extends Migration
 
         Schema::create('siblings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained('persons')->onDelete('cascade');
-            $table->foreignId('prev_school_id')->constrained('prev_schools')->onDelete('set null');
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
+            $table->foreignId('prev_school_id')->constrained()->onDelete('set null');
             $table->unsignedTinyInteger('age')->nullable();
             $table->string('edu_attain', 100)->nullable();
             $table->timestamps();
@@ -45,23 +45,23 @@ return new class extends Migration
 
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained('persons')->onDelete('cascade');
-            $table->foreignId('prev_school_id')->constrained('prev_schools')->onDelete('set null');
-            $table->foreignId('user_id')->constrained('users')->onDelete('set null');
-            $table->foreignId('program_id')->constrained('programs')->onDelete('set null');
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
+            $table->foreignId('prev_school_id')->constrained()->onDelete('set null');
+            $table->foreignId('user_id')->constrained()->onDelete('set null');
+            $table->foreignId('program_id')->constrained()->onDelete('set null');
             $table->timestamps();
         });
 
         Schema::create('parent_relations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->constrained('parents')->onDelete('cascade');
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->foreignId('parent_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
         Schema::create('sibling_relations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sibling_id')->constrained('siblings')->onDelete('cascade');
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->foreignId('sibling_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -74,9 +74,9 @@ return new class extends Migration
 
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained('persons')->onDelete('cascade');
-            $table->foreignId('job_title_id')->constrained('job_titles')->onDelete('set null');
-            $table->foreignId('user_id')->constrained('users')->onDelete('set null');
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
+            $table->foreignId('job_title_id')->constrained()->onDelete('set null');
+            $table->foreignId('user_id')->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

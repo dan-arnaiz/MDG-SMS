@@ -18,8 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->foreignId('scholarship_status_id')->constrained('scholarship_statuses')->onDelete('set null');
-            $table->foreignId('role_id')->constrained('roles')->onDelete('set null');
+            $table->foreignId('scholarship_status_id')->constrained()->onDelete('set null');
+            $table->foreignId('role_id')->constrained()->onDelete('set null');
             $table->timestamps();
         });
 

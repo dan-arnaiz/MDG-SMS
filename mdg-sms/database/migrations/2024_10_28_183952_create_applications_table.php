@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('set null');
-            $table->foreignId('scholarship_id')->constrained('scholarships')->onDelete('set null');
-            $table->foreignId('term_id')->constrained('terms')->onDelete('set null');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('employee_id')->constrained()->onDelete('set null');
+            $table->foreignId('scholarship_id')->constrained()->onDelete('set null');
+            $table->foreignId('term_id')->constrained()->onDelete('set null');
             $table->datetime('date_filed');
             $table->datetime('date_terminated');
             $table->boolean('current');
@@ -42,8 +42,8 @@ return new class extends Migration
 
         Schema::create('file_reqs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->constrained('scholarships')->onDelete('cascade');
-            $table->foreignId('file_id')->constrained('files')->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -62,8 +62,8 @@ return new class extends Migration
 
         Schema::create('terms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('academic_year_id')->constrained('academic_years')->onDelete('cascade');
-            $table->foreignId('semester_id')->constrained('semesters')->onDelete('cascade');
+            $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
+            $table->foreignId('semester_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
    
