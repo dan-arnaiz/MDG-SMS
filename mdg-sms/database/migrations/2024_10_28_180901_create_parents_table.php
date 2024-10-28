@@ -20,7 +20,7 @@ return new class extends Migration
 
         Schema::create('prev_schools', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('address_id')->constrained()->onDelete('set null');
+            $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
             $table->char('landline', 15);
             $table->string('name', 150);           
             $table->string('email', 100);           
@@ -30,7 +30,7 @@ return new class extends Migration
         Schema::create('siblings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
-            $table->foreignId('prev_school_id')->constrained()->onDelete('set null');
+            $table->foreignId('prev_school_id')->nullable()->constrained()->nullOnDelete();
             $table->unsignedTinyInteger('age')->nullable();
             $table->string('edu_attain', 100)->nullable();
             $table->timestamps();
@@ -46,9 +46,9 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
-            $table->foreignId('prev_school_id')->constrained()->onDelete('set null');
-            $table->foreignId('user_id')->constrained()->onDelete('set null');
-            $table->foreignId('program_id')->constrained()->onDelete('set null');
+            $table->foreignId('prev_school_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('program_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
 
@@ -75,8 +75,8 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
-            $table->foreignId('job_title_id')->constrained()->onDelete('set null');
-            $table->foreignId('user_id')->constrained()->onDelete('set null');
+            $table->foreignId('job_title_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

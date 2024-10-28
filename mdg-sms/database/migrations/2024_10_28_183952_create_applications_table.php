@@ -11,18 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained()->onDelete('set null');
-            $table->foreignId('scholarship_id')->constrained()->onDelete('set null');
-            $table->foreignId('term_id')->constrained()->onDelete('set null');
-            $table->datetime('date_filed');
-            $table->datetime('date_terminated');
-            $table->boolean('current');
-            $table->timestamps();
-        });
-
         Schema::create('scholarships', function (Blueprint $table) {
             $table->id();
             $table->string('name',150);
@@ -30,20 +18,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('max_slots');
             $table->unsignedSmallInteger('taken_slots');
             $table->boolean('is_full');
-            $table->timestamps();
-        });
-
-        Schema::create('files', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',150);
-            $table->text('description');
-            $table->timestamps();
-        });
-
-        Schema::create('file_reqs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -66,7 +40,33 @@ return new class extends Migration
             $table->foreignId('semester_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
+
+        Schema::create('files', function (Blueprint $table) {
+            $table->id();
+            $table->string('name',150);
+            $table->text('description');
+            $table->timestamps();
+        });
+
+        Schema::create('file_reqs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('file_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
    
+        Schema::create('applications', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('scholarship_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('term_id')->nullable()->constrained()->nullOnDelete();
+            $table->datetime('date_filed');
+            $table->datetime('date_terminated');
+            $table->boolean('current');
+            $table->timestamps();
+        });
+
     }
 
     /**

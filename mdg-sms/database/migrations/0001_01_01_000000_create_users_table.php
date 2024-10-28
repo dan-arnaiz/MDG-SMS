@@ -11,6 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('scholarship_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->char('name',8);
+            $table->text('description');
+            $table->timestamps();
+        });
+
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('title',50);
+            $table->text('description');
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -18,8 +32,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->foreignId('scholarship_status_id')->constrained()->onDelete('set null');
-            $table->foreignId('role_id')->constrained()->onDelete('set null');
+            $table->foreignId('scholarship_status_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('role_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
 
@@ -36,20 +50,6 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
-        });
-
-        Schema::create('scholarship_statuses', function (Blueprint $table) {
-            $table->id();
-            $table->char('name',8);
-            $table->text('description');
-            $table->timestamps();
-        });
-
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('title',50);
-            $table->text('description');
-            $table->timestamps();
         });
         
     }
