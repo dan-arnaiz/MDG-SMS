@@ -78,23 +78,25 @@ export default function Students() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredStudents.map(s => (
-                                    <tr key={s.id}>
-                                        <td>
-                                            <img src={`storage/${students.picture}`} alt={`${s.last_name} ${s.first_name}`} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
-                                        </td>
-                                        <td>{`${s.last_name}, ${s.first_name} ${s.suffix ? s.suffix + ' ' : ''}(${s.middle_name})`}</td>
-                                        <td>{s.studentId}</td>
-                                        <td>{s.scholarship}</td>
-                                        <td>{s.emailaddress}</td>
-                                        <td>{s.program}</td>
-                                        <td>{s.status}</td>
-                                        <td>
-                                            <button onClick={() => openModal(s)}>Edit</button>
-                                            <button onClick={() => deleteStudent(s.id)}>Delete</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filteredStudents.map(s => {
+                                    return (
+                                        <tr key={s.id}>
+                                            <td>
+                                                <img src={s.picture ? `/storage/${s.picture.replace(/\\/g, '/')}` : '/storage/pictures/default-profile-placeholder.png'} alt={`${s.last_name} ${s.first_name}`} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
+                                            </td>
+                                            <td>{`${s.last_name}, ${s.first_name} ${s.suffix ? s.suffix + ' ' : ''}(${s.middle_name})`}</td>
+                                            <td>{s.studentId}</td>
+                                            <td>{s.scholarship}</td>
+                                            <td>{s.emailaddress}</td>
+                                            <td>{s.program}</td>
+                                            <td>{s.status}</td>
+                                            <td>
+                                                <button onClick={() => openModal(s)}>Edit</button>
+                                                <button onClick={() => deleteStudent(s.id)}>Delete</button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     )}

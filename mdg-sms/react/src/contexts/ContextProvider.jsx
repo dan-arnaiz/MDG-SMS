@@ -37,8 +37,13 @@ export const ContextProvider = ({ children }) => {
         setLoading(true);
         axiosClient.get('/students')
             .then(({ data }) => {
+                // Ensure the picture path is correctly formatted
+                const formattedData = data.map(student => ({
+                    ...student,
+                    picture: student.picture ? student.picture.replace(/\\/g, '/') : 'pictures/default-profile-placeholder.png'
+                }));
                 setLoading(false);
-                setStudents(data);
+                setStudents(formattedData);
             })
             .catch((error) => {
                 setLoading(false);
@@ -49,6 +54,8 @@ export const ContextProvider = ({ children }) => {
     const addStudent = (student) => {
         axiosClient.post('/students', student)
             .then(({ data }) => {
+                // Ensure the picture path is correctly formatted
+                data.picture = data.picture ? data.picture.replace(/\\/g, '/') : 'pictures/default-profile-placeholder.png';
                 setStudents(prevStudents => [...prevStudents, data]);
             })
             .catch(error => {
@@ -59,6 +66,8 @@ export const ContextProvider = ({ children }) => {
     const updateStudent = (id, updatedStudent) => {
         axiosClient.put(`/students/${id}`, updatedStudent)
             .then(({ data }) => {
+                // Ensure the picture path is correctly formatted
+                data.picture = data.picture ? data.picture.replace(/\\/g, '/') : 'pictures/default-profile-placeholder.png';
                 setStudents(prevStudents => prevStudents.map(student => student.id === id ? data : student));
             })
             .catch(error => {

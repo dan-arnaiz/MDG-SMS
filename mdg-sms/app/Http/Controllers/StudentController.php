@@ -37,7 +37,7 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         Log::info('Request Data:', $request->all());
-
+    
         $validatedData = $request->validate([
             'last_name' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
@@ -50,17 +50,19 @@ class StudentController extends Controller
             'status' => 'required|string|max:255',
             'picture' => 'nullable|image|max:2048',
         ]);
-
+    
         Log::info('Validated Data:', $validatedData);
-
+    
         if ($request->hasFile('picture')) {
-            $validatedData['picture'] = $request->file('picture')->storeAs('pictures', $request->file('picture')->getClientOriginalName(), 'public');
+            $file = $request->file('picture');
+            $filename = $validatedData['last_name'] . '_' . $validatedData['first_name'] . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $validatedData['picture'] = $file->storeAs('pictures', $filename, 'public');
         } else {
             $validatedData['picture'] = 'pictures/default-profile-placeholder.png';
         }
-
+    
         $student = Student::create($validatedData);
-
+    
         return response()->json($student, 201);
     }
 

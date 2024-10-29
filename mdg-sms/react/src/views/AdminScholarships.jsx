@@ -25,44 +25,170 @@ export default function AdminScholarships() {
                 <div>
                     <div className="cards-container-scholarships">
                     <div className="card-scholarships">
-                            <h2>Scholarship 1</h2>
-                            <p>Description of Scholarship 1.</p>
+                            <h2>E.T. Yuchengco Institutional Scholarship</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">16</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">37</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">10</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 2</h2>
-                            <p>Description of Scholarship 2.</p>
+                            <h2>Academic Excellence Award Scholarship</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">36</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">15</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">2</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 3</h2>
-                            <p>Description of Scholarship 3.</p>
+                            <h2>Academic Honoree Scholarship</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">40</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">5</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">0</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 4</h2>
-                            <p>Description of Scholarship 4.</p>
+                            <h2>YGC & Ayala Promotional Discount</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">21</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">11</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">9</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 5</h2>
-                            <p>Description of Scholarship 5.</p>
+                            <h2>Mapua MCM Cup</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">5</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">2</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">10</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 6</h2>
-                            <p>Description of Scholarship 6.</p>
+                            <h2>President's List</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">27</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">11</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">8</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 7</h2>
-                            <p>Description of Scholarship 7.</p>
+                            <h2>Academic Achiever Incentives</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">8</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">12</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">21</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 8</h2>
-                            <p>Description of Scholarship 8.</p>
+                            <h2>Sibling Discount</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">29</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">17</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">19</p>
+                                    <p className="label">Available</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="card-scholarships">
-                            <h2>Scholarship 9</h2>
-                            <p>Description of Scholarship 9.</p>
-                        </div>
+                            <h2>Jose Rizal Scholarship</h2>
+                            <hr />
+                            <div className="card-stats">
+                                <div>
+                                    <p className="number">16</p>
+                                    <p className="label">Active</p>
+                                </div>
+                                <div>
+                                    <p className="number">37</p>
+                                    <p className="label">Inactive</p>
+                                </div>
+                                <div>
+                                    <p className="number">10</p>
+                                    <p className="label">Available</p>
+                                </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    </div>
+    </div>
+    );
 }
