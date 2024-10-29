@@ -43,6 +43,10 @@ export default function AddStudent() {
         });
     };
 
+    React.useEffect(() => {
+        showTab(currentTab);
+    }, [currentTab]);
+
     return(
         <div>
             <form id="regForm" action="">
@@ -114,7 +118,58 @@ export default function AddStudent() {
                     </div>
                 </div>
                 <div className="tab">
-
+                    <div className='personal-info'>
+                        <div className='address-header'>
+                            <h1>PERMANENT ADDRESS</h1>
+                            <button>Use an Existing Address</button>
+                        </div>
+                        <p>House/Block/Unit No.</p>
+                        <input type='text'></input>
+                        <p>Street Name</p>
+                        <input type='text'></input>
+                        <div className="address-select">
+                            <div>
+                                <p>Barangay</p>
+                                <select></select>
+                            </div>
+                            <div>
+                                <p>Province</p>
+                                <select></select>
+                            </div>
+                            <div>
+                                <p>City/Municipality</p>
+                                <select></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='personal-info'>
+                        <div className='address-header'>
+                            <h1>MAILING ADDRESS</h1>
+                            <div>
+                                <input type="checkbox"/> 
+                                <p>Use permanent address as mailing address</p>
+                            </div>
+                        </div>
+                        <p>House/Block/Unit No.</p>
+                        <input type='text'></input>
+                        <p>Street Name</p>
+                        <input type='text'></input>
+                        <div className="address-select">
+                            <div>
+                                <p>Barangay</p>
+                                <select></select>
+                            </div>
+                            <div>
+                                <p>Province</p>
+                                <select></select>
+                            </div>
+                            <div>
+                                <p>City/Municipality</p>
+                                <select></select>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div className="tab">
 

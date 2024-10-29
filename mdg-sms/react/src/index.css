@@ -720,9 +720,10 @@ header {
 }
 
 .tab{
-    display: flex;
+    display: none;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
+    width: 70%;
 }
 
 .personal-info select{
@@ -734,6 +735,7 @@ header {
     flex-direction: column;
     background: white;
     padding: 2rem;
+    gap: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -860,6 +862,35 @@ header {
     align-items: center;
     padding: 1rem;
 }
+
+.address-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.address-header div{
+    display: flex;
+    justify-content: flex-start ; 
+    gap: 1px;
+    width: 5rem;
+}
+.address-header div p{
+    font-size: 0.6rem !important;
+}
+.address-header div input{
+    margin: 0;
+    padding: 0;
+}
+.address-select{
+    display: flex;
+    gap: 10px;
+}
+.address-select select{
+    width: 100%;
+}
+
 
 
 
