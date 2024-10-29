@@ -44,7 +44,7 @@ export default function Students() {
                         <button>Filter</button>
                         <button>Import</button>
                         <button>Export</button>
-                        <Link className='addstudent-btn' to="">Add Student</Link>
+                        <Link className='addstudent-btn' to="/add-student">Add Student</Link>
                     </div>                          
                 </div>
                 <div className="students-list">
