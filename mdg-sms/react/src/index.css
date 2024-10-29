@@ -247,6 +247,8 @@ header {
 .navbar li {
     height: 5vh;
     border-radius: 5px;
+    font-size: 15px;
+    transition: background 0.3s;
 }
 
 .active {
@@ -291,6 +293,10 @@ header {
         width: 100%;
         padding: 10px;
     }
+
+    .navbar li {
+        font-size: 15px;
+    }
 }
 
 /* STUDENTS */
@@ -311,7 +317,7 @@ header {
 }
 
 .students-title h1 {
-    font-size: 2rem;
+    font-size: 24px;
 }
 
 .students-toolbar {
@@ -329,15 +335,15 @@ header {
 }
 
 .students-searchbox input {
-    font-size: 1.5rem;
-    padding: 5px 10px 5px 50px;
+    font-size: 1rem;
+    padding: 5px 10px 5px 40px;
     border: 0.3px solid rgba(0, 0, 0, 0.5);
     border-radius: 5px;
 }
 
 .students-searchbox div {
     position: absolute;
-    transform: translateY(9px) translateX(18px);
+    transform: translateY(7px) translateX(10px);
 }
 
 .students-toolbar-btns {
@@ -346,8 +352,8 @@ header {
 }
 
 .students-toolbar-btns button {
-    font-size: 1rem;
-    padding: 10px 30px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border-radius: 8px;
     border: none;
     background-color: #D9D9D9;
@@ -356,8 +362,8 @@ header {
 }
 
 .addstudent-btn {
-    font-size: 1rem;
-    padding: 10px 30px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border-radius: 8px;
     border: none;
     letter-spacing: 1px;
@@ -370,7 +376,7 @@ header {
 .students-search-tools {
     display: flex;
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: 0.8rem;
     padding: 5px 20px;
     align-items: center;
 }
@@ -386,7 +392,7 @@ header {
 }
 
 .students-list-numdisplay select {
-    font-size: 1rem;
+    font-size: 0.8rem;
     height: 30px;
 }
 
@@ -396,8 +402,8 @@ header {
 }
 
 .search-tools-btns button {
-    padding: 10px;
-    font-size: 1rem;
+    padding: 8px;
+    font-size: 0.8rem;
     width: 30px;
     height: 30px;
 }
@@ -421,8 +427,8 @@ header {
 }
 
 .students-list th, .students-list td {
-    font-size: 1.3rem;
-    padding: 10px;
+    font-size: 0.9rem;
+    padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -444,8 +450,8 @@ header {
 }
 
 .students-list img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -453,35 +459,35 @@ header {
 @media (max-width: 1536px) {
 
     .students-title h1{
-        font-size: 1rem;
+        font-size: 22px;
     }
 
     .students-toolbar-btns button{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
     
     .addstudent-btn{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .students-search-tools{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .students-searchbox input{
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .students-searchbox div{
         position: absolute;
-        transform: translateY(5px) translateX(20px);
+        transform: translateY(5px) translateX(10px);
     } 
 
-    .students-list th{
-        font-size: 1rem;
+    .students-list th, .students-list td{
+        font-size: 0.8rem;
     }
     .Head-Toolbox a{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 }
 
@@ -658,7 +664,11 @@ header {
 /* Dashboard */
 
 .admin-dash {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     padding: 20px;
+    height: 100vh;
 }
 
 .admin-dash h1 {
@@ -761,3 +771,31 @@ header {
     background-color: #f44336;
     color: white;
   }
+
+
+/* AdminScholarships.css */
+
+.cards-container-scholarships {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card-scholarships {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card-scholarships h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.card-scholarships p {
+    font-size: 1rem;
+    color: #666;
+}

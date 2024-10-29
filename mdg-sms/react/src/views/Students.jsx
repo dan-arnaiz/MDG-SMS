@@ -81,7 +81,7 @@ export default function Students() {
                                 {filteredStudents.map(s => (
                                     <tr key={s.id}>
                                         <td>
-                                            <img src={`/storage/${s.picture}`} alt={`${s.last_name} ${s.first_name}`} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                                            <img src={`storage/${students.picture}`} alt={`${s.last_name} ${s.first_name}`} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
                                         </td>
                                         <td>{`${s.last_name}, ${s.first_name} ${s.suffix ? s.suffix + ' ' : ''}(${s.middle_name})`}</td>
                                         <td>{s.studentId}</td>
