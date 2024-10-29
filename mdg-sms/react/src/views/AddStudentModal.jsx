@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
+// import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
-Modal.setAppElement('#root'); // Set the root element for accessibility
+// Modal.setAppElement('#root'); // Set the root element for accessibility
 
 const AddStudentModal = ({ isOpen, onRequestClose, onSubmit, student }) => {
   const [lastName, setLastName] = useState('');
