@@ -43,14 +43,12 @@ export default function AdminLayout() {
                 </div>
             </header>
             <aside className="navbar">
-                <navbar>
                     <ul>
                         <li><NavLink to="/dashboard">Dashboard</NavLink></li>
                         <li><NavLink to="/student-list">Students</NavLink></li>
                         <li><NavLink to="/scholarship-list">Scholarships</NavLink></li>
                         <li><NavLink to="/reports">Reports</NavLink></li>
                     </ul>
-                </navbar>
             </aside>
             <main>
                 <Outlet/>

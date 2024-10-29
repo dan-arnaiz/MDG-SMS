@@ -683,3 +683,186 @@ header {
         width: 100%; /* Adjust width to fit 1 card in a row */
     }
 }
+
+/* ADD STUDENT */
+
+#regForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+}
+
+#regForm h1{ 
+    font-size: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+#regForm p{ 
+    font-size: 1rem;
+    padding-left: 1rem;
+    width: 100%;
+}
+
+#regForm input{ 
+    font-size: 1rem;
+    border-radius: 7px;
+    padding: 10px;
+    border: 1px solid rgb(0, 0, 0, 0.3);
+}
+
+#regForm select{ 
+    font-size: 1rem;
+    border-radius: 7px;
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0, 0.3);
+}
+
+.tab{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.personal-info select{
+    width: 20%;
+}
+
+.personal-info{
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.personal-info div{
+    width: 100%;
+}
+
+.personal-info input{
+    width: 100%;
+}
+
+.student-info2{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+
+.age-input{
+    width: 100px;
+}
+
+.student-info3{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.student-info3 div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.org-info{
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.org-info div{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+
+}
+
+.org-info div div{
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-info{
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info div{
+
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.contact-info div div{
+
+    flex-direction: column;
+}
+
+.add-steps{
+    margin: 2rem 0 1rem 0;
+}
+
+.step {
+    height: 15px;
+    width: 15px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+}
+
+.add-students-btns{
+    display: flex;
+    gap: 10rem;
+}
+
+.step{
+    margin: 1rem;
+}
+
+.active {
+    opacity: 1;
+}
+
+.finish {
+    background-color: #04AA6D;
+}
+
+.add-students-btns button{
+
+    
+    font-size: 1rem;
+    padding: 10px 100px;
+    cursor: pointer;
+
+    border: none;
+    border-radius: 10px;
+    background:#D9D9D9
+}
+
+#tab{
+    display: none;
+}
+
+.add-student-toolbar{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+
+
+
+
+
