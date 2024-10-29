@@ -295,25 +295,26 @@ header {
 
 /* STUDENTS */
 
-.students-main{
+.students-main {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 20px;
     height: 100vh;
 }
-.students-title{
+
+.students-title {
     background: white;
     padding: 10px 40px;
     border-radius: 15px;
     box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-.students-title h1{
-    font-size: 2rem;
+.students-title h1 {
+    font-size: 24px;
 }
 
-.students-toolbar{
+.students-toolbar {
     background: white;
     padding: 10px 25px;
     border-radius: 15px;
@@ -323,25 +324,30 @@ header {
     align-items: center;
 }
 
-.students-searchbox input{
-    font-size: 1.5rem;
-    padding: 5px 10px 5px 50px;
+.students-searchbox {
+    position: relative;
+}
+
+.students-searchbox input {
+    font-size: 1rem;
+    padding: 5px 10px 5px 40px;
     border: 0.3px solid rgba(0, 0, 0, 0.5);
     border-radius: 5px;
 }
-.students-searchbox div{
+
+.students-searchbox div {
     position: absolute;
-    transform: translateY(9px) translateX(18px);
+    transform: translateY(7px) translateX(10px);
 }
 
-.students-toolbar-btns{
+.students-toolbar-btns {
     display: flex;
     gap: 10px;
 }
 
-.students-toolbar-btns button{
-    font-size: 1rem;
-    padding: 10px 30px;
+.students-toolbar-btns button {
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border-radius: 8px;
     border: none;
     background-color: #D9D9D9;
@@ -349,9 +355,9 @@ header {
     cursor: pointer;
 }
 
-.addstudent-btn{
-    font-size: 1rem;
-    padding: 10px 30px;
+.addstudent-btn {
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border-radius: 8px;
     border: none;
     letter-spacing: 1px;
@@ -361,42 +367,42 @@ header {
     text-decoration: none;
 }
 
-.students-search-tools{
+.students-search-tools {
     display: flex;
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: 0.8rem;
     padding: 5px 20px;
     align-items: center;
 }
 
-.students-search-tools p{
+.students-search-tools p {
     color: #8F8F8F;
 }
 
-.students-list-numdisplay{
+.students-list-numdisplay {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.students-list-numdisplay select{
-    font-size: 1rem;
+.students-list-numdisplay select {
+    font-size: 0.8rem;
     height: 30px;
 }
 
-.search-tools-btns{
+.search-tools-btns {
     display: flex;
-    gap: 5px;   
+    gap: 5px;
 }
 
-.search-tools-btns button{
-    padding: 10x;
-    font-size: 1rem;
+.search-tools-btns button {
+    padding: 8px;
+    font-size: 0.8rem;
     width: 30px;
     height: 30px;
 }
 
-.students-list{
+.students-list {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -404,52 +410,78 @@ header {
     width: 100%;
 }
 
-.students-list table{
+.students-list table {
     width: 100%;
+    border-collapse: collapse;
 }
 
-.students-list thead{
-    display: flex;
+.students-list thead {
     background: #D9D9D9;
     border-radius: 5px;
 }
-.students-list th{
-    font-size: 1.3rem;
-    padding: 5px 10px;
+
+.students-list th, .students-list td {
+    font-size: 0.9rem;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.students-list th {
+    font-weight: bold;
+}
+
+.students-list tbody tr {
+    background: white;
+}
+
+.students-list tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.students-list tbody tr:hover {
+    background: #f1f1f1;
+}
+
+.students-list img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 @media (max-width: 1536px) {
 
     .students-title h1{
-        font-size: 1rem;
+        font-size: 22px;
     }
 
     .students-toolbar-btns button{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
     
     .addstudent-btn{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .students-search-tools{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .students-searchbox input{
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .students-searchbox div{
         position: absolute;
-        transform: translateY(5px) translateX(20px);
+        transform: translateY(5px) translateX(10px);
     } 
 
-    .students-list th{
-        font-size: 1rem;
+    .students-list th, .students-list td{
+        font-size: 0.8rem;
     }
     .Head-Toolbox a{
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 }
 
@@ -861,6 +893,32 @@ header {
     padding: 1rem;
 }
 
+/* AdminScholarships.css */
+
+.cards-container-scholarships {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card-scholarships {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card-scholarships h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.card-scholarships p {
+    font-size: 1rem;
+    color: #666;
+}
 
 
 
