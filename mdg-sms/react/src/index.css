@@ -295,25 +295,26 @@ header {
 
 /* STUDENTS */
 
-.students-main{
+.students-main {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 20px;
     height: 100vh;
 }
-.students-title{
+
+.students-title {
     background: white;
     padding: 10px 40px;
     border-radius: 15px;
     box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-.students-title h1{
+.students-title h1 {
     font-size: 2rem;
 }
 
-.students-toolbar{
+.students-toolbar {
     background: white;
     padding: 10px 25px;
     border-radius: 15px;
@@ -323,23 +324,28 @@ header {
     align-items: center;
 }
 
-.students-searchbox input{
+.students-searchbox {
+    position: relative;
+}
+
+.students-searchbox input {
     font-size: 1.5rem;
     padding: 5px 10px 5px 50px;
     border: 0.3px solid rgba(0, 0, 0, 0.5);
     border-radius: 5px;
 }
-.students-searchbox div{
+
+.students-searchbox div {
     position: absolute;
     transform: translateY(9px) translateX(18px);
 }
 
-.students-toolbar-btns{
+.students-toolbar-btns {
     display: flex;
     gap: 10px;
 }
 
-.students-toolbar-btns button{
+.students-toolbar-btns button {
     font-size: 1rem;
     padding: 10px 30px;
     border-radius: 8px;
@@ -349,7 +355,7 @@ header {
     cursor: pointer;
 }
 
-.addstudent-btn{
+.addstudent-btn {
     font-size: 1rem;
     padding: 10px 30px;
     border-radius: 8px;
@@ -361,7 +367,7 @@ header {
     text-decoration: none;
 }
 
-.students-search-tools{
+.students-search-tools {
     display: flex;
     justify-content: space-between;
     font-size: 1rem;
@@ -369,34 +375,34 @@ header {
     align-items: center;
 }
 
-.students-search-tools p{
+.students-search-tools p {
     color: #8F8F8F;
 }
 
-.students-list-numdisplay{
+.students-list-numdisplay {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.students-list-numdisplay select{
+.students-list-numdisplay select {
     font-size: 1rem;
     height: 30px;
 }
 
-.search-tools-btns{
+.search-tools-btns {
     display: flex;
-    gap: 5px;   
+    gap: 5px;
 }
 
-.search-tools-btns button{
-    padding: 10x;
+.search-tools-btns button {
+    padding: 10px;
     font-size: 1rem;
     width: 30px;
     height: 30px;
 }
 
-.students-list{
+.students-list {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -404,18 +410,44 @@ header {
     width: 100%;
 }
 
-.students-list table{
+.students-list table {
     width: 100%;
+    border-collapse: collapse;
 }
 
-.students-list thead{
-    display: flex;
+.students-list thead {
     background: #D9D9D9;
     border-radius: 5px;
 }
-.students-list th{
+
+.students-list th, .students-list td {
     font-size: 1.3rem;
-    padding: 5px 10px;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.students-list th {
+    font-weight: bold;
+}
+
+.students-list tbody tr {
+    background: white;
+}
+
+.students-list tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.students-list tbody tr:hover {
+    background: #f1f1f1;
+}
+
+.students-list img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 @media (max-width: 1536px) {
@@ -683,3 +715,49 @@ header {
         width: 100%; /* Adjust width to fit 1 card in a row */
     }
 }
+
+
+/* AddStudentModal.css */
+.ReactModal__Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000; /* Ensure the modal is on top of everything */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ReactModal__Content {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001; /* Ensure the modal content is on top of the overlay */
+  }
+  
+
+  
+  button {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  button[type="button"] {
+    background-color: #f44336;
+    color: white;
+  }
