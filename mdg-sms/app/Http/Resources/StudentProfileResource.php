@@ -4,8 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
-class StudentResource extends JsonResource
+class StudentProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +15,8 @@ class StudentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $age = $this->dob ? Carbon::parse($this->dob)->age : null;
+
         $fullName = ucfirst(strtolower($this->last_name)) . ", " . ucfirst(strtolower($this->first_name));
 
         if (!empty($this->middle_name)) {
@@ -25,12 +28,16 @@ class StudentResource extends JsonResource
         }
 
         return [
-            'student_id' => $this->student_id, // From applications
-            'full_name' => $fullName,           // From people   
-            'email' => $this->email,             // From users
-            'scholarship' => $this->scholarship, // From scholarships
-            'program' => $this->program,  
-            'status' => $this->status,           // From scholarship_statuses
+            'student_id' => $this->id,
+            'full_name' => $fullName,
+            'program_year' => $this->year,
+            'program' => $this->program,           
+            'dob' => $this->dob,
+            'age' => $age,
+            'schoolEmail' => $this->schoolEmail,
+            'personalEmail' => $this->personalEmail,
+            'mobileNum' => $this->mobileNum,     
+            'status' => $this->status       
         ];
     }
 }

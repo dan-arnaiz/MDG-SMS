@@ -594,7 +594,7 @@ header {
 .admin-student-info-main{
     display: flex;
     gap: 10px;
-    height: 100vh;
+    max-height: 100vh;
     justify-content: space-evenly;
 
     gap: 30px;

@@ -45,7 +45,7 @@ export default function AdminLayout() {
             <aside className="navbar">
                     <ul>
                         <li><NavLink to="/dashboard">Dashboard</NavLink></li>
-                        <li><NavLink to="/student-list">Students</NavLink></li>
+                        <li><NavLink to="/students">Students</NavLink></li>
                         <li><NavLink to="/scholarship-list">Scholarships</NavLink></li>
                         <li><NavLink to="/reports">Reports</NavLink></li>
                     </ul>
