@@ -682,8 +682,8 @@ header {
 
 .admin-dash {
     display: flex;
-    justify-content: center;
-    padding: 20px;
+    padding: 15px 2px;
+
 }
 
 .admin-dash h1 {
@@ -694,9 +694,10 @@ header {
 .cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    width: 600px;
+    gap: 15px;
+    justify-content: left;
+    width:fit-content;
+
 ;
 }
 
@@ -706,14 +707,13 @@ header {
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 200px !important; /* Adjust width to fit 4 cards in a row */
+    padding: 40px;
+    width: 20vh !important; /* Adjust width to fit 4 cards in a row */
     box-sizing: border-box;
     transition: transform 0.2s;
-    height: 200px;
+    height: 20vh;
     justify-content: center;
-    gap: 15px;
-    
+    gap: 15px; 
 }
 
 .cards-container div:hover {
@@ -740,12 +740,11 @@ header {
 }
 
 .chart-1{
-    justify-content: center;
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 50%;
+    width: 100%;
     transition: transform 0.2s;
 }
 
@@ -1001,6 +1000,11 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     height: 100%;
+    transition: transform 0.2s;
+}
+
+.scholarship-list li:hover{
+    transform: translateY(-5px);
 }
 
 .scholarship-list li a{
