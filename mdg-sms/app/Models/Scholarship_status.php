@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Scholarship_status extends Model
 {
+    protected $table = 'scholarhip_statuses';
+
     use HasFactory;
 
     protected $fillable = ['name', 'description'];
