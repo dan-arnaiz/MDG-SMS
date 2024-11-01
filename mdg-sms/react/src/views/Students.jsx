@@ -38,7 +38,7 @@ export default function Students() {
                         <div>
                             <FontAwesomeIcon icon={Icons.faMagnifyingGlass} size='lg'/>
                         </div>
-                        <input type="text"  placeholder="Search Student"/>
+                        <input type="text"  placeholder="Search Students"/>
                     </div>                    
                     <div className="students-toolbar-btns">
                         <button>Filter</button>

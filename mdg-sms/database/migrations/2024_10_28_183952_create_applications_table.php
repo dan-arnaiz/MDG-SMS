@@ -69,6 +69,33 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('subtypes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->string('name',150);
+            $table->text('description');
+            $table->timestamps();
+        });
+
+        Schema::create('benefits', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->text('description');
+            $table->timestamps();
+        });
+        Schema::create('retenions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->text('description');
+            $table->timestamps();
+        });
+        Schema::create('qualifications', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->text('description');
+            $table->timestamps();
+        });
+
     }
 
     /**

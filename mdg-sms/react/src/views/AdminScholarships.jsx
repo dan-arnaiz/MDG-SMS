@@ -39,7 +39,7 @@ export default function AdminScholarships() {
                         <div>
                             <FontAwesomeIcon icon={Icons.faMagnifyingGlass} size='lg'/>
                         </div>
-                        <input type="text"  placeholder="Search Scholarship"/>
+                        <input type="text"  placeholder="Search Scholarships"/>
                     </div>                    
                     <div className="students-toolbar-btns">
                         <button>Filter</button>
