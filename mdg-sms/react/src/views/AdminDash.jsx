@@ -37,21 +37,13 @@ export default function AdminDash() {
                 </div>
             <div className="admin-dash">
                 <div className="cards-container">
-                    <div className="card">
+                    <div className="active-card">
                         <h2>{scholars.activeScholars}</h2>
                         <p>Active Scholars</p>
                     </div>
-                    <div className="card">
+                    <div className="inactive-card">
                         <h2>{scholars.inactiveScholars}</h2>
                         <p>Inactive Scholars</p>
-                    </div>
-                    <div className="card">
-                        <h2>Chart 1</h2>
-                        <p>Analytics</p>
-                    </div>
-                    <div className="card">
-                        <h2>Chart 2</h2>
-                        <p>Analytics</p>
                     </div>
                     <div className="card">
                         <h2>{scholars.scholarships}</h2>
@@ -61,14 +53,10 @@ export default function AdminDash() {
                     <h2>{scholars.scholarsTotal}</h2>
                     <p>Scholarship to date</p>
                     </div>
-                    <div className="card">
-                        <h2>Chart 3</h2>
-                        <p>Analytics</p>
-                    </div>
-                    <div className="card">
-                        <h2>Chart 4</h2>
-                        <p>Analytics</p>
-                    </div>
+                </div>
+                <div className="chart-1">
+                    <h2>Chart 1</h2>
+                    <p>Analytics</p>
                 </div>
             </div>
         </div>

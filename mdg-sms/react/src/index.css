@@ -658,6 +658,8 @@ header {
 /* Dashboard */
 
 .admin-dash {
+    display: flex;
+    justify-content: center;
     padding: 20px;
 }
 
@@ -671,47 +673,79 @@ header {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    width: 600px;
 ;
 }
 
-.card {
+.cards-container div {
+    display: flex;
+    flex-direction: column;
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: calc(25% - 20px); /* Adjust width to fit 4 cards in a row */
+    width: 200px !important; /* Adjust width to fit 4 cards in a row */
     box-sizing: border-box;
     transition: transform 0.2s;
     height: 200px;
+    justify-content: center;
+    gap: 15px;
+    
 }
 
-.card:hover {
+.cards-container div:hover {
     transform: translateY(-10px);
 }
 
-.card h2 {
+.cards-container div h2 {
     margin-top: 0;
+    font-size: 3rem;
 }
 
-.card p {
+.cards-container div p {
     margin-bottom: 0;
+    font-size: 0.8rem;
+    color: black;   
+}
+
+.active-card{
+    color: #04AA6D;
+}
+
+.inactive-card{
+    color:rgb(236, 58, 58);
+}
+
+.chart-1{
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 50%;
+    transition: transform 0.2s;
+}
+
+.chart-1:hover{
+
+    transform: translateY(-10px);
 }
 
 /* Responsive styles */
 @media (max-width: 1200px) {
-    .card {
+    .cards-container div {
         width: calc(33.33% - 20px); /* Adjust width to fit 3 cards in a row */
     }
 }
 
 @media (max-width: 768px) {
-    .card {
+    .cards-container div {
         width: calc(50% - 20px); /* Adjust width to fit 2 cards in a row */
     }
 }
 
 @media (max-width: 480px) {
-    .card {
+    .cards-container div {
         width: 100%; /* Adjust width to fit 1 card in a row */
     }
 }
