@@ -64,7 +64,7 @@ return new class extends Migration
             $table->foreignId('scholarship_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('term_id')->nullable()->constrained()->nullOnDelete();
             $table->datetime('date_filed');
-            $table->datetime('date_terminated');
+            $table->datetime('date_terminated')->nullable();
             $table->boolean('current');
             $table->timestamps();
         });

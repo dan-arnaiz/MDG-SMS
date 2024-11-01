@@ -31,7 +31,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->foreignId('prev_school_id')->nullable()->constrained()->nullOnDelete();
-            $table->unsignedTinyInteger('age')->nullable();
+            $table->unsignedTinyInteger('age');
             $table->string('edu_attain', 100)->nullable();
             $table->timestamps();
         });
