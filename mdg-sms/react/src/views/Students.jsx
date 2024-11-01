@@ -9,23 +9,23 @@ export default function Students() {
     const[students,setStudents] = useState([]);
     const[loading,setLoading] = useState(false);
 
-    // useEffect(() => {
-    //     getStudents();
-    // }, [])
+    useEffect(() => {
+        getStudents();
+    }, [])
 
-    // const getStudents = () => {
-    //     setLoading(true)
-    //     axiosClient.get('/students')
-    //         .then(({data}) => {
-    //             setLoading(false)
-    //             console.log(data);
-    //         })
-
-    //         .catch(() => {
-    //             setLoading(false)
-    //         })
-
-    // }
+    const getStudents = () => {
+        setLoading(true)
+        axiosClient.get('/students')
+            .then(({data}) => {
+                setLoading(false)
+                setStudents(data.data);
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error.response ? error.response.data : error.message);
+                setLoading(false); 
+            });
+    }
     
     return(
         <div>
@@ -50,40 +50,35 @@ export default function Students() {
                 <div className="students-list">
                     <table>
                         <thead>
-                        <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Name</th>
-                                    <th>Student ID</th>
-                                    <th>Scholarship</th>
-                                    <th>Email Address</th>
-                                    <th>Program</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Student ID</th>
+                                <th>Scholarship</th>
+                                <th>Email Address</th>
+                                <th>Program</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody>
-                                {students.map(s => {
-                                    return (
-                                        <tr key={s.id}>
-                                            <td>
-                                                <img src={s.picture ? `/storage/${s.picture.replace(/\\/g, '/')}` : '/storage/pictures/default-profile-placeholder.png'} alt={`${s.last_name} ${s.first_name}`} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
-                                            </td>
-                                            <td>{`${s.last_name}, ${s.first_name} ${s.suffix ? s.suffix + ' ' : ''}(${s.middle_name})`}</td>
-                                            <td>{s.studentId}</td>
-                                            <td>{s.scholarship}</td>
-                                            <td>{s.emailaddress}</td>
-                                            <td>{s.program}</td>
-                                            <td>{s.status}</td>
-                                            <td>
-                                                <button onClick={() => openModal(s)}>Edit</button>
-                                                <button onClick={() => deleteStudent(s.id)}>Delete</button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
+                            {students.map(s => (
+                                <tr key={s.id}>
+                                <td>                                              
+                                </td>
+                                <td>{s.full_name}</td>
+                                <td>{s.student_id}</td>
+                                <td>{s.scholarship}</td>
+                                <td>{s.email}</td>
+                                <td>{s.program}</td>
+                                <td>{s.status}</td>
+                                <td>
+                                    <button onClick={() => openModal(s)}>Edit</button>
+                                    <button onClick={() => deleteStudent(s.id)}>Delete</button>
+                                </td>
+                                </tr>
+                            ))}                                                     
+                        </tbody>
                     </table>
                 </div>
                 <div className="students-search-tools">
