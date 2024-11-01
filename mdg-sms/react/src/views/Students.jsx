@@ -63,15 +63,18 @@ export default function Students() {
                         </thead>
                         <tbody>
                             {students.map(s => (
-                                <tr key={s.id}>
-                                <td>                                              
+                                <tr key={s.student_id}>
+                                <td> 
+                                    <img src={s.picture ? `/storage/${s.picture.replace(/\\/g, '/')}` : '/storage/pictures/default-profile-placeholder.png'}></img>
                                 </td>
                                 <td>{s.full_name}</td>
                                 <td>{s.student_id}</td>
                                 <td>{s.scholarship}</td>
                                 <td>{s.email}</td>
                                 <td>{s.program}</td>
-                                <td>{s.status}</td>
+                                <td id='status'>
+                                    <span style={{display: 'inline-block',width: '10px',height: '10px',borderRadius: '50%', marginLeft: '8px', backgroundColor: s.status === 'Active' ? 'green' : 'red', margin: '0 10px' }}></span>
+                                    {s.status}</td>
                                 <td>
                                     <button onClick={() => openModal(s)}>Edit</button>
                                     <button onClick={() => deleteStudent(s.id)}>Delete</button>
