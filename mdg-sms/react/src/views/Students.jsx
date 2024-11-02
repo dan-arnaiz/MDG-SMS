@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js";
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 export default function Students() {
 
@@ -26,6 +26,12 @@ export default function Students() {
                 setLoading(false); 
             });
     }
+
+    const navigate = useNavigate();
+
+    const handleRowDoubleClick = (studentId) => {
+        navigate(`/students/${studentId}`);
+    };
     
     return(
         <div>
@@ -38,7 +44,7 @@ export default function Students() {
                         <div>
                             <FontAwesomeIcon icon={Icons.faMagnifyingGlass} size='lg'/>
                         </div>
-                        <input type="text"  placeholder="Search Student"/>
+                        <input type="text"  placeholder="Search Students"/>
                     </div>                    
                     <div className="students-toolbar-btns">
                         <button>Filter</button>
@@ -58,24 +64,22 @@ export default function Students() {
                                 <th>Email Address</th>
                                 <th>Program</th>
                                 <th>Status</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {students.map(s => (
-                                <tr key={s.id}>
-                                <td>                                              
+                                <tr key={s.student_id} onDoubleClick={() => handleRowDoubleClick(s.student_id)}>
+                                <td> 
+                                    <img src={s.picture ? `/storage/${s.picture.replace(/\\/g, '/')}` : '/storage/pictures/default-profile-placeholder.png'}></img>
                                 </td>
                                 <td>{s.full_name}</td>
                                 <td>{s.student_id}</td>
                                 <td>{s.scholarship}</td>
                                 <td>{s.email}</td>
                                 <td>{s.program}</td>
-                                <td>{s.status}</td>
-                                <td>
-                                    <button onClick={() => openModal(s)}>Edit</button>
-                                    <button onClick={() => deleteStudent(s.id)}>Delete</button>
-                                </td>
+                                <td id='status'>
+                                    <span style={{display: 'inline-block',width: '10px',height: '10px',borderRadius: '50%', marginLeft: '8px', backgroundColor: s.status === 'Active' ? 'green' : 'red', margin: '0 10px' }}></span>
+                                    {s.status}</td>
                                 </tr>
                             ))}                                                     
                         </tbody>

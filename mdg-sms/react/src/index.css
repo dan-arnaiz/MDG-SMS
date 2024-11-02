@@ -412,7 +412,8 @@ header {
 
 .students-list table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: seperate;
+    border-spacing: 0 5px;
 }
 
 .students-list thead {
@@ -430,9 +431,31 @@ header {
 .students-list th {
     font-weight: bold;
 }
+.student-list tbody{
+    border-radius: 5px;
+}
 
 .students-list tbody tr {
-    background: white;
+    background: white; 
+    padding-bottom: 1rem;
+}
+.students-list th:first-child { 
+    border-top-left-radius: 10px; 
+    border-bottom-left-radius: 10px;
+}
+.students-list th:last-child {
+     border-top-right-radius: 10px; 
+     border-bottom-right-radius: 10px; 
+}
+
+.students-list td:first-child {
+     border-top-left-radius: 10px;
+     border-bottom-left-radius: 10px;
+     padding: 5px 0 5px 30px; 
+}
+.students-list td:last-child { 
+    border-top-right-radius: 10px; 
+    border-bottom-right-radius: 10px;
 }
 
 .students-list tbody tr:nth-child(even) {
@@ -571,7 +594,7 @@ header {
 .admin-student-info-main{
     display: flex;
     gap: 10px;
-    height: 100vh;
+    max-height: 100vh;
     justify-content: space-evenly;
 
     gap: 30px;
@@ -659,8 +682,8 @@ header {
 
 .admin-dash {
     display: flex;
-    justify-content: center;
-    padding: 20px;
+    padding: 5px 2px;
+
 }
 
 .admin-dash h1 {
@@ -671,9 +694,10 @@ header {
 .cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    width: 600px;
+    gap: 15px;
+    justify-content: left;
+    width:fit-content;
+
 ;
 }
 
@@ -683,14 +707,13 @@ header {
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 200px !important; /* Adjust width to fit 4 cards in a row */
+    padding: 40px;
+    width: 20vh !important; /* Adjust width to fit 4 cards in a row */
     box-sizing: border-box;
     transition: transform 0.2s;
-    height: 200px;
+    height: 20vh;
     justify-content: center;
-    gap: 15px;
-    
+    gap: 15px; 
 }
 
 .cards-container div:hover {
@@ -717,12 +740,11 @@ header {
 }
 
 .chart-1{
-    justify-content: center;
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 50%;
+    width: 100%;
     transition: transform 0.2s;
 }
 
@@ -953,6 +975,74 @@ header {
     font-size: 1rem;
     color: #666;
 }
+
+/* scholarship list */
+
+.scholarship-list{
+    height: 100%;
+}
+
+.scholarship-list ul{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 16px;
+    padding: 0;
+    list-style: none;
+}
+
+.scholarship-list li{
+    display: flex;
+    background: white;
+    list-style: none;
+    padding: 3rem;
+    border-radius: 10px;
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 100%;
+    transition: transform 0.2s;
+}
+
+.scholarship-list li:hover{
+    transform: translateY(-5px);
+}
+
+.scholarship-list li a{
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+.scholarship-card{
+    display: flex;
+    flex-direction:column;
+    gap: 10px;
+    color: black;
+    height: 100%;
+}
+.scholarship-card h1{
+    font-size: 1.6rem;
+}
+.scholarship-info{
+    display: flex;
+    justify-content:space-evenly ;
+    gap: 10px;
+    text-align: center;
+}
+.scholarship-info h3{
+    padding-bottom: 5px;
+    font-size: 2rem;
+}
+.taken{
+    color: rgb(236, 58, 58);
+}
+.available{
+    color: #04AA6D;
+}
+
+
+
+
 
 
 

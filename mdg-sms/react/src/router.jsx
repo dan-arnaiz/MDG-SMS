@@ -27,7 +27,7 @@ const router = createBrowserRouter([
                 element: <AdminDash />
             },
             {
-                path: '/student-list',
+                path: '/students',
                 element: <Students/>
             },
             {
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
                 element: <AdminReports/>
             },
             {
-                path: '/student-profile',
+                path: '/students/:id',
                 element: <AdminStudentProfile/>
             },
             {

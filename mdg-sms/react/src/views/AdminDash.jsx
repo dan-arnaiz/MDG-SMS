@@ -35,31 +35,31 @@ export default function AdminDash() {
                 <div className="students-title">
                     <h1>Dashboard</h1>   
                 </div>
-            <div className="admin-dash">
-                <div className="cards-container">
-                    <div className="active-card">
-                        <h2>{scholars.activeScholars}</h2>
-                        <p>Active Scholars</p>
+                <div className="admin-dash">
+                    <div className="cards-container">
+                        <div className="active-card">
+                            <h2>{scholars.activeScholars}</h2>
+                            <p>Active Scholars</p>
+                        </div>
+                        <div className="inactive-card">
+                            <h2>{scholars.inactiveScholars}</h2>
+                            <p>Inactive Scholars</p>
+                        </div>
+                        <div className="card">
+                            <h2>{scholars.scholarships}</h2>
+                            <p>Scholarships</p>
+                        </div>
+                        <div className="card">
+                        <h2>{scholars.scholarsTotal}</h2>
+                        <p>Scholarship to date</p>
+                        </div>
                     </div>
-                    <div className="inactive-card">
-                        <h2>{scholars.inactiveScholars}</h2>
-                        <p>Inactive Scholars</p>
+                    <div className="chart-1">
+                        <h2>Chart 1</h2>
+                        <p>Analytics</p>
                     </div>
-                    <div className="card">
-                        <h2>{scholars.scholarships}</h2>
-                        <p>Scholarships</p>
-                    </div>
-                    <div className="card">
-                    <h2>{scholars.scholarsTotal}</h2>
-                    <p>Scholarship to date</p>
-                    </div>
-                </div>
-                <div className="chart-1">
-                    <h2>Chart 1</h2>
-                    <p>Analytics</p>
                 </div>
             </div>
-        </div>
         </div>
     );
 }
