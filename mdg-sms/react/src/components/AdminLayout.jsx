@@ -2,7 +2,7 @@ import { Outlet, Navigate, NavLink } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client.js";
 import { Home, Users, FileChartPie, Mailbox, HandCoins } from 'lucide-react';
-import { Button } from "../components/ui/button";
+import { Button } from '@/components/ui/button';
 
 export default function AdminLayout() {
 

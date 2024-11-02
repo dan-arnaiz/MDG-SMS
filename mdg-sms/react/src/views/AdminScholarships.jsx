@@ -31,8 +31,8 @@ export default function AdminScholarships() {
     return(
         <div>
             <div className="main">
-                <div className="students-title">
-                    <h1>Scholarships</h1>             
+                <div className="header-toolbar">
+                    <h1 className='text-black font-bold font-sans text-lg'>Scholarships</h1>             
                 </div>
                 <div className="students-toolbar">
                     <div className="students-searchbox">

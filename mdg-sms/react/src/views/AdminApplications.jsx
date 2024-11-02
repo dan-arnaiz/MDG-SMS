@@ -31,8 +31,8 @@ export default function AdminApplications() {
     return(
         <div>
             <div className="main">
-                <div className="students-title">
-                    <h1>Applications</h1>             
+                <div className="header-toolbar">
+                    <h1 className='text-black font-bold font-sans text-lg'>Applications</h1>             
                 </div>
                 <div className="students-toolbar">
                     <div className="students-searchbox">

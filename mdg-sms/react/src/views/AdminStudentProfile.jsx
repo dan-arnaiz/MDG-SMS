@@ -32,8 +32,8 @@ export default function AdminStudentProfile() {
     return(
         <div>
             <div className="main">
-                <div className="students-title">
-                    <h1>Students</h1>             
+                <div className="header-toolbar">
+                    <h1 className='text-black font-bold font-sans text-lg'>Students</h1>             
                 </div>
                 <div className="students-toolbar">
                     <div>

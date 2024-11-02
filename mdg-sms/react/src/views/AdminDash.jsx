@@ -32,10 +32,14 @@ export default function AdminDash() {
     return (
         <div>
             <div className="main">
-                <div className="students-title">
-                    <h1>Dashboard</h1>   
+                <div className="header-toolbar">
+                    <h1 className="text-black font-bold font-sans text-lg">Dashboard</h1>   
                 </div>
-                <div className="admin-dash">
+                <div className="page-title">
+                    <div className="chart-1">
+                        <h2>Chart 1</h2>
+                        <p>Analytics</p>
+                    </div>
                     <div className="cards-container">
                         <div className="active-card">
                             <h2>{scholars.activeScholars}</h2>
@@ -53,10 +57,6 @@ export default function AdminDash() {
                         <h2>{scholars.scholarsTotal}</h2>
                         <p>Scholarship to date</p>
                         </div>
-                    </div>
-                    <div className="chart-1">
-                        <h2>Chart 1</h2>
-                        <p>Analytics</p>
                     </div>
                 </div>
             </div>
