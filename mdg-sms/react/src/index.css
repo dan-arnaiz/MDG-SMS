@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+
 *{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Open Sans', Helvetica, sans-serif;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -222,13 +225,16 @@ header {
     
 }
 
+
+/* Sidebar */
+
 .navbar {
+    position: fixed; /* Fix the sidebar in place */
+    height: 100vh; /* Set the sidebar height to 100% of the viewport height */
     background: #0F2554;
     width: 20%;
     text-align: center;
     padding: 20px 20px 0 20px;
-    height: 100vh;
-    position: fixed; /* Fix the sidebar in place */
     top: 0;
     left: 0; /* Ensure the sidebar is anchored to the left */
     z-index: 999; /* Ensure the sidebar is above other content */
@@ -242,16 +248,38 @@ header {
     gap: 10px;
     padding-top: 40%; /* Remove default padding */
     margin: 0; /* Remove default margin */
+    align-items: start;
+    flex-grow: 1;
 }
 
 .navbar li {
     height: 5vh;
     border-radius: 5px;
+    margin: 2px 0;
+}
+
+.sidebar-subtitle {
+    color: gray;
+    font-size: 1em;
+    padding: 10px 0;
 }
 
 .active {
-    background: rgb(255, 255, 255, 0.21);
+    background: rgba(255, 255, 255, 0.21);
     border-radius: 5px;
+    display: block; /* Ensure it covers the entire row */
+    width: 100%; /* Ensure it covers the entire row */
+}
+
+.nav-item {
+    padding: 10px; /* Add padding to create a rectangular background */
+    border-radius: 5px; /* Optional: Add border radius for rounded corners */
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Change background color on hover */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    
 }
 
 .navbar a {
@@ -265,6 +293,19 @@ header {
     letter-spacing: 1.5px;
 }
 
+.navbar a svg {
+    margin-right: 16px; /* Increase gap between icon and text */
+    width: 24px; /* Make icons bigger */
+    height: 24px; /* Make icons bigger */
+}
+
+.active .nav-item {
+    background: rgba(255, 255, 255, 0.21);
+    border-radius: 5px;
+    display: block; /* Ensure it covers the entire row */
+    width: 100%; /* Ensure it covers the entire row */
+}
+
 .adminlayout-background main {
     background: #E8E8E8;
     height: 100vh;
@@ -272,6 +313,51 @@ header {
     padding-left: 20%; /* Adjust padding for the sidebar */
     overflow-y: auto; /* Allow scrolling within the main content area */
 }
+
+/* Sidebar Footer */
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    background-color: #0f2452; /* Adjust as needed */
+}
+
+.sidebar-footer a {
+    color: white;
+    text-decoration: none;
+}
+
+.dev {
+    color: white;
+    font-size: 0.8em;
+}
+
+.footer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 50px !important;
+}
+
+.signout-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #00000000; /* Adjust as needed */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.signout-button:hover {
+    background-color: #ffffff; /* Adjust as needed */
+    align-items: center;
+}
+
+
 
 /* Responsive styles for admin layout */
 @media (max-width: 768px) {

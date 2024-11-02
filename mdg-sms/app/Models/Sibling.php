@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Prev_school;
 
 class Sibling extends Model
 {
@@ -18,7 +19,7 @@ class Sibling extends Model
 
     public function prevSchool()
     {
-        return $this->belongsTo(PrevSchool::class);
+        return $this->belongsTo(Prev_school::class);
     }
 
     public function students()
