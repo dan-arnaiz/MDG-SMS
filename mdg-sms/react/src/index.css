@@ -291,9 +291,13 @@ header {
     letter-spacing: 1.5px;
 }
 
+.header-logo {
+    height: 65px;
+}
+
 .header-logo img {
-    height: 70px;
-    
+    height: 65px;
+    transform: translateX(-35%);
 }
 
 
@@ -361,6 +365,7 @@ header {
     padding: 10px; /* Add padding to create a rectangular background */
     border-radius: 5px; /* Optional: Add border radius for rounded corners */
     width: 100%; /* Ensure it covers the entire row */
+    
 }
 
 .nav-item:hover {
@@ -446,7 +451,7 @@ header {
     height: 100vh;
 }
 
-.students-title {
+.header-toolbar {
     background: white;
     padding: 10px 40px;
     border-radius: 15px;
@@ -823,13 +828,13 @@ header {
 
 /* Dashboard */
 
-.admin-dash {
+.page-title {
     display: flex;
     padding: 5px 2px;
 
 }
 
-.admin-dash h1 {
+.page-title h1 {
     text-align: left;
     margin-bottom: 20px;
 }
@@ -886,8 +891,8 @@ header {
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     width: 100%;
+    margin-right: 20px;
     transition: transform 0.2s;
 }
 
@@ -973,9 +978,9 @@ header {
     width: 100%;
 }
 
-.personal-info input{
-    width: 100%;
-}
+/* .personal-info input{
+    margin-bottom: 1rem;
+} */
 
 .student-info2{
     display: flex;
@@ -1204,14 +1209,15 @@ header {
 
 
 
-
-.riseup {
-    animation: fadeIn 0.3s ease-out;
-    z-index: 1001; /* Ensure it appears above the sidebar and header */
+.form-title {
+    padding-bottom: 20px;
 }
 
 
-
-
-
-
+.input-custom {
+    width: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}

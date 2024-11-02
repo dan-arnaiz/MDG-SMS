@@ -6,13 +6,13 @@ export default function AdminDash() {
     return (
         <div>
             <div className="main">
-                <div className="students-title">
-                    <h1>Reports</h1>   
+                <div className="header-toolbar">
+                    <h1 className='text-black font-bold font-sans text-lg'>Reports</h1>   
                 </div>
             <div className="admin-dash">
                 <div className="cards-container">
                     <div className="card">
-                        <h2>Students</h2>
+                        <h1>Students</h1>
                         <p>569</p>
                     </div>
                     
