@@ -1006,6 +1006,8 @@ header {
 }
 
 .org-info{
+    display: flex;
+    flex-direction: column;
     background: white;
     padding: 2rem;
     border-radius: 10px;
