@@ -5,7 +5,7 @@
 export default function AdminDash() {
     return (
         <div>
-            <div className="students-main">
+            <div className="main">
                 <div className="students-title">
                     <h1>Reports</h1>   
                 </div>

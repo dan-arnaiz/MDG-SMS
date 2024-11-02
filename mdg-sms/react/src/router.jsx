@@ -12,6 +12,7 @@ import AdminScholarships from "./views/AdminScholarships.jsx";
 import AdminReports from "./views/AdminReports.jsx";
 import AdminStudentProfile from "./views/AdminStudentProfile.jsx";
 import AddStudent from "./views/Add-Student.jsx";
+import AdminApplications from "./views/AdminApplications.jsx";
 
 const router = createBrowserRouter([
     {
@@ -31,8 +32,12 @@ const router = createBrowserRouter([
                 element: <Students/>
             },
             {
-                path: '/scholarship-list',
+                path: '/scholarships',
                 element: <AdminScholarships />
+            },
+            {
+                path: '/applications',
+                element: <AdminApplications />
             },
             {
                 path: '/reports',

@@ -1,5 +1,76 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer base {
+    :root {
+          --background: 0 0% 100%;
+          --foreground: 222.2 84% 4.9%;
+          --card: 0 0% 100%;
+          --card-foreground: 222.2 84% 4.9%;
+          --popover: 0 0% 100%;
+          --popover-foreground: 222.2 84% 4.9%;
+          --primary: 222.2 47.4% 11.2%;
+          --primary-foreground: 210 40% 98%;
+          --secondary: 210 40% 96.1%;
+          --secondary-foreground: 222.2 47.4% 11.2%;
+          --muted: 210 40% 96.1%;
+          --muted-foreground: 215.4 16.3% 46.9%;
+          --accent: 210 40% 96.1%;
+          --accent-foreground: 222.2 47.4% 11.2%;
+          --destructive: 0 84.2% 60.2%;
+          --destructive-foreground: 210 40% 98%;
+          --border: 214.3 31.8% 91.4%;
+          --input: 214.3 31.8% 91.4%;
+          --ring: 222.2 84% 4.9%;
+          --chart-1: 12 76% 61%;
+          --chart-2: 173 58% 39%;
+          --chart-3: 197 37% 24%;
+          --chart-4: 43 74% 66%;
+          --chart-5: 27 87% 67%;
+          --radius: 0.5rem;
+      }
+    .dark {
+          --background: 222.2 84% 4.9%;
+          --foreground: 210 40% 98%;
+          --card: 222.2 84% 4.9%;
+          --card-foreground: 210 40% 98%;
+          --popover: 222.2 84% 4.9%;
+          --popover-foreground: 210 40% 98%;
+          --primary: 210 40% 98%;
+          --primary-foreground: 222.2 47.4% 11.2%;
+          --secondary: 217.2 32.6% 17.5%;
+          --secondary-foreground: 210 40% 98%;
+          --muted: 217.2 32.6% 17.5%;
+          --muted-foreground: 215 20.2% 65.1%;
+          --accent: 217.2 32.6% 17.5%;
+          --accent-foreground: 210 40% 98%;
+          --destructive: 0 62.8% 30.6%;
+          --destructive-foreground: 210 40% 98%;
+          --border: 217.2 32.6% 17.5%;
+          --input: 217.2 32.6% 17.5%;
+          --ring: 212.7 26.8% 83.9%;
+          --chart-1: 220 70% 50%;
+          --chart-2: 160 60% 45%;
+          --chart-3: 30 80% 55%;
+          --chart-4: 280 65% 60%;
+          --chart-5: 340 75% 55%;
+      }
+  }
+  @layer base {
+    * {
+      @apply  border-border;
+      }
+    body {
+      @apply bg-background text-foreground;
+      }
+  }
+  
+
 
 *{
     font-family: 'Open Sans', Helvetica, sans-serif;
@@ -252,45 +323,56 @@ header {
     flex-grow: 1;
 }
 
+/* Sidebar */
+.navbar {
+    position: fixed; /* Fix the sidebar in place */
+    height: 100vh; /* Set the sidebar height to 100% of the viewport height */
+    width: 230px; /* Adjust as needed */
+    background-color: #0F2554; /* Adjust as needed */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 0 20px;
+    top: 0;
+    left: 0; /* Ensure the sidebar is anchored to the left */
+    z-index: 999; /* Ensure the sidebar is above other content */
+    overflow: hidden; /* Prevent scrollbars on the sidebar */
+}
+
+.navbar ul {
+    list-style: none;
+    padding-top: 40%; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add gap between items */
+    flex-grow: 1; /* Allow the ul to grow and take available space */
+}
+
 .navbar li {
-    height: 5vh;
+    height: auto; /* Adjust height to fit content */
     border-radius: 5px;
     margin: 2px 0;
 }
 
-.sidebar-subtitle {
-    color: gray;
-    font-size: 1em;
-    padding: 10px 0;
-}
-
-.active {
-    background: rgba(255, 255, 255, 0.21);
-    border-radius: 5px;
-    display: block; /* Ensure it covers the entire row */
-    width: 100%; /* Ensure it covers the entire row */
-}
-
 .nav-item {
+    display: flex;
+    align-items: center;
     padding: 10px; /* Add padding to create a rectangular background */
     border-radius: 5px; /* Optional: Add border radius for rounded corners */
+    width: 100%; /* Ensure it covers the entire row */
 }
 
 .nav-item:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Change background color on hover */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    
 }
 
 .navbar a {
     display: flex;
-    justify-content: center;
     align-items: center;
-    color: white;
     text-decoration: none;
-    height: 100%;
-    width: 100%;
-    letter-spacing: 1.5px;
+    color: inherit;
+    width: 100%; /* Ensure it covers the entire row */
 }
 
 .navbar a svg {
@@ -302,59 +384,32 @@ header {
 .active .nav-item {
     background: rgba(255, 255, 255, 0.21);
     border-radius: 5px;
-    display: block; /* Ensure it covers the entire row */
     width: 100%; /* Ensure it covers the entire row */
 }
 
-.adminlayout-background main {
-    background: #E8E8E8;
-    height: 100vh;
-    width: 100%;
-    padding-left: 20%; /* Adjust padding for the sidebar */
-    overflow-y: auto; /* Allow scrolling within the main content area */
+.sidebar-subtitle {
+    color: gray;
+    font-size: 1em;
 }
-
-/* Sidebar Footer */
 
 .sidebar-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
     text-align: center;
-    padding: 15px;
-    background-color: #0f2452; /* Adjust as needed */
-}
-
-.sidebar-footer a {
-    color: white;
-    text-decoration: none;
-}
-
-.dev {
-    color: white;
-    font-size: 0.8em;
-}
-
-.footer-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 50px !important;
+    padding: 10px;
+    background-color: #f1f1f1; /* Adjust as needed */
+    color: #333; /* Adjust as needed */
 }
 
 .signout-button {
     margin-top: 10px;
     padding: 5px 10px;
-    background-color: #00000000; /* Adjust as needed */
+    background-color: #ff4d4d; /* Adjust as needed */
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .signout-button:hover {
-    background-color: #ffffff; /* Adjust as needed */
-    align-items: center;
+    background-color: #ff1a1a; /* Adjust as needed */
 }
 
 
@@ -381,11 +436,12 @@ header {
 
 /* STUDENTS */
 
-.students-main {
+.main {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 20px;
+    padding-left: 250px; /* Adjust padding to account for the sidebar */
     height: 100vh;
 }
 
@@ -1125,6 +1181,7 @@ header {
 .available{
     color: #04AA6D;
 }
+
 
 
 

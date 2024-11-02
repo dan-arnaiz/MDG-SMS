@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js"
 
-export default function AdminScholarships() {
+export default function AdminApplications() {
 
     const[scholarships,setScholarships] = useState([]);
     const[loading,setLoading] = useState(false);
@@ -32,7 +32,7 @@ export default function AdminScholarships() {
         <div>
             <div className="main">
                 <div className="students-title">
-                    <h1>Scholarships</h1>             
+                    <h1>Applications</h1>             
                 </div>
                 <div className="students-toolbar">
                     <div className="students-searchbox">

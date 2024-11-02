@@ -1,7 +1,8 @@
 import { Outlet, Navigate, NavLink } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client.js";
-import { Home, Users, Award, BarChart2 } from 'lucide-react';
+import { Home, Users, BarChart2, Mailbox, HandCoins } from 'lucide-react';
+import { Button } from "../components/ui/button";
 
 export default function AdminLayout() {
 
@@ -34,7 +35,6 @@ export default function AdminLayout() {
                 </div>
                 <div className="Head-Toolbox">
                     <NavLink to="">Need help?</NavLink>
-                    <NavLink to="">Applications</NavLink>
                     <NavLink to="">{user && user.name}</NavLink> 
                     <div>
                         <a href="#" onClick={onLogout} className="btn-logout">Sign out</a>
@@ -59,9 +59,16 @@ export default function AdminLayout() {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/scholarship-list" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <NavLink to="/applications" className={({ isActive }) => isActive ? 'active' : ''}>
                             <div className="nav-item">
-                                <Award size={24} /> Scholarships
+                                <Mailbox size={24} /> Applications
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/scholarships" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <div className="nav-item">
+                                <HandCoins size={24} /> Scholarships
                             </div>
                         </NavLink>
                     </li>
@@ -77,7 +84,7 @@ export default function AdminLayout() {
                         <wrapper className="footer-wrapper">
                             <p className="dev">© 2024 MDG</p>
                             <div>
-                            <button className="signout-button" onClick={onLogout}>Sign out</button>
+                            <Button variant="destructive" className="signout-button" onClick={onLogout}>Sign out</Button>
                             </div>
                         </wrapper>
                     </footer>
