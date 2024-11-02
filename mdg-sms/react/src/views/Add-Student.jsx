@@ -61,89 +61,141 @@ export default function AddStudent() {
                 <h1 className="text-black font-bold font-sans text-lg">Add Student</h1>
             </div>
             <Form id="regForm" action="">
-                <div className="tab">
-                    <div className="personal-info">
-                        <h1 className='text-stone-600 text-sm'>Personal Information</h1>
-                        <div className='pl-5 pt-5'>
-                            <Label htmlFor="firstname" className="text-black text-base mb-2">First Name</Label>
-                            <FormItem label="first-name">
-                                <Input type="text" className="w-1/2 mb-3 text-base" /> 
-                            </FormItem>
-                            <Label htmlFor="middlename" className="text-black text-base">Middle Name</Label>
-                            <FormItem label="middle-name">
-                                <Input type="text" className="w-1/2 mb-3 text-base" /> 
-                            </FormItem>
-                            <Label htmlFor="lastname" className="text-black text-base">Last Name</Label>
-                            <FormItem label="last-name">
-                                <Input type="text" className="w-1/2 mb-3 text-base" /> 
-                            </FormItem>
-                            <Label htmlFor="suffix" className="text-black text-base">Suffix</Label>
-                            <FormItem label="Suffix">
-                                <Select>
-                                    <SelectTrigger className="w-35 mb-3 text-base">
-                                        <SelectValue placeholder="Suffix" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel>Suffix</SelectLabel>
-                                            <SelectItem value="blank"> </SelectItem>
-                                            <SelectItem value="jr">Jr.</SelectItem>
-                                            <SelectItem value="sr">Sr.</SelectItem>
-                                            <SelectItem value="ii">II</SelectItem>
-                                            <SelectItem value="iii">III</SelectItem>
-                                            <SelectItem value="iv">IV</SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </FormItem>
-                            <Label htmlFor="suffix" className="text-black text-base">Age</Label>
-                            <FormItem label="Age">
-                                <Input type="text" className="w-full" /> {/* Adjust width using Tailwind CSS */}
-                            </FormItem>
+                <div className="tab mt-3">
+                    {/* Personal Info  */}
+                    <div className="grid grid-cols-2 gap-5">
+                        <div className="personal-info">
+                            <h1 className='text-stone-600 text-sm'>Personal Information</h1>
+                            <div className='pl-5 pt-5'>
+                                <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
+                                <FormItem label="first-name">
+                                    <Input type="text" placeholder="First Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="middlename" className="text-black text-xs">Middle Name</Label>
+                                <FormItem label="middle-name">
+                                    <Input type="text" placeholder="Middle Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="lastname" className="text-black text-xs">Last Name</Label>
+                                <FormItem label="last-name">
+                                    <Input type="text" placeholder="Last Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="suffix" className="text-black text-xs">Suffix</Label>
+                                <FormItem label="Suffix">
+                                    <Select>
+                                        <SelectTrigger className="w-auto mb-3" defaultValue="blank">
+                                            <SelectValue placeholder="Suffix" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup className="bg-slate-50">
+                                                <SelectLabel>Select Suffix</SelectLabel>
+                                                <SelectItem value="blank" className="mb-3"></SelectItem>
+                                                <SelectItem value="jr" className="mb-2">Jr.</SelectItem>
+                                                <SelectItem value="sr" className="mb-2">Sr.</SelectItem>
+                                                <SelectItem value="ii" className="mb-2">II</SelectItem>
+                                                <SelectItem value="iii" className="mb-2">III</SelectItem>
+                                                <SelectItem value="iv" className="mb-2">IV</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                                <Label htmlFor="dateofbirth" className="text-black text-xs">Date of Birth</Label>
+                                <FormItem label="dateofbirth">
+                                    <Input type="text" className="w-35 mb-3 text-base" /> 
+                                </FormItem>
+                                <Label htmlFor="age" className="text-black text-xs">Age</Label>
+                                <FormItem label="Age">
+                                    <Input type="text" className="w-35 mb-3 text-base" /> 
+                                </FormItem>
+                            </div>
+                        </div>
+                        <div className="personal-info">
+                            <h1 className='text-stone-600 text-sm'>Upload Photo</h1>
+
                         </div>
                     </div>
+                    {/* Org Info  */}
                     <div className="org-info">
-                        <h1>ORGANIZATIONAL INFO</h1>
-                        <div>
+                        <h1 className='text-stone-600 text-sm'>Program Information</h1>
+                        <div className='pl-5 pt-5'>
                             <div>
+                            <Label htmlFor="lastname" className="text-black text-sm">MMCM Student Number</Label>
                                 <FormItem label="MMCM Student Number">
-                                    <Input type="text" className="w-full" /> {/* Adjust width using Tailwind CSS */}
+                                    <Input type="text" className="w-35 mb-3 text-base" />
                                 </FormItem>
+                            <Label htmlFor="lastname" className="text-black text-sm">Year Level</Label>
                                 <FormItem label="Current Year">
                                     <Select>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Year" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Year</SelectLabel>
-                                                <SelectItem value="1">1</SelectItem>
-                                                <SelectItem value="2">2</SelectItem>
-                                                <SelectItem value="3">3</SelectItem>
-                                                <SelectItem value="4">4</SelectItem>
+                                        <SelectGroup className='bg-slate-50'>
+                                            <SelectLabel className="text-xs">Junior High School</SelectLabel>
+                                            <SelectItem value="jhs_grade_7" className="pl-7">Grade 7</SelectItem>
+                                            <SelectLabel className="text-xs">Senior High School</SelectLabel>
+                                            <SelectItem value="shs_grade_11" className="pl-7">Grade 11</SelectItem>
+                                            <SelectItem value="shs_grade_12" className="pl-7">Grade 12</SelectItem>
+                                            <SelectLabel className="text-xs">College</SelectLabel>
+                                            <SelectItem value="college_1st_year" className="pl-7">1st Year</SelectItem>
+                                            <SelectItem value="college_2nd_year" className="pl-7">2nd Year</SelectItem>
+                                            <SelectItem value="college_3rd_year" className="pl-7">3rd Year</SelectItem>
+                                            <SelectItem value="college_4th_year" className="pl-7">4th Year</SelectItem>
+                                            <SelectItem value="college_5th_year" className="pl-7">5th Year</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </FormItem>
                             </div>
                             <div>
-                                <FormItem label="Program/Strand">
+                            <Label htmlFor="lastname" className="text-black text-sm">Program</Label>
+                                <FormItem label="Program/Strand" className="w-35 mb-3 text-base">
                                     <Select>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Program/Strand" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Program/Strand</SelectLabel>
-                                                <SelectItem value="cs">Computer Science</SelectItem>
-                                                <SelectItem value="it">Information Technology</SelectItem>
-                                                <SelectItem value="eng">Engineering</SelectItem>
-                                            </SelectGroup>
+                                        <SelectGroup className='bg-slate-50'>
+                                            <SelectLabel className="text-xs">Senior High School</SelectLabel>
+                                            <SelectItem value="abm" className="pl-10">ABM</SelectItem>
+                                            <SelectItem value="humss" className="pl-10">HUMSS</SelectItem>
+                                            <SelectItem value="stem" className="pl-10">STEM</SelectItem>
+                                            <SelectItem value="arts_design" className="pl-10">Arts and Design</SelectItem>
+                                            <SelectItem value="tvl_ict" className="pl-10">TVL-ICT</SelectItem>
+                                            <SelectLabel className="text-xs">College</SelectLabel>
+                                            <SelectLabel className="text-black pl-5">ATYCB</SelectLabel>
+                                            <SelectItem value="bs_entrepreneurship" className="pl-10">BS Entrepreneurship</SelectItem>
+                                            <SelectItem value="bs_management_accounting" className="pl-10">BS Management Accounting</SelectItem>
+                                            <SelectItem value="bs_real_estate_management" className="pl-10">BS Real Estate Management</SelectItem>
+                                            <SelectItem value="bs_tourism_management" className="pl-10">BS Tourism Management</SelectItem>
+                                            <SelectItem value="bs_accountancy" className="pl-10">BS Accountancy</SelectItem>
+                                            <SelectLabel className="text-black pl-5">CAS</SelectLabel>
+                                            <SelectItem value="bs_communication" className="pl-10">BS Communication</SelectItem>
+                                            <SelectItem value="bs_multimedia_arts" className="pl-10">BS Multimedia Arts</SelectItem>
+                                            <SelectLabel className="text-black pl-5">CCIS</SelectLabel>
+                                            <SelectItem value="bs_computer_science" className="pl-10">BS Computer Science</SelectItem>
+                                            <SelectItem value="bs_entertainment_multimedia_computing" className="pl-10">BS Entertainment and Multimedia Computing</SelectItem>
+                                            <SelectItem value="bs_information_systems" className="pl-10">BS Information Systems</SelectItem>
+                                            <SelectLabel className="text-black pl-5">CEA</SelectLabel>
+                                            <SelectItem value="bs_architecture" className="pl-10">BS Architecture</SelectItem>
+                                            <SelectItem value="bs_chemical_engineering" className="pl-10">BS Chemical Engineering</SelectItem>
+                                            <SelectItem value="bs_civil_engineering" className="pl-10">BS Civil Engineering</SelectItem>
+                                            <SelectItem value="bs_computer_engineering" className="pl-10">BS Computer Engineering</SelectItem>
+                                            <SelectItem value="bs_electrical_engineering" className="pl-10">BS Electrical Engineering</SelectItem>
+                                            <SelectItem value="bs_electronics_engineering" className="pl-10">BS Electronics Engineering</SelectItem>
+                                            <SelectItem value="bs_industrial_engineering" className="pl-10">BS Industrial Engineering</SelectItem>
+                                            <SelectItem value="bs_mechanical_engineering" className="pl-10">BS Mechanical Engineering</SelectItem>
+                                            <SelectLabel className="text-black pl-5">CHS</SelectLabel>
+                                            <SelectItem value="bs_biology" className="pl-10">BS Biology</SelectItem>
+                                            <SelectItem value="bs_psychology" className="pl-10">BS Psychology</SelectItem>
+                                            <SelectItem value="bs_pharmacy" className="pl-10">BS Pharmacy</SelectItem>
+                                            <SelectItem value="bs_physical_therapy" className="pl-10">BS Physical Therapy</SelectItem>
+                                        </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </FormItem>
+                                <Label htmlFor="recentschoolyear" className="text-black text-sm">Most Recent School Year</Label>
                                 <FormItem label="Previous School">
-                                    <Input type="text" className="w-full" /> {/* Adjust width using Tailwind CSS */}
+                                    <Input type="text" className="w-35 mb-3 text-base" /> 
                                 </FormItem>
                             </div>
                         </div>
