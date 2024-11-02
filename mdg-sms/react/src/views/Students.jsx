@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js";
 import {Link, useNavigate} from "react-router-dom"
 
+
+
 export default function Students() {
 
     const[students,setStudents] = useState([]);
@@ -35,7 +37,7 @@ export default function Students() {
     
     return(
         <div>
-            <div className="students-main">
+            <div className="main">
                 <div className="students-title">
                     <h1>Students</h1>             
                 </div>
@@ -50,8 +52,8 @@ export default function Students() {
                         <button>Filter</button>
                         <button>Import</button>
                         <button>Export</button>
-                        <Link className='addstudent-btn' to="/add-student">Add Student</Link>
-                    </div>                          
+                        <button className='addstudent-btn' onClick={() => navigate('/add-student')}>Add Student</button>
+                    </div>                              
                 </div>
                 <div className="students-list">
                     <table>

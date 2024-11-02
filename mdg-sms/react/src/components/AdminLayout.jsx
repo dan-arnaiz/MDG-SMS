@@ -1,8 +1,8 @@
 import { Outlet, Navigate, NavLink } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import * as Icons from '@fortawesome/free-solid-svg-icons';
 import axiosClient from "../axios-client.js";
+import { Home, Users, FileChartPie, Mailbox, HandCoins } from 'lucide-react';
+import { Button } from "../components/ui/button";
 
 export default function AdminLayout() {
 
@@ -35,20 +35,59 @@ export default function AdminLayout() {
                 </div>
                 <div className="Head-Toolbox">
                     <NavLink to="">Need help?</NavLink>
-                    <NavLink to="">Applications</NavLink>
                     <NavLink to="">{user && user.name}</NavLink> 
                     <div>
-                        <a href="#" onClick={onLogout} className="btn-logout">Logout (for testing)</a>
+                        <a href="#" onClick={onLogout} className="btn-logout">Sign out</a>
                     </div>   
                 </div>
             </header>
             <aside className="navbar">
                     <ul>
-                        <li><NavLink to="/dashboard">Dashboard</NavLink></li>
-                        <li><NavLink to="/students">Students</NavLink></li>
-                        <li><NavLink to="/scholarship-list">Scholarships</NavLink></li>
-                        <li><NavLink to="/reports">Reports</NavLink></li>
+                        <p className="sidebar-subtitle">Manage</p>
+                        <li>
+                        <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <div className="nav-item">
+                                <Home size={24} /> Dashboard
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/students" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <div className="nav-item">
+                                <Users size={24} /> Students
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/applications" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <div className="nav-item">
+                                <Mailbox size={24} /> Applications
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/scholarships" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <div className="nav-item">
+                                <HandCoins size={24} /> Scholarships
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/reports" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <div className="nav-item">
+                                <FileChartPie size={24} /> Reports
+                            </div>
+                        </NavLink>
+                    </li>
                     </ul>
+                    <footer className="sidebar-footer">
+                        <div className="footer-wrapper">
+                            <p className="dev">© 2024 MDG</p>
+                            <div>
+                            <Button variant="destructive" className="signout-button" onClick={onLogout}>Sign out</Button>
+                            </div>
+                        </div>
+                    </footer>
             </aside>
             <main>
                 <Outlet/>

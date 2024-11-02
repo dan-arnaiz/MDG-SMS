@@ -31,7 +31,7 @@ export default function AdminStudentProfile() {
     
     return(
         <div>
-            <div className="students-main">
+            <div className="main">
                 <div className="students-title">
                     <h1>Students</h1>             
                 </div>

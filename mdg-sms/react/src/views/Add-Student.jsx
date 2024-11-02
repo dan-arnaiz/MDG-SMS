@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Form, FormItem } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 
 export default function AddStudent() {
 
@@ -44,37 +48,43 @@ export default function AddStudent() {
     };
 
     return(
-        <div>
-            <form id="regForm" action="">
+        <div className="main">
+            <Form id="regForm" action="">
                 <div className="tab">
                     <div className="personal-info">
                         <h1>PERSONAL INFO</h1>
-                        <p>First Name</p>
-                        <input type="text"></input>
+                        <FormItem label="First Name">
+                            <Input type="text" />
+                        </FormItem>
                         <div className="student-info2">
                             <div className="student-info2-1">
-                                <p>Last Name</p>
-                                <input type="text"></input>
-                                <p>Suffix</p>
-                                <select>
-                                    <option>Jr.</option>
-                                    <option>Sr.</option>
-                                    <option>II</option>
-                                    <option>III</option>
-                                    <option>IV</option>
-                                </select>
+                                <FormItem label="Last Name">
+                                    <Input type="text" />
+                                </FormItem>
+                                <FormItem label="Suffix">
+                                    <Select>
+                                        <option>Jr.</option>
+                                        <option>Sr.</option>
+                                        <option>II</option>
+                                        <option>III</option>
+                                        <option>IV</option>
+                                    </Select>
+                                </FormItem>
                             </div>
                             <div className="student-info2-2">
-                                <p>Middle Name</p>
-                                <input type="text"></input>
+                                <FormItem label="Middle Name">
+                                    <Input type="text" />
+                                </FormItem>
                                 <div className="student-info3">
                                     <div>
-                                        <p>Age</p>
-                                        <input type="number" className="age-input" min={0}></input>
+                                        <FormItem label="Age">
+                                            <Input type="number" className="age-input" min={0} />
+                                        </FormItem>
                                     </div>
                                     <div>
-                                        <p>Birth Date</p>
-                                        <input type="Date"></input>
+                                        <FormItem label="Birth Date">
+                                            <Input type="date" />
+                                        </FormItem>
                                     </div>
                                 </div>
                             </div>
@@ -84,16 +94,20 @@ export default function AddStudent() {
                         <h1>ORGANIZATIONAL INFO</h1>
                         <div>
                             <div>
-                                <p>MMCM Student Number</p>
-                                <input type="text"></input>
-                                <p>Current Year</p>
-                                <select></select>
+                                <FormItem label="MMCM Student Number">
+                                    <Input type="text" />
+                                </FormItem>
+                                <FormItem label="Current Year">
+                                    <Select></Select>
+                                </FormItem>
                             </div>
                             <div>
-                                <p>Program/Strand</p>
-                                <select></select>
-                                <p>Previous School</p>
-                                <input type="text"></input>
+                                <FormItem label="Program/Strand">
+                                    <Select></Select>
+                                </FormItem>
+                                <FormItem label="Previous School">
+                                    <Input type="text" />
+                                </FormItem>
                             </div>
                         </div>    
                     </div>
@@ -101,31 +115,34 @@ export default function AddStudent() {
                         <h1>CONTACT INFO</h1>
                         <div>
                             <div>
-                                <p>Landline Number</p>
-                                <input type="text"></input>
-                                <p>Mobile Number</p>
-                                <input type="text"></input>
+                                <FormItem label="Landline Number">
+                                    <Input type="text" />
+                                </FormItem>
+                                <FormItem label="Mobile Number">
+                                    <Input type="text" />
+                                </FormItem>
                             </div>
                             <div>
-                                <p>Personal Email</p>
-                                <input type="text"></input>
+                                <FormItem label="Personal Email">
+                                    <Input type="text" />
+                                </FormItem>
                             </div>
                         </div>    
                     </div>
                 </div>
                 <div className="tab">
-
+                    {/* Additional tabs content */}
                 </div>
                 <div className="tab">
-
+                    {/* Additional tabs content */}
                 </div>
                 <div className="tab">
-
+                    {/* Additional tabs content */}
                 </div>
                 <div className="tab">
-
+                    {/* Additional tabs content */}
                 </div>
-            </form>
+            </Form>
             <div className="add-student-toolbar">
                 <div>
                     <span className="step"></span>
@@ -135,8 +152,8 @@ export default function AddStudent() {
                     <span className="step"></span>
                 </div>
                 <div className="add-students-btns">
-                    <button type="button" id="prevBtn" onClick={() => nextPrev(-1)}>Back</button>
-                    <button type="button" id="nextBtn" onClick={() => nextPrev(1)}>Next</button>
+                    <Button type="button" id="prevBtn" onClick={() => nextPrev(-1)}>Back</Button>
+                    <Button type="button" id="nextBtn" onClick={() => nextPrev(1)}>Next</Button>
                 </div>
             </div>             
         </div>
