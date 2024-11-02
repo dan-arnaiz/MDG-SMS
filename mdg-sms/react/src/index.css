@@ -377,8 +377,8 @@ header {
 
 .navbar a svg {
     margin-right: 16px; /* Increase gap between icon and text */
-    width: 24px; /* Make icons bigger */
-    height: 24px; /* Make icons bigger */
+    width: 20px; /* Make icons bigger */
+    height: 20px; /* Make icons bigger */
 }
 
 .active .nav-item {
@@ -395,16 +395,17 @@ header {
 .sidebar-footer {
     text-align: center;
     padding: 10px;
-    background-color: #f1f1f1; /* Adjust as needed */
-    color: #333; /* Adjust as needed */
+    background-color: #0F2554; /* Adjust as needed */
+    color: white; /* Adjust as needed */
 }
 
 .signout-button {
     margin-top: 10px;
     padding: 5px 10px;
-    background-color: #ff4d4d; /* Adjust as needed */
+    background-color: transparent; /* Adjust as needed */
     color: white;
-    border: none;
+    border: 1px solid white; /* Adjust as needed */
+    border-radius: 12px; /* Adjust as needed */
     cursor: pointer;
 }
 

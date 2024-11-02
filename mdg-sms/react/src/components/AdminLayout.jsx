@@ -1,7 +1,7 @@
 import { Outlet, Navigate, NavLink } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client.js";
-import { Home, Users, BarChart2, Mailbox, HandCoins } from 'lucide-react';
+import { Home, Users, FileChartPie, Mailbox, HandCoins } from 'lucide-react';
 import { Button } from "../components/ui/button";
 
 export default function AdminLayout() {
@@ -75,18 +75,18 @@ export default function AdminLayout() {
                     <li>
                         <NavLink to="/reports" className={({ isActive }) => isActive ? 'active' : ''}>
                             <div className="nav-item">
-                                <BarChart2 size={24} /> Reports
+                                <FileChartPie size={24} /> Reports
                             </div>
                         </NavLink>
                     </li>
                     </ul>
                     <footer className="sidebar-footer">
-                        <wrapper className="footer-wrapper">
+                        <div className="footer-wrapper">
                             <p className="dev">© 2024 MDG</p>
                             <div>
                             <Button variant="destructive" className="signout-button" onClick={onLogout}>Sign out</Button>
                             </div>
-                        </wrapper>
+                        </div>
                     </footer>
             </aside>
             <main>
