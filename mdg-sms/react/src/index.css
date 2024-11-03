@@ -979,7 +979,7 @@ header {
 }
 
 .card-add-student-preview {
-    display: grid ;
+    display: grid;
     background: white;
     padding: 2rem;
     border-radius: 10px;
