@@ -899,7 +899,7 @@ export default function AddStudent() {
                     
                     <div className="grid grid-cols-3 gap-2">
                         <div className="card-add-student-preview grid-cols-1 place-items-center justify-center justify-items-center">
-                        
+                        {/* Preview Personal Info */}
                             <div>
                                 <h1 className='text-black text-lg font-bold pb-4'>Profile</h1>
                             </div>
@@ -940,30 +940,36 @@ export default function AddStudent() {
                             <div>
                                 <p className='text-gray-500 text-xs mt-2'>Age</p>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            
-
-                            
-
                         </div>
-                        <div className="card-add-student-preview">
-                            <h1 className='text-stone-600 text-sm font-semibold'>Student Information</h1>
-                        </div>     
-                        <div className="card-add-student-preview">
-                            <h1 className='text-stone-600 text-sm font-semibold'>Student Information</h1>
-                        </div>        
+                        {/* Preview Enrollment Info */}
+                        
+                        <div className='grid gap-3'>
+                            <div id="col2row1" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border">
+                                <div>
+                                    <h1 className='text-stone-600 text-sm font-semibold'>Column2 first row</h1>
+                                </div>
+                            </div>
+                            <div id="col2row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border">
+                                <div>
+                                    <h1 className='text-stone-600 text-sm font-semibold'>Column2 second row</h1>
+                                </div>
+                            </div>
+                            <div id="col2row3" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border">
+                                <div>
+                                    <h1 className='text-stone-600 text-sm font-semibold'>Column2 third row</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='grid gap-3'>
+                            <div id="col3row1" className="card-add-student-preview">
+                                <h1 className='text-stone-600 text-sm font-semibold'>Column3 row1</h1>
+                            </div>
+                            <div id="col3row2" className="card-add-student-preview">
+                                <h1 className='text-stone-600 text-sm font-semibold'>Column3 row2</h1>
+                            </div> 
+                        </div>
+                               
                     </div>
                     {/* <h1 className='text-stone-600 text-sm'>Review Your Information</h1>
                     <div className='pl-5 pt-5'>
