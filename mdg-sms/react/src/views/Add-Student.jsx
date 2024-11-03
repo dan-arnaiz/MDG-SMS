@@ -105,6 +105,58 @@ const programMapping = {
     bs_physical_therapy: "Bachelor of Science in Physical Therapy",
 };
 
+const enrollmentStatusMapping = {
+    enrolled: { text: "Enrolled", img: "images/check.png" },
+    not_enrolled: { text: "Not Enrolled", img: "images/xmark.png" },
+};
+
+const scholarshipStatusMapping = {
+    active: { text: "Active", img: "images/check.png" },
+    inactive: { text: "Inactive", img: "images/xmark.png" },
+};
+
+const recentSchoolYearMapping = {
+    ay_2019_2020_1st_term: "AY 2019-2020 | 1st Term",
+    ay_2019_2020_2nd_term: "AY 2019-2020 | 2nd Term",
+    ay_2019_2020_3rd_term: "AY 2019-2020 | 3rd Term",
+    ay_2020_2021_1st_term: "AY 2020-2021 | 1st Term",
+    ay_2020_2021_2nd_term: "AY 2020-2021 | 2nd Term",
+    ay_2020_2021_3rd_term: "AY 2020-2021 | 3rd Term",
+    ay_2021_2022_1st_term: "AY 2021-2022 | 1st Term",
+    ay_2021_2022_2nd_term: "AY 2021-2022 | 2nd Term",
+    ay_2021_2022_3rd_term: "AY 2021-2022 | 3rd Term",
+    ay_2022_2023_1st_term: "AY 2022-2023 | 1st Term",
+    ay_2022_2023_2nd_term: "AY 2022-2023 | 2nd Term",
+    ay_2022_2023_3rd_term: "AY 2022-2023 | 3rd Term",
+    ay_2023_2024_1st_term: "AY 2023-2024 | 1st Term",
+    ay_2023_2024_2nd_term: "AY 2023-2024 | 2nd Term",
+    ay_2023_2024_3rd_term: "AY 2023-2024 | 3rd Term",
+    ay_2024_2025_1st_term: "AY 2024-2025 | 1st Term",
+    ay_2024_2025_2nd_term: "AY 2024-2025 | 2nd Term",
+};
+
+const scholarshipMapping = {
+    academic_honoree_g11: "Academic Honoree - G11",
+    academic_honoree_grade_7: "Academic Honoree - Grade 7",
+    academic_honoree_rank_1_and_2: "Academic Honoree - Rank 1 and 2",
+    academic_excellence_axa: "Academic Excellence (AXA)",
+    academic_achiever_grade_11_top_20: "Academic Achiever - Grade 11 - Top 20",
+    academic_honoree_grade_12_top_20: "Academic Honoree - Grade 12 - Top 20",
+    presidents_list: "President's List",
+    et_yuchengco: "E.T. Yuchengco",
+    jose_rizal: "Jose Rizal Scholarship",
+    mcm_cup: "MCM Cup",
+    hyperlink: "Hyperlink",
+    st_scholarship: "S&T Scholarship",
+    paid_fund: "PAID Fund",
+    bukas_ph: "Bukas.ph",
+    early_bird: "Early Bird",
+    referral: "Referral",
+    sibling: "Sibling",
+    ygc: "YGC",
+    study_aid: "Study Aid",
+};
+
 
 export default function AddStudent() {
 
@@ -132,7 +184,7 @@ export default function AddStudent() {
             tab.style.display = index === n ? "flex" : "none";
         });
         document.getElementById("prevBtn").style.display = n === 0 ? "none" : "flex";
-        document.getElementById("nextBtn").innerHTML = n === tabs.length - 1 ? "Submit" : "Next";
+        document.getElementById("nextBtn").innerHTML = n === tabs.length - 1 ? "Add Student" : "Next";
         fixStepIndicator(n);
     };
 
@@ -450,43 +502,49 @@ export default function AddStudent() {
                                             <div className='pl-5 pt-5'>
                                             <Label htmlFor="scholarship" className="text-black text-xs mt-1">Scholarship</Label>
                                             <FormItem label="scholarship" className="w-11/12 mb-5">
-                                                <Select {...register('scholarship')}>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select Scholarship" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectGroup className='bg-slate-50 '>
-                                                            <SelectLabel className="text-xs">Scholarship</SelectLabel>
-                                                            <SelectItem value="academic_honoree_g11" className="pl-7 hover:bg-slate-200">Academic Honoree - G11</SelectItem>
-                                                            <SelectItem value="academic_honoree_grade_7" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 7</SelectItem>
-                                                            <SelectItem value="academic_honoree_rank_1_and_2" className="pl-7 hover:bg-slate-200">Academic Honoree - Rank 1 and 2</SelectItem>
-                                                            <SelectItem value="academic_excellence_axa" className="pl-7 hover:bg-slate-200">Academic Excellence (AXA)</SelectItem>
-                                                            <SelectItem value="academic_achiever_grade_11_top_20" className="pl-7 hover:bg-slate-200">Academic Achiever - Grade 11 - Top 20</SelectItem>
-                                                            <SelectItem value="academic_honoree_grade_12_top_20" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 12 - Top 20</SelectItem>
-                                                            <SelectItem value="presidents_list" className="pl-7 hover:bg-slate-200">President&lsquo;s List</SelectItem>
-                                                            <SelectItem value="et_yuchengco" className="pl-7 hover:bg-slate-200">E.T. Yuchengco</SelectItem>
-                                                            <SelectItem value="jose_rizal" className="pl-7 hover:bg-slate-200">Jose Rizal Scholarship</SelectItem>
-                                                            <SelectItem value="mcm_cup" className="pl-7 hover:bg-slate-200">MCM Cup</SelectItem>
-                                                            <SelectItem value="hyperlink" className="pl-7 hover:bg-slate-200">Hyperlink</SelectItem>
-                                                            <SelectItem value="st_scholarship" className="pl-7 hover:bg-slate-200">S&T Scholarship</SelectItem>
-                                                        </SelectGroup>
-                                                        <SelectGroup className='bg-slate-50'>
-                                                            <SelectLabel className="text-xs">Financial Assistance</SelectLabel>
-                                                            <SelectItem value="paid_fund" className="pl-7 hover:bg-slate-200">PAID Fund</SelectItem>
-                                                            <SelectItem value="bukas_ph" className="pl-7 hover:bg-slate-200">Bukas.ph</SelectItem>
-                                                        </SelectGroup>
-                                                        <SelectGroup className='bg-slate-50'>
-                                                            <SelectLabel className="text-xs">Discounts</SelectLabel>
-                                                            <SelectItem value="early_bird" className="pl-7 hover:bg-slate-200">Early Bird</SelectItem>
-                                                            <SelectItem value="referral" className="pl-7 hover:bg-slate-200">Referral</SelectItem>
-                                                            <SelectItem value="sibling" className="pl-7 hover:bg-slate-200">Sibling</SelectItem>
-                                                            <SelectItem value="ygc" className="pl-7 hover:bg-slate-200">YGC</SelectItem>
-                                                            <SelectItem value="study_aid" className="pl-7 hover:bg-slate-200">Study Aid</SelectItem>
-                                                        </SelectGroup>
-                                                    </SelectContent>
-                                                </Select>
+                                                <Controller
+                                                    name="scholarship"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Select {...field} onValueChange={(value) => field.onChange(value)}>
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder="Select Scholarship" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectGroup className='bg-slate-50'>
+                                                                    <SelectLabel className="text-xs">Scholarship</SelectLabel>
+                                                                    <SelectItem value="academic_honoree_g11" className="pl-7 hover:bg-slate-200">Academic Honoree - G11</SelectItem>
+                                                                    <SelectItem value="academic_honoree_grade_7" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 7</SelectItem>
+                                                                    <SelectItem value="academic_honoree_rank_1_and_2" className="pl-7 hover:bg-slate-200">Academic Honoree - Rank 1 and 2</SelectItem>
+                                                                    <SelectItem value="academic_excellence_axa" className="pl-7 hover:bg-slate-200">Academic Excellence (AXA)</SelectItem>
+                                                                    <SelectItem value="academic_achiever_grade_11_top_20" className="pl-7 hover:bg-slate-200">Academic Achiever - Grade 11 - Top 20</SelectItem>
+                                                                    <SelectItem value="academic_honoree_grade_12_top_20" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 12 - Top 20</SelectItem>
+                                                                    <SelectItem value="presidents_list" className="pl-7 hover:bg-slate-200">President&lsquo;s List</SelectItem>
+                                                                    <SelectItem value="et_yuchengco" className="pl-7 hover:bg-slate-200">E.T. Yuchengco</SelectItem>
+                                                                    <SelectItem value="jose_rizal" className="pl-7 hover:bg-slate-200">Jose Rizal Scholarship</SelectItem>
+                                                                    <SelectItem value="mcm_cup" className="pl-7 hover:bg-slate-200">MCM Cup</SelectItem>
+                                                                    <SelectItem value="hyperlink" className="pl-7 hover:bg-slate-200">Hyperlink</SelectItem>
+                                                                    <SelectItem value="st_scholarship" className="pl-7 hover:bg-slate-200">S&T Scholarship</SelectItem>
+                                                                </SelectGroup>
+                                                                <SelectGroup className='bg-slate-50'>
+                                                                    <SelectLabel className="text-xs">Financial Assistance</SelectLabel>
+                                                                    <SelectItem value="paid_fund" className="pl-7 hover:bg-slate-200">PAID Fund</SelectItem>
+                                                                    <SelectItem value="bukas_ph" className="pl-7 hover:bg-slate-200">Bukas.ph</SelectItem>
+                                                                </SelectGroup>
+                                                                <SelectGroup className='bg-slate-50'>
+                                                                    <SelectLabel className="text-xs">Discounts</SelectLabel>
+                                                                    <SelectItem value="early_bird" className="pl-7 hover:bg-slate-200">Early Bird</SelectItem>
+                                                                    <SelectItem value="referral" className="pl-7 hover:bg-slate-200">Referral</SelectItem>
+                                                                    <SelectItem value="sibling" className="pl-7 hover:bg-slate-200">Sibling</SelectItem>
+                                                                    <SelectItem value="ygc" className="pl-7 hover:bg-slate-200">YGC</SelectItem>
+                                                                    <SelectItem value="study_aid" className="pl-7 hover:bg-slate-200">Study Aid</SelectItem>
+                                                                </SelectGroup>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    )}
+                                                />
                                                 {errors.scholarship && <span className="text-red-500 text-xs">{errors.scholarship.message}</span>}
-                                            </FormItem>
+                                                </FormItem>
                                             <Label htmlFor="enrollmentStatus" className="text-black text-xs">Enrollment Status</Label>
                                             <FormItem label="enrollmentStatus" className="mb-3 w-3/5">
                                                 <Controller
@@ -898,7 +956,7 @@ export default function AddStudent() {
                     </div>
                     
                     <div className="grid grid-cols-3 gap-2">
-                        <div className="card-add-student-preview grid-cols-1 place-items-center justify-center justify-items-center">
+                        <div className="card-add-student-preview grid-cols-1 place-items-center justify-center justify-items-center border hover:border-blue-900">
                         {/* Preview Personal Info */}
                             <div>
                                 <h1 className='text-black text-lg font-bold pb-4'>Profile</h1>
@@ -944,17 +1002,37 @@ export default function AddStudent() {
                         {/* Preview Enrollment Info */}
                         
                         <div className='grid gap-3'>
-                            <div id="col2row1" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border">
-                                <div>
-                                    <h1 className='text-stone-600 text-sm font-semibold'>Column2 first row</h1>
+                            <div id="col2row1" className="card-add-student-preview grid-rows-3 place-items-center justify-center justify-items-center border hover:border-blue-900">
+                            <div>
+                                    <h1 className='text-black text-lg font-bold pb-2'>Enrollment Status</h1>
+                                    </div>
+                                    <div className='flex items-center'>
+                                        <p className='text-blue-950 text-2xl font-bold'>{enrollmentStatusMapping[watch('enrollmentStatus')]?.text}</p>
+                                        {watch('enrollmentStatus') && (
+                                            <img src={enrollmentStatusMapping[watch('enrollmentStatus')]?.img} alt={enrollmentStatusMapping[watch('enrollmentStatus')]?.text} className="ml-2 w-9 h-9" />
+                                        )}
+                                    </div>
+                                    <Separator className="-mt-6 w-3/4" />
+                                    <div className='-mt-8'>
+                                        <p className='text-black text-xs font-semibold'>{recentSchoolYearMapping[watch('recentSchoolYear')]}</p>
+                                    </div>
+                            </div>
+                            <div id="col2row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
+                            <div>
+                                    <h1 className='text-black text-lg font-bold pb-2'>Scholarship Status</h1>
+                                </div>
+                                <div className='flex items-center'>
+                                    <p className='text-blue-950 text-2xl font-bold'>{scholarshipStatusMapping[watch('scholarshipStatus')]?.text}</p>
+                                    {watch('scholarshipStatus') && (
+                                        <img src={scholarshipStatusMapping[watch('scholarshipStatus')]?.img} alt={scholarshipStatusMapping[watch('scholarshipStatus')]?.text} className="ml-2 w-9 h-9" />
+                                    )}
+                                </div>
+                                <Separator className="-mt-6 w-3/4" />
+                                <div className='-mt-8'>
+                                    <h1 className='text-black text-xs font-semibold'>{scholarshipMapping[watch('scholarship')]}</h1>
                                 </div>
                             </div>
-                            <div id="col2row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border">
-                                <div>
-                                    <h1 className='text-stone-600 text-sm font-semibold'>Column2 second row</h1>
-                                </div>
-                            </div>
-                            <div id="col2row3" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border">
+                            <div id="col2row3" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
                                 <div>
                                     <h1 className='text-stone-600 text-sm font-semibold'>Column2 third row</h1>
                                 </div>
@@ -962,88 +1040,15 @@ export default function AddStudent() {
                         </div>
 
                         <div className='grid gap-3'>
-                            <div id="col3row1" className="card-add-student-preview">
+                            <div id="col3row1" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
                                 <h1 className='text-stone-600 text-sm font-semibold'>Column3 row1</h1>
                             </div>
-                            <div id="col3row2" className="card-add-student-preview">
+                            <div id="col3row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
                                 <h1 className='text-stone-600 text-sm font-semibold'>Column3 row2</h1>
                             </div> 
                         </div>
                                
                     </div>
-                    {/* <h1 className='text-stone-600 text-sm'>Review Your Information</h1>
-                    <div className='pl-5 pt-5'>
-                        <div className="grid grid-cols-2 gap-5">
-                            <div className="personal-info">
-                                <h2 className='text-stone-600 text-sm'>Personal Information</h2>
-                                <p><strong>First Name:</strong> {watch('firstName')}</p>
-                                <p><strong>Middle Name:</strong> {watch('middleName')}</p>
-                                <p><strong>Last Name:</strong> {watch('lastName')}</p>
-                                <p><strong>Suffix:</strong> {watch('suffix')}</p>
-                                <p><strong>Date of Birth:</strong> {watch('dateOfBirth')}</p>
-                                <p><strong>Age:</strong> {watch('age')}</p>
-                            </div>
-                            <div className="org-info">
-                                <h2 className='text-stone-600 text-sm'>Student Information</h2>
-                                <p><strong>Student Number:</strong> {watch('studentNumber')}</p>
-                                <p><strong>Year Level:</strong> {watch('yearLevel')}</p>
-                                <p><strong>Program:</strong> {watch('program')}</p>
-                                <p><strong>Previous School:</strong> {watch('previousSchool')}</p>
-                                <p><strong>Scholarship:</strong> {watch('scholarship')}</p>
-                            </div>
-                            <div className="contact-info">
-                                <h2 className='text-stone-600 text-sm'>Contact Information</h2>
-                                <p><strong>Telephone Number:</strong> {watch('telNumber')}</p>
-                                <p><strong>Phone Number:</strong> {watch('contactNumber')}</p>
-                                <p><strong>Personal Email:</strong> {watch('personalEmail')}</p>
-                                <p><strong>School Email:</strong> {watch('schoolEmail')}</p>
-                            </div>
-                            <div className="address-info">
-                                <h2 className='text-stone-600 text-sm'>Permanent Address</h2>
-                                <p><strong>House / Block / Unit No.:</strong> {watch('houseBlockUnitNo')}</p>
-                                <p><strong>Street Name:</strong> {watch('street')}</p>
-                                <p><strong>Barangay:</strong> {watch('barangay')}</p>
-                                <p><strong>City:</strong> {watch('city')}</p>
-                                <p><strong>Municipality:</strong> {watch('municipality')}</p>
-                                <p><strong>ZipCode:</strong> {watch('zipCode')}</p>
-                            </div>
-                            <div className="parent-info">
-                                <h2 className='text-stone-600 text-sm'>Parent/Guardian Information</h2>
-                                <p><strong>First Name:</strong> {watch('parentFirstName')}</p>
-                                <p><strong>Middle Name:</strong> {watch('parentMiddleName')}</p>
-                                <p><strong>Last Name:</strong> {watch('parentLastName')}</p>
-                                <p><strong>Suffix:</strong> {watch('parentSuffix')}</p>
-                                <p><strong>Relationship:</strong> {watch('relationship')}</p>
-                                <p><strong>Occupation:</strong> {watch('occupation')}</p>
-                                <p><strong>Office/Work Number:</strong> {watch('officeNo')}</p>
-                                <p><strong>Mobile Number:</strong> {watch('mobileNo')}</p>
-                                <p><strong>Personal Email:</strong> {watch('parentEmail')}</p>
-                            </div>
-                            <div className="sibling-info">
-                                <h2 className='text-stone-600 text-sm'>Sibling Information</h2>
-                                <p><strong>First Name:</strong> {watch('siblingFirstName')}</p>
-                                <p><strong>Middle Name:</strong> {watch('siblingMiddleName')}</p>
-                                <p><strong>Last Name:</strong> {watch('siblingLastName')}</p>
-                                <p><strong>Suffix:</strong> {watch('siblingSuffix')}</p>
-                                <p><strong>Date of Birth:</strong> {watch('siblingDateOfBirth')}</p>
-                                <p><strong>Age:</strong> {watch('siblingAge')}</p>
-                                <p><strong>Personal Email:</strong> {watch('siblingPersonalEmail')}</p>
-                                <p><strong>School Email:</strong> {watch('siblingSchoolEmail')}</p>
-                            </div>
-                            <div className="upload-files">
-                                <h2 className='text-stone-600 text-sm'>Uploaded Documents</h2>
-                                <p><strong>Form 137:</strong> {watch('form137') ? 'Uploaded' : 'Not Uploaded'}</p>
-                                <p><strong>Form 138:</strong> {watch('form138') ? 'Uploaded' : 'Not Uploaded'}</p>
-                                <p><strong>Good Moral:</strong> {watch('goodMoral') ? 'Uploaded' : 'Not Uploaded'}</p>
-                                <p><strong>NSO/PSA:</strong> {watch('nso') ? 'Uploaded' : 'Not Uploaded'}</p>
-                                <p><strong>Others:</strong> {watch('others') ? 'Uploaded' : 'Not Uploaded'}</p>
-                            </div>
-                            <div className="upload-picture">
-                                <h2 className='text-stone-600 text-sm'>Uploaded Picture</h2>
-                                <p><strong>Profile Picture:</strong> {watch('profilePic') ? 'Uploaded' : 'Not Uploaded'}</p>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             </Form>
             <div className="add-student-toolbar">
