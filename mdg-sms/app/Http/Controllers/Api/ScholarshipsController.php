@@ -115,7 +115,7 @@ class ScholarshipsController extends Controller
                             'scholarship_statuses.name as status'
                         )
                         ->where('applications.scholarship_id','=',$id)
-                        ->paginate();
+                        ->get();
             $data = [
                 'profile' => $profile,
                 'types' => $types,

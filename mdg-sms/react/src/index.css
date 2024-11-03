@@ -1250,3 +1250,22 @@ header {
     border: 1px solid #ccc;
     margin-bottom: 20px;
 }
+
+.Data-Table{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.Data-Table Select{
+    background: white;
+    opacity: 1;  
+}
+
+.Data-Table table{ 
+    min-height: 50vh;   
+}
+
+.Data-Table table td {
+    vertical-align: top;
+}

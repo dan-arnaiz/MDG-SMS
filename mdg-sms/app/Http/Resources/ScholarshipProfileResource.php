@@ -68,11 +68,13 @@ class ScholarshipProfileResource extends JsonResource
 
     private function formatFullName($student)
     {
-        $fullName = ucfirst(strtolower($student->last_name)) . ", " . ucfirst(strtolower($student->first_name));
+        $fullName = ucfirst(strtolower($student->first_name));
 
         if (!empty($student->middle_name)) {
             $fullName .= " " . ucfirst(strtolower($student->middle_name));
         }
+
+        $fullName .= " " . ucfirst(strtolower($student->last_name));
 
         if (!empty($student->suffix)) {
             $fullName .= ", " . ucfirst(strtolower($student->suffix));
