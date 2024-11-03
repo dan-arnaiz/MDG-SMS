@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Form, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { z } from 'zod';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import {
@@ -15,8 +16,59 @@ import {
 } from "@/components/ui/select";
 import { Label } from '@/components/ui/label';
 
+const formSchema = z.object({
+    firstName: z.string().min(1, { message: "First Name is required" }),
+    middleName: z.string().optional(),
+    lastName: z.string().min(1, { message: "Last Name is required" }),
+    dateOfBirth: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
+    age: z.number().optional(),
+    studentNumber: z.string().min(1, { message: "Student Number is required" }),
+    yearLevel: z.string().min(1, { message: "Year Level is required" }),
+    program: z.string().min(1, { message: "Program is required" }),
+    previousSchool: z.string().optional(),
+    scholarship: z.string().optional(),
+    telNumber: z.string().optional(),
+    contactNumber: z.string().optional(),
+    personalEmail: z.string().email({ message: "Invalid email address" }).optional(),
+    schoolEmail: z.string().email({ message: "Invalid email address" }).optional(),
+    houseBlockUnitNo: z.string().optional(),
+    street: z.string().optional(),
+    barangay: z.string().optional(),
+    city: z.string().optional(),
+    municipality: z.string().optional(),
+    zipCode: z.string().optional(),
+    parentFirstName: z.string().min(1, { message: "First Name is required" }),
+    parentMiddleName: z.string().optional(),
+    parentLastName: z.string().min(1, { message: "Last Name is required" }),
+    parentSuffix: z.string().optional(),
+    relationship: z.string().min(1, { message: "Relationship is required" }),
+    occupation: z.string().optional(),
+    officeNo: z.string().optional(),
+    mobileNo: z.string().optional(),
+    parentEmail: z.string().email({ message: "Invalid email address" }).optional(),
+    siblingFirstName: z.string().optional(),
+    siblingMiddleName: z.string().optional(),
+    siblingLastName: z.string().optional(),
+    siblingSuffix: z.string().optional(),
+    siblingDateOfBirth: z.string().optional(),
+    siblingAge: z.number().optional(),
+    siblingPersonalEmail: z.string().email({ message: "Invalid email address" }).optional(),
+    siblingSchoolEmail: z.string().email({ message: "Invalid email address" }).optional(),
+    form137: z.any().optional(),
+    form138: z.any().optional(),
+    goodMoral: z.any().optional(),
+    nso: z.any().optional(),
+    others: z.any().optional(),
+    profilePic: z.any().optional(),
+});
+
 export default function AddStudent() {
     const [currentTab, setCurrentTab] = useState(0);
+    const [age, setAge] = useState('');
+
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+        resolver: zodResolver(formSchema),
+    });
 
     useEffect(() => {
         showTab(0); // Show Tab 1 when the component mounts
@@ -61,6 +113,21 @@ export default function AddStudent() {
         });
     };
 
+    const handleDateChange = (event) => {
+        const birthDate = new Date(event.target.value);
+        if (isNaN(birthDate.getTime())) {
+            setAge(''); // Set age to an empty string if the date is invalid
+            return;
+        }
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        setAge(age);
+    };
+
     return (
         <div className="main">
             <div className="header-toolbar">
@@ -73,17 +140,19 @@ export default function AddStudent() {
                         <div className="personal-info">
                             <h1 className='text-stone-600 text-sm'>Personal Information</h1>
                             <div className='pl-5 pt-5'>
-                                <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
+                            <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
                                 <FormItem label="first-name">
-                                    <Input type="text" placeholder="First Name" className="w-11/12 mb-3" /> 
+                                    <Input type="text" placeholder="First Name" className="w-11/12 mb-3" {...register('firstName')} />
+                                    {errors.firstName && <span className="text-red-500 text-xs">{errors.firstName.message}</span>}
                                 </FormItem>
                                 <Label htmlFor="middlename" className="text-black text-xs">Middle Name</Label>
                                 <FormItem label="middle-name">
-                                    <Input type="text" placeholder="Middle Name" className="w-11/12 mb-3" /> 
+                                    <Input type="text" placeholder="Middle Name" className="w-11/12 mb-3" {...register('middleName')} />
                                 </FormItem>
                                 <Label htmlFor="lastname" className="text-black text-xs">Last Name</Label>
                                 <FormItem label="last-name">
-                                    <Input type="text" placeholder="Last Name" className="w-11/12 mb-3" /> 
+                                    <Input type="text" placeholder="Last Name" className="w-11/12 mb-3" {...register('lastName')} />
+                                    {errors.lastName && <span className="text-red-500 text-xs">{errors.lastName.message}</span>}
                                 </FormItem>
                                 <Label htmlFor="suffix" className="text-black text-xs">Suffix</Label>
                                 <FormItem label="Suffix">
@@ -106,11 +175,11 @@ export default function AddStudent() {
                                 </FormItem>
                                 <Label htmlFor="dateofbirth" className="text-black text-xs">Date of Birth</Label>
                                 <FormItem label="dateofbirth">
-                                    <Input type="text" className="w-35 mb-3 text-base" /> 
+                                    <Input type="date" className="w-35 mb-3 text-xs" onChange={handleDateChange} /> 
                                 </FormItem>
                                 <Label htmlFor="age" className="text-black text-xs">Age</Label>
-                                <FormItem label="Age">
-                                    <Input type="text" className="w-35 mb-3 text-base" /> 
+                                <FormItem label="age">
+                                    <Input type="text" className="w-24 mb-3 text-xs" value={age}/> 
                                 </FormItem>
                             </div>
                         </div>
@@ -197,6 +266,44 @@ export default function AddStudent() {
                                 <Label htmlFor="recentschoolyear" className="text-black text-xs">Previous School Attended</Label>
                                 <FormItem label="Previous School">
                                     <Input type="text" className="w-11/12 mb-5" /> 
+                                </FormItem>
+                                <Label htmlFor="scholarship" className="text-black text-xs mt-2">Scholarship</Label>
+                                <FormItem label="scholarship" className="w-11/12 mb-5">
+                                    <Select>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select Scholarship" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup className='bg-slate-50'>
+                                                <SelectLabel className="text-xs">Scholarship</SelectLabel>
+                                                <SelectItem value="academic_honoree_g11" className="pl-7">Academic Honoree - G11</SelectItem>
+                                                <SelectItem value="academic_honoree_grade_7" className="pl-7">Academic Honoree - Grade 7</SelectItem>
+                                                <SelectItem value="academic_honoree_rank_1_and_2" className="pl-7">Academic Honoree - Rank 1 and 2</SelectItem>
+                                                <SelectItem value="academic_excellence_axa" className="pl-7">Academic Excellence (AXA)</SelectItem>
+                                                <SelectItem value="academic_achiever_grade_11_top_20" className="pl-7">Academic Achiever - Grade 11 - Top 20</SelectItem>
+                                                <SelectItem value="academic_honoree_grade_12_top_20" className="pl-7">Academic Honoree - Grade 12 - Top 20</SelectItem>
+                                                <SelectItem value="presidents_list" className="pl-7">President&apos;s List</SelectItem>
+                                                <SelectItem value="et_yuchengco" className="pl-7">E.T. Yuchengco</SelectItem>
+                                                <SelectItem value="jose_rizal" className="pl-7">Jose Rizal Scholarship</SelectItem>
+                                                <SelectItem value="mcm_cup" className="pl-7">MCM Cup</SelectItem>
+                                                <SelectItem value="hyperlink" className="pl-7">Hyperlink</SelectItem>
+                                                <SelectItem value="st_scholarship" className="pl-7">S&T Scholarship</SelectItem>
+                                            </SelectGroup>
+                                            <SelectGroup className='bg-slate-50'>
+                                                <SelectLabel className="text-xs">Financial Assistance</SelectLabel>
+                                                <SelectItem value="paid_fund" className="pl-7">PAID Fund</SelectItem>
+                                                <SelectItem value="bukas_ph" className="pl-7">Bukas.ph</SelectItem>
+                                            </SelectGroup>
+                                            <SelectGroup className='bg-slate-50'>
+                                                <SelectLabel className="text-xs">Discounts</SelectLabel>
+                                                <SelectItem value="early_bird" className="pl-7">Early Bird</SelectItem>
+                                                <SelectItem value="referral" className="pl-7">Referral</SelectItem>
+                                                <SelectItem value="sibling" className="pl-7">Sibling</SelectItem>
+                                                <SelectItem value="ygc" className="pl-7">YGC</SelectItem>
+                                                <SelectItem value="study_aid" className="pl-7">Study Aid</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
                                 </FormItem>
                             </div>
                         </div>
@@ -508,6 +615,10 @@ export default function AddStudent() {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="tab">
+                    {/* Preview & Submit Page */}
+                    This is the final review page
                 </div>
             </Form>
             <div className="add-student-toolbar">
