@@ -72,7 +72,7 @@ const router = createBrowserRouter([
                 element: <Navigate to="/student/dashboard" />
             },
             {
-                path: 'dashboard',
+                path: '/studentdashboard',
                 element: <StudentDash />
             }
         ]
