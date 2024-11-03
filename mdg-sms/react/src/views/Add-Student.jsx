@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Form, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Select,
     SelectContent,
@@ -108,24 +109,19 @@ export default function AddStudent() {
                                 </FormItem>
                             </div>
                         </div>
-                        <div className="personal-info">
-                            <h1 className='text-stone-600 text-sm'>Upload Photo</h1>
-
-                        </div>
-                    </div>
-                    {/* Org Info  */}
+                        {/* Org Info  */}
                     <div className="org-info">
-                        <h1 className='text-stone-600 text-sm'>Program Information</h1>
+                        <h1 className='text-stone-600 text-sm'>Student Information</h1>
                         <div className='pl-5 pt-5'>
                             <div>
-                            <Label htmlFor="lastname" className="text-black text-sm">MMCM Student Number</Label>
-                                <FormItem label="MMCM Student Number">
-                                    <Input type="text" className="w-35 mb-3 text-base" />
+                            <Label htmlFor="MMCM Student Number" className="text-black text-xs mt-1">Student Number</Label>
+                                <FormItem label="student-number">
+                                    <Input type="text" placeholder="Student Number" className="w-11/12 mb-3" /> 
                                 </FormItem>
-                            <Label htmlFor="lastname" className="text-black text-sm">Year Level</Label>
-                                <FormItem label="Current Year">
+                            <Label htmlFor="yearlevel" className="text-black text-xs mt-2">Year Level</Label>
+                                <FormItem label="Current Year" className="w-3/5 mb-5">
                                     <Select>
-                                        <SelectTrigger className="w-full">
+                                        <SelectTrigger>
                                             <SelectValue placeholder="Select Year" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -145,23 +141,23 @@ export default function AddStudent() {
                                         </SelectContent>
                                     </Select>
                                 </FormItem>
-                            </div>
-                            <div>
-                            <Label htmlFor="lastname" className="text-black text-sm">Program</Label>
-                                <FormItem label="Program/Strand" className="w-35 mb-3 text-base">
-                                    <Select>
+                                <Label htmlFor="lastname" className="text-black text-xs">Program</Label>
+                                <FormItem label="Program/Strand" className="w-3/5 mb-5">
+                                    <Select className="z-auto">
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Program/Strand" />
                                         </SelectTrigger>
                                         <SelectContent>
                                         <SelectGroup className='bg-slate-50'>
-                                            <SelectLabel className="text-xs">Senior High School</SelectLabel>
+                                        <SelectLabel className="text-xs">Senior High School</SelectLabel>
                                             <SelectItem value="abm" className="pl-10">ABM</SelectItem>
                                             <SelectItem value="humss" className="pl-10">HUMSS</SelectItem>
                                             <SelectItem value="stem" className="pl-10">STEM</SelectItem>
                                             <SelectItem value="arts_design" className="pl-10">Arts and Design</SelectItem>
                                             <SelectItem value="tvl_ict" className="pl-10">TVL-ICT</SelectItem>
-                                            <SelectLabel className="text-xs">College</SelectLabel>
+                                        </SelectGroup>
+                                        <SelectGroup className='bg-slate-50'>
+                                        <SelectLabel className="text-xs">College</SelectLabel>
                                             <SelectLabel className="text-black pl-5">ATYCB</SelectLabel>
                                             <SelectItem value="bs_entrepreneurship" className="pl-10">BS Entrepreneurship</SelectItem>
                                             <SelectItem value="bs_management_accounting" className="pl-10">BS Management Accounting</SelectItem>
@@ -193,28 +189,98 @@ export default function AddStudent() {
                                         </SelectContent>
                                     </Select>
                                 </FormItem>
-                                <Label htmlFor="recentschoolyear" className="text-black text-sm">Most Recent School Year</Label>
+                                <Label htmlFor="recentschoolyear" className="text-black text-xs">Previous School Attended</Label>
                                 <FormItem label="Previous School">
-                                    <Input type="text" className="w-35 mb-3 text-base" /> 
+                                    <Input type="text" className="w-11/12 mb-5" /> 
+                                </FormItem>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    <div className="contact-info">
+                        <h1 className='text-stone-600 text-sm'>Contact Information</h1>
+                        <div className='pl-5 pt-5'>
+                            <div>
+                            <Label htmlFor="TelNumber" className="text-black text-xs">Telephone Number</Label>
+                                <FormItem label="telnumber">
+                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            <Label htmlFor="ContactNumber" className="text-black text-xs">Phone Number</Label>
+                                <FormItem label="contactnumber">
+                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            </div>
+                            <div>
+                            <Label htmlFor="personalemail" className="text-black text-xs">Personal Email Address</Label>
+                                <FormItem label="personalemailaddress">
+                                    <Input type="email" placeholder="student@gmail.com" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            <Label htmlFor="personalemail" className="text-black text-xs">School Email Address</Label>
+                                <FormItem label="personalemailaddress">
+                                    <Input type="email" placeholder="student@mcm.edu.ph" className="w-11/12 mb-3" /> 
                                 </FormItem>
                             </div>
                         </div>
                     </div>
                     <div className="contact-info">
-                        <h1>CONTACT INFO</h1>
-                        <div>
+                        <h1 className='text-stone-600 text-sm'>Permanent Address</h1>
+                        <div className='pl-5 pt-5'>
                             <div>
-                                <FormItem label="Landline Number">
-                                    <Input type="text" className="w-full" /> {/* Adjust width using Tailwind CSS */}
+                            <Label htmlFor="houseblockunitno" className="text-black text-xs">House / Block / Unit No.</Label>
+                                <FormItem label="houseblockunitno">
+                                    <Input type="text" placeholder="" className="w-11/12"/> 
                                 </FormItem>
-                                <FormItem label="Mobile Number">
-                                    <Input type="text" className="w-full" /> {/* Adjust width using Tailwind CSS */}
+                            <Label htmlFor="Street" className="text-black text-xs">Street Name</Label>
+                                <FormItem label="street">
+                                    <Input type="text" placeholder="" className="w-11/12"/> 
                                 </FormItem>
+                            <Label htmlFor="Barangay" className="text-black text-xs">Barangay</Label>
+                                <FormItem label="barangay">
+                                    <Input type="text" placeholder="" className="w-11/12"/> 
+                                </FormItem>
+                            <Label htmlFor="City" className="text-black text-xs">City</Label>
+                                <FormItem label="City">
+                                    <Input type="text" placeholder="" className="w-11/12" /> 
+                                </FormItem>
+                            <Label htmlFor="Municipality" className="text-black text-xs">Municipality</Label>
+                                <FormItem label="Municipality">
+                                <Input type="text" placeholder="" className="w-11/12" /> 
+                                </FormItem>
+                            <Label htmlFor="ZipCode" className="text-black text-xs">ZipCode</Label>
+                                <FormItem label="ZipCode">
+                                <Input type="text" placeholder="" className="w-11/12 mb-3" /> 
+                                </FormItem>
+
+                            
                             </div>
-                            <div>
-                                <FormItem label="Personal Email">
-                                    <Input type="text" className="w-full" /> {/* Adjust width using Tailwind CSS */}
+                            
+                            <div className="mailing-address">
+                            <Label htmlFor="houseblockunitno" className="text-black text-xs">House / Block / Unit No.</Label>
+                                <FormItem label="houseblockunitno">
+                                    <Input type="text" placeholder="" className="w-11/12"/> 
                                 </FormItem>
+                            <Label htmlFor="Street" className="text-black text-xs">Street Name</Label>
+                                <FormItem label="street">
+                                    <Input type="text" placeholder="" className="w-11/12"/> 
+                                </FormItem>
+                            <Label htmlFor="Barangay" className="text-black text-xs">Barangay</Label>
+                                <FormItem label="barangay">
+                                    <Input type="text" placeholder="" className="w-11/12"/> 
+                                </FormItem>
+                            <Label htmlFor="City" className="text-black text-xs">City</Label>
+                                <FormItem label="City">
+                                    <Input type="text" placeholder="" className="w-11/12" /> 
+                                </FormItem>
+                            <Label htmlFor="Municipality" className="text-black text-xs">Municipality</Label>
+                                <FormItem label="Municipality">
+                                <Input type="text" placeholder="" className="w-11/12" /> 
+                                </FormItem>
+                            <Label htmlFor="ZipCode" className="text-black text-xs">ZipCode</Label>
+                                <FormItem label="ZipCode">
+                                <Input type="text" placeholder="" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            
                             </div>
                         </div>
                     </div>

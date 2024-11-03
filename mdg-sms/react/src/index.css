@@ -989,9 +989,6 @@ header {
 }
 
 
-.age-input{
-    width: 100px;
-}
 
 .student-info3{
     display: flex;
@@ -1015,14 +1012,12 @@ header {
 }
 .org-info div{
     display: flex;
-    width: 100%;
-    gap: 10px;
+    flex-direction: column;
 
 }
 
 .org-info div div{
     display: flex;
-    flex-direction: column;
 }
 
 .contact-info{
