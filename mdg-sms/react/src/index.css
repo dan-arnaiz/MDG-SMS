@@ -989,9 +989,6 @@ header {
 }
 
 
-.age-input{
-    width: 100px;
-}
 
 .student-info3{
     display: flex;
@@ -1015,14 +1012,12 @@ header {
 }
 .org-info div{
     display: flex;
-    width: 100%;
-    gap: 10px;
+    flex-direction: column;
 
 }
 
 .org-info div div{
     display: flex;
-    flex-direction: column;
 }
 
 .contact-info{
@@ -1063,6 +1058,25 @@ header {
     gap: 10rem;
 }
 
+.upload-picture {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.upload-files {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
 .step{
     margin: 1rem;
 }
@@ -1072,7 +1086,7 @@ header {
 }
 
 .finish {
-    background-color: #04AA6D;
+    background-color: #0051ff;
 }
 
 .add-students-btns button{
