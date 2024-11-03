@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import {
     Select,
     SelectContent,
@@ -16,6 +17,10 @@ import { Label } from '@/components/ui/label';
 
 export default function AddStudent() {
     const [currentTab, setCurrentTab] = useState(0);
+
+    useEffect(() => {
+        showTab(0); // Show Tab 1 when the component mounts
+    }, []);
 
     const showTab = (n) => {
         const tabs = document.querySelectorAll(".tab");
@@ -197,8 +202,10 @@ export default function AddStudent() {
                         </div>
                     </div>
                     </div>
-                    
-                    <div className="contact-info">
+            
+                </div>
+                <div className="tab">
+                <div className="contact-info">
                         <h1 className='text-stone-600 text-sm'>Contact Information</h1>
                         <div className='pl-5 pt-5'>
                             <div>
@@ -223,7 +230,9 @@ export default function AddStudent() {
                             </div>
                         </div>
                     </div>
-                    <div className="contact-info">
+                </div>
+                <div className="tab">
+                <div className="contact-info">
                         <h1 className='text-stone-600 text-sm'>Permanent Address</h1>
                         <div className='pl-5 pt-5'>
                             <div>
@@ -286,16 +295,219 @@ export default function AddStudent() {
                     </div>
                 </div>
                 <div className="tab">
-                    {/* Additional tabs content */}
+                    {/* Parent/Guardian Info  */}
+                    <div className="grid grid-cols-2 gap-5">
+                        <div className="personal-info">
+                            <h1 className='text-stone-600 text-sm'>Parent/Guardian Information</h1>
+                            <div className='pl-5 pt-5'>
+                                <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
+                                <FormItem label="first-name">
+                                    <Input type="text" placeholder="First Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="middlename" className="text-black text-xs">Middle Name</Label>
+                                <FormItem label="middle-name">
+                                    <Input type="text" placeholder="Middle Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="lastname" className="text-black text-xs">Last Name</Label>
+                                <FormItem label="last-name">
+                                    <Input type="text" placeholder="Last Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="suffix" className="text-black text-xs">Suffix</Label>
+                                <FormItem label="Suffix">
+                                    <Select>
+                                        <SelectTrigger className="w-auto mb-3" defaultValue="blank">
+                                            <SelectValue placeholder="Suffix" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup className="bg-slate-50">
+                                                <SelectLabel>Select Suffix</SelectLabel>
+                                                <SelectItem value="blank" className="mb-3"></SelectItem>
+                                                <SelectItem value="jr" className="mb-2">Jr.</SelectItem>
+                                                <SelectItem value="sr" className="mb-2">Sr.</SelectItem>
+                                                <SelectItem value="ii" className="mb-2">II</SelectItem>
+                                                <SelectItem value="iii" className="mb-2">III</SelectItem>
+                                                <SelectItem value="iv" className="mb-2">IV</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                                <Label htmlFor="relationship" className="text-black text-xs">Relationship</Label>
+                                <FormItem label="relationship">
+                                    <Input type="text" placeholder="Relationship" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="occupation" className="text-black text-xs">Occupation</Label>
+                                <FormItem label="occupation">
+                                    <Input type="text" placeholder="Occupation" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="officeno" className="text-black text-xs">Office/Work Number</Label>
+                                <FormItem label="officeno">
+                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="mobileno" className="text-black text-xs">Mobile Number</Label>
+                                <FormItem label="mobileno">
+                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="email" className="text-black text-xs">Personal Email Address</Label>
+                                <FormItem label="email">
+                                    <Input type="email" placeholder="personal@gmail.com" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            </div>   
+                        </div>
+                        <div className="personal-info">
+                            <h1 className='text-stone-600 text-sm'>Parent/Guardian Information</h1>
+                            <div className='pl-5 pt-5'>
+                                <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
+                                <FormItem label="first-name">
+                                    <Input type="text" placeholder="First Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="middlename" className="text-black text-xs">Middle Name</Label>
+                                <FormItem label="middle-name">
+                                    <Input type="text" placeholder="Middle Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="lastname" className="text-black text-xs">Last Name</Label>
+                                <FormItem label="last-name">
+                                    <Input type="text" placeholder="Last Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="suffix" className="text-black text-xs">Suffix</Label>
+                                <FormItem label="Suffix">
+                                    <Select>
+                                        <SelectTrigger className="w-auto mb-3" defaultValue="blank">
+                                            <SelectValue placeholder="Suffix" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup className="bg-slate-50">
+                                                <SelectLabel>Select Suffix</SelectLabel>
+                                                <SelectItem value="blank" className="mb-3"></SelectItem>
+                                                <SelectItem value="jr" className="mb-2">Jr.</SelectItem>
+                                                <SelectItem value="sr" className="mb-2">Sr.</SelectItem>
+                                                <SelectItem value="ii" className="mb-2">II</SelectItem>
+                                                <SelectItem value="iii" className="mb-2">III</SelectItem>
+                                                <SelectItem value="iv" className="mb-2">IV</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                                <Label htmlFor="relationship" className="text-black text-xs">Relationship</Label>
+                                <FormItem label="relationship">
+                                    <Input type="text" placeholder="Relationship" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="occupation" className="text-black text-xs">Occupation</Label>
+                                <FormItem label="occupation">
+                                    <Input type="text" placeholder="Occupation" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="officeno" className="text-black text-xs">Office/Work Number</Label>
+                                <FormItem label="officeno">
+                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="mobileno" className="text-black text-xs">Mobile Number</Label>
+                                <FormItem label="mobileno">
+                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="email" className="text-black text-xs">Personal Email Address</Label>
+                                <FormItem label="email">
+                                    <Input type="email" placeholder="personal@gmail.com" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            </div>   
+                        </div>
+                    </div>
+                    { /* Sibling Info  */}
+                    <div className="contact-info">
+                        <h1 className='text-stone-600 text-sm'>Sibling Information</h1>
+                        <div className='pl-5 pt-5'>
+                            <div>
+                            <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
+                                <FormItem label="first-name">
+                                    <Input type="text" placeholder="First Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="middlename" className="text-black text-xs">Middle Name</Label>
+                                <FormItem label="middle-name">
+                                    <Input type="text" placeholder="Middle Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="lastname" className="text-black text-xs">Last Name</Label>
+                                <FormItem label="last-name">
+                                    <Input type="text" placeholder="Last Name" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="suffix" className="text-black text-xs">Suffix</Label>
+                                <FormItem label="Suffix">
+                                    <Select>
+                                        <SelectTrigger className="w-40 mb-3" defaultValue="blank">
+                                            <SelectValue placeholder="Suffix" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup className="bg-slate-50">
+                                                <SelectLabel>Select Suffix</SelectLabel>
+                                                <SelectItem value="blank" className="mb-3"></SelectItem>
+                                                <SelectItem value="jr" className="mb-2">Jr.</SelectItem>
+                                                <SelectItem value="sr" className="mb-2">Sr.</SelectItem>
+                                                <SelectItem value="ii" className="mb-2">II</SelectItem>
+                                                <SelectItem value="iii" className="mb-2">III</SelectItem>
+                                                <SelectItem value="iv" className="mb-2">IV</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                                <Label htmlFor="dateofbirth" className="text-black text-xs">Date of Birth</Label>
+                                <FormItem label="dateofbirth">
+                                    <Input type="text" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="age" className="text-black text-xs">Age</Label>
+                                <FormItem label="Age">
+                                    <Input type="text" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            </div>
+                            <div>
+                            <Label htmlFor="personalemail" className="text-black text-xs">Personal Email Address</Label>
+                                <FormItem label="personalemailaddress">
+                                    <Input type="email" placeholder="student@gmail.com" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            <Label htmlFor="personalemail" className="text-black text-xs">School Email Address</Label>
+                                <FormItem label="personalemailaddress">
+                                    <Input type="email" placeholder="student@mcm.edu.ph" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            </div>
+                        </div>
+                    </div>  
+                <div>
+                </div>
                 </div>
                 <div className="tab">
-                    {/* Additional tabs content */}
-                </div>
-                <div className="tab">
-                    {/* Additional tabs content */}
-                </div>
-                <div className="tab">
-                    {/* Additional tabs content */}
+                    {/* Upload Documents & Picture / Submit Page */}
+                    <div className="grid grid-cols-2 gap-5">
+                        <div className="upload-files">
+                            <h1 className='text-stone-600 text-sm'>Upload Documents</h1>
+                            <div className='pl-5 pt-5'>
+                                <Label htmlFor="form137" className="text-black text-xs">Form 137</Label>
+                                <FormItem label="form137">
+                                    <Input type="file" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="form138" className="text-black text-xs">Form 138</Label>
+                                <FormItem label="form138">
+                                    <Input type="file" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="goodmoral" className="text-black text-xs">Good Moral</Label>
+                                <FormItem label="goodmoral">
+                                    <Input type="file" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="nso" className="text-black text-xs">NSO/PSA</Label>
+                                <FormItem label="nso">
+                                    <Input type="file" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                                <Label htmlFor="others" className="text-black text-xs">Others</Label>
+                                <FormItem label="others">
+                                    <Input type="file" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            </div>
+                        </div>
+                        <div className="upload-picture">
+                            <h1 className='text-stone-600 text-sm'>Upload Picture</h1>
+                            <div className='pl-5 pt-5'>
+                                <Label htmlFor="profilepic" className="text-black text-xs">Profile Picture</Label>
+                                <FormItem label="profilepic">
+                                    <Input type="file" className="w-11/12 mb-3" /> 
+                                </FormItem>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Form>
             <div className="add-student-toolbar">
@@ -307,8 +519,8 @@ export default function AddStudent() {
                     <span className="step"></span>
                 </div>
                 <div className="add-students-btns">
-                    <Button type="button" id="prevBtn" onClick={() => nextPrev(-1)}>Back</Button>
-                    <Button type="button" id="nextBtn" onClick={() => nextPrev(1)}>Next</Button>
+                    <Button type="button" id="prevBtn" className="hover:bg-blue-800 hover:text-teal-50 font-sans text-xs" onClick={() => nextPrev(-1)}>Back</Button>
+                    <Button type="button" id="nextBtn" className="hover:bg-blue-800 hover:text-teal-50 font-sans text-xs" onClick={() => nextPrev(1)}>Next</Button>
                 </div>
             </div>
         </div>
