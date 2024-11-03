@@ -52,6 +52,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
+            $table->boolean('is_submitted');
             $table->timestamps();
         });
    
@@ -65,7 +66,7 @@ return new class extends Migration
             $table->foreignId('term_id')->nullable()->constrained()->nullOnDelete();
             $table->datetime('date_filed');
             $table->datetime('date_terminated')->nullable();
-            $table->boolean('current');
+            $table->boolean('is_current');
             $table->timestamps();
         });
 

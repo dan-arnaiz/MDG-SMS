@@ -32,8 +32,8 @@ class StudentsController extends Controller
                             'programs.name as program',
                             'scholarship_statuses.name as status'
                         )
-                        ->where('applications.current','=','1')
-                        ->paginate();
+                        ->where('applications.is_current','=','1')
+                        ->get();
             return StudentResource::collection($students);     
         } catch (\Exception $e) {
             return response()->json(['error' => 'Something went wrong'], 500);

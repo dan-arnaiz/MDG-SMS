@@ -16,6 +16,7 @@ export default function AdminStudentProfile() {
     }, [])
 
     const getStudent = () => {
+
         setLoading(true)
         axiosClient.get(`/students/${id}`)
             .then(({data}) => {
@@ -28,6 +29,7 @@ export default function AdminStudentProfile() {
                 setLoading(false); 
             });
     }
+    
     
     return(
         <div>
