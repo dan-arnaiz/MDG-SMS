@@ -45,7 +45,7 @@ export default function Login() {
     return (
         <main className="login-main">
             <div className="login-background">
-                <img src="images/Logo-Final_noname_1.png" alt="Logo"/>
+                <img src="images/Logo-mmcm.png" alt="Logo"/>
             </div>
             <div className="Login-Form">
                 <div className="login-logo">
