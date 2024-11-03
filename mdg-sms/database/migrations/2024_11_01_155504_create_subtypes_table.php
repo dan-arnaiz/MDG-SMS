@@ -25,7 +25,7 @@ return new class extends Migration
             $table->text('description');
             $table->timestamps();
         });
-        Schema::create('retenions', function (Blueprint $table) {
+        Schema::create('retentions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->text('description');

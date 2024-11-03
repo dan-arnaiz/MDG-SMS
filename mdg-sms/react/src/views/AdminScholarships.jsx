@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js"
 
 export default function AdminScholarships() {
 
     const[scholarships,setScholarships] = useState([]);
-    const[loading,setLoading] = useState(false);
+    const[loading,setLoading] = useState(true);
 
     useEffect(() => {
         getScholarships();
@@ -25,6 +25,16 @@ export default function AdminScholarships() {
                 console.error('Error:', error.response ? error.response.data : error.message);
                 setLoading(false); 
             });
+    }
+
+    const navigate = useNavigate();
+
+    const handleCardDoubleClick = ({id,name}) => {
+        navigate(`/scholarships/${id}-${name}`);
+    };
+
+    if (loading) {
+        return <div>Loading...</div>; // Show loading indicator
     }
     
 
@@ -49,8 +59,7 @@ export default function AdminScholarships() {
                 <div className='scholarship-list'>
                     <ul>
                         {scholarships.map(s =>(
-                            <li key={s.id}>
-                                <Link to="">
+                            <li key={s.id} onClick={() => handleCardDoubleClick({ id: s.id, name: s.name })}>
                                     <div className='scholarship-card'>
                                         <h1>{s.name}</h1>
                                         <hr></hr>
@@ -69,7 +78,6 @@ export default function AdminScholarships() {
                                             </div>
                                         </div>
                                     </div>
-                                </Link>
                             </li>
                         ))}
                     </ul>

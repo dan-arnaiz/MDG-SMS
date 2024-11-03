@@ -32,7 +32,7 @@ class StudentsController extends Controller
                             'programs.name as program',
                             'scholarship_statuses.name as status'
                         )
-                        ->where('applications.current','=','1')
+                        ->where('applications.is_current','=','1')
                         ->paginate();
             return StudentResource::collection($students);     
         } catch (\Exception $e) {
