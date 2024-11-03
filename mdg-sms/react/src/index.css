@@ -454,8 +454,10 @@ header {
 .header-toolbar {
     background: white;
     padding: 10px 40px;
-    border-radius: 15px;
+    border-radius: 10px;
     box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
 }
 
 .students-title h1 {
@@ -862,6 +864,7 @@ header {
     height: 20vh;
     justify-content: center;
     gap: 15px; 
+    
 }
 
 .cards-container div:hover {
@@ -965,13 +968,23 @@ header {
     width: 20%;
 }
 
-.personal-info{
+.card-add-student {
     display: flex;
     flex-direction: column;
     background: white;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-width: 1px;
+}
+
+.card-add-student-preview {
+    display: grid ;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-width: 1px;
 }
 
 .personal-info div{

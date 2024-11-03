@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Form, FormItem, FormLabel } from '@/components/ui/form';
-import { useForm } from 'react-hook-form'; // Import useForm
+import { useForm, Controller } from 'react-hook-form'; // Import useForm
 import { zodResolver } from '@hookform/resolvers/zod'; // Import zodResolver
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { z } from 'zod';
 import {
     Select,
@@ -63,13 +64,63 @@ const formSchema = z.object({
     profilePic: z.any().optional(),
 });
 
+const yearLevelMapping = {
+    jhs_grade_7: "Grade 7",
+    shs_grade_11: "Grade 11",
+    shs_grade_12: "Grade 12",
+    college_first_year: "First Year",
+    college_second_year: "Second Year",
+    college_third_year: "Third Year",
+    college_fourth_year: "Fourth Year",
+    college_fifth_year: "Fifth Year",
+};
+
+const programMapping = {
+    abm: "ABM",
+    humss: "HUMSS",
+    stem: "STEM",
+    arts_design: "Arts and Design",
+    tvl_ict: "TVL-ICT",
+    bs_entrepreneurship: "Bachelor of Science in Entrepreneurship",
+    bs_management_accounting: "Bachelor of Science in Management Accounting",
+    bs_real_estate_management: "Bachelor of Science in Real Estate Management",
+    bs_tourism_management: "Bachelor of Science in Tourism Management",
+    bs_accountancy: "Bachelor of Science in Accountancy",
+    bs_communication: "Bachelor of Science in Communication",
+    bs_multimedia_arts: "Bachelor of Science in Multimedia Arts",
+    bs_computer_science: "Bachelor of Science in Computer Science",
+    bs_entertainment_multimedia_computing: "Bachelor of Science in Entertainment and Multimedia Computing",
+    bs_information_systems: "Bachelor of Science in Information Systems",
+    bs_architecture: "Bachelor of Science in Architecture",
+    bs_chemical_engineering: "Bachelor of Science in Chemical Engineering",
+    bs_civil_engineering: "Bachelor of Science in Civil Engineering",
+    bs_computer_engineering: "Bachelor of Science in Computer Engineering",
+    bs_electrical_engineering: "Bachelor of Science in Electrical Engineering",
+    bs_electronics_engineering: "Bachelor of Science in Electronics Engineering",
+    bs_industrial_engineering: "Bachelor of Science in Industrial Engineering",
+    bs_mechanical_engineering: "Bachelor of Science in Mechanical Engineering",
+    bs_biology: "Bachelor of Science in Biology",
+    bs_psychology: "Bachelor of Science in Psychology",
+    bs_pharmacy: "Bachelor of Science in Pharmacy",
+    bs_physical_therapy: "Bachelor of Science in Physical Therapy",
+};
+
+
 export default function AddStudent() {
+
     const [currentTab, setCurrentTab] = useState(0);
     const [age, setAge] = useState('');
 
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm({
         resolver: zodResolver(formSchema),
     });
+
+    const profilePic = watch('profilePic');
+    const defaultProfilePic = '/images/default-profile.png';
+
+    const dateOfBirth = watch('dateOfBirth');
+    const formattedDateOfBirth = dateOfBirth ? new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(dateOfBirth)) : '';
+
 
     useEffect(() => {
         showTab(0); // Show Tab 1 when the component mounts
@@ -102,6 +153,9 @@ export default function AddStudent() {
 
         setCurrentTab(newTab);
         showTab(newTab);
+
+        // Scroll to the top of the page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleSameAsPermanent = (event) => {
@@ -132,11 +186,10 @@ export default function AddStudent() {
         });
     };
 
-    const handleDateChange = (event) => {
+    const handleDateChange = (event, field) => {
         const birthDate = new Date(event.target.value);
         if (isNaN(birthDate.getTime())) {
-            setAge(''); // Set age to an empty string if the date is invalid
-            setValue('age', ''); // Update the form value
+            setValue(field, ''); // Update the form value
             return;
         }
         const today = new Date();
@@ -145,8 +198,7 @@ export default function AddStudent() {
         if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
-        setAge(age);
-        setValue('age', age); // Update the form value
+        setValue(field, age); // Update the form value
     };
 
     const onSubmit = async (data) => {
@@ -177,14 +229,15 @@ export default function AddStudent() {
     return (
         <div className="main">
             <div className="header-toolbar">
-                <h1 className="text-black font-bold font-sans text-lg">Add Student</h1>
+                <h1 className="text-black font-bold font-sans text-lg pt-1">Add Student</h1>
+                <Button className="hover:bg-slate-500 border hover:black hover:text-white" onClick={() => window.history.back()}>Cancel</Button>
             </div>
             <Form id="regForm" onSubmit={handleSubmit(onSubmit)}>
                 <div className="tab mt-3">
                     {/* Personal Info  */}
                         <div className="grid grid-cols-2 gap-5">
-                            <div className="personal-info">
-                                <h1 className='text-stone-600 text-sm'>Personal Information</h1>
+                            <div className="card-add-student hover:border-blue-200">
+                                <h1 className='text-stone-600 text-sm font-semibold'>Personal Information</h1>
                                 <div className='pl-5 pt-5'>
                                     <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
                                     <FormItem label="first-name">
@@ -207,32 +260,32 @@ export default function AddStudent() {
                                                 <SelectValue placeholder="Suffix" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectGroup className="bg-slate-50">
+                                            <SelectGroup className="bg-slate-50">
                                                     <SelectLabel>Select Suffix</SelectLabel>
-                                                    <SelectItem value="blank" className="mb-3"></SelectItem>
-                                                    <SelectItem value="jr" className="mb-2">Jr.</SelectItem>
-                                                    <SelectItem value="sr" className="mb-2">Sr.</SelectItem>
-                                                    <SelectItem value="ii" className="mb-2">II</SelectItem>
-                                                    <SelectItem value="iii" className="mb-2">III</SelectItem>
-                                                    <SelectItem value="iv" className="mb-2">IV</SelectItem>
+                                                    <SelectItem value="blank" className="mb-3 hover:bg-slate-200"></SelectItem>
+                                                    <SelectItem value="jr" className="mb-2 hover:bg-slate-200">Jr.</SelectItem>
+                                                    <SelectItem value="sr" className="mb-2 hover:bg-slate-200">Sr.</SelectItem>
+                                                    <SelectItem value="ii" className="mb-2 hover:bg-slate-200">II</SelectItem>
+                                                    <SelectItem value="iii" className="mb-2 hover:bg-slate-200">III</SelectItem>
+                                                    <SelectItem value="iv" className="mb-2 hover:bg-slate-200">IV</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
                                     </FormItem>
                                     <Label htmlFor="dateofbirth" className="text-black text-xs">Date of Birth</Label>
                                     <FormItem label="dateofbirth">
-                                        <Input type="date" className="w-35 mb-3 text-xs" onChange={handleDateChange} {...register('dateOfBirth')} />
-                                        {errors.dateOfBirth && <span className="text-red-500 text-xs">{errors.dateOfBirth.message}</span>}
+                                        <Input type="date" className="w-35 mb-3 text-xs" onChange={(e) => handleDateChange(e, 'age')} {...register('dateOfBirth')} />
                                     </FormItem>
                                     <Label htmlFor="age" className="text-black text-xs">Age</Label>
                                     <FormItem label="age">
-                                        <Input type="text" className="w-24 mb-3 text-xs" value={age} readOnly {...register('age')} />
+                                        <Input type="text" className="w-40 mb-3" value={watch('age')} readOnly {...register('age')} />
+                                        {errors.age && <span className="text-red-500 text-xs">{errors.age.message}</span>}
                                     </FormItem>
                                 </div>
                             </div>
                             {/* Org Info  */}
-                            <div className="org-info">
-                                <h1 className='text-stone-600 text-sm'>Student Information</h1>
+                            <div className="card-add-student hover:border-blue-200">
+                                <h1 className='text-stone-600 text-sm font-semibold'>Student Information</h1>
                                 <div className='pl-5 pt-5'>
                                     <div>
                                         <Label htmlFor="MMCM Student Number" className="text-black text-xs mt-1">Student Number</Label>
@@ -242,75 +295,87 @@ export default function AddStudent() {
                                         </FormItem>
                                         <Label htmlFor="yearlevel" className="text-black text-xs mt-2">Year Level</Label>
                                         <FormItem label="Current Year" className="w-3/5 mb-5">
-                                            <Select {...register('yearLevel')}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select Year" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup className='bg-slate-50'>
-                                                        <SelectLabel className="text-xs">Junior High School</SelectLabel>
-                                                        <SelectItem value="jhs_grade_7" className="pl-7">Grade 7</SelectItem>
-                                                        <SelectLabel className="text-xs">Senior High School</SelectLabel>
-                                                        <SelectItem value="shs_grade_11" className="pl-7">Grade 11</SelectItem>
-                                                        <SelectItem value="shs_grade_12" className="pl-7">Grade 12</SelectItem>
-                                                        <SelectLabel className="text-xs">College</SelectLabel>
-                                                        <SelectItem value="college_1st_year" className="pl-7">1st Year</SelectItem>
-                                                        <SelectItem value="college_2nd_year" className="pl-7">2nd Year</SelectItem>
-                                                        <SelectItem value="college_3rd_year" className="pl-7">3rd Year</SelectItem>
-                                                        <SelectItem value="college_4th_year" className="pl-7">4th Year</SelectItem>
-                                                        <SelectItem value="college_5th_year" className="pl-7">5th Year</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                            {errors.yearLevel && <span className="text-red-500 text-xs">{errors.yearLevel.message}</span>}
-                                        </FormItem>
+                                        <Controller
+                                            name="yearLevel"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select {...field} onValueChange={(value) => field.onChange(value)}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select Year" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup className='bg-slate-50'>
+                                                            <SelectLabel className="text-xs">Junior High School</SelectLabel>
+                                                            <SelectItem value="jhs_grade_7" className="pl-7 hover:bg-slate-200">Grade 7</SelectItem>
+                                                            <SelectLabel className="text-xs">Senior High School</SelectLabel>
+                                                            <SelectItem value="shs_grade_11" className="pl-7 hover:bg-slate-200">Grade 11</SelectItem>
+                                                            <SelectItem value="shs_grade_12" className="pl-7 hover:bg-slate-200">Grade 12</SelectItem>
+                                                            <SelectLabel className="text-xs">College</SelectLabel>
+                                                            <SelectItem value="college_first_year" className="pl-7 hover:bg-slate-200">First Year</SelectItem>
+                                                            <SelectItem value="college_second_year" className="pl-7 hover:bg-slate-200">Second Year</SelectItem>
+                                                            <SelectItem value="college_third_year" className="pl-7 hover:bg-slate-200">Third Year</SelectItem>
+                                                            <SelectItem value="college_fourth_year" className="pl-7 hover:bg-slate-200">Fourth Year</SelectItem>
+                                                            <SelectItem value="college_fifth_year" className="pl-7 hover:bg-slate-200">Fifth Year</SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            )}
+                                        />
+                                        {errors.yearLevel && <span className="text-red-500 text-xs">{errors.yearLevel.message}</span>}
+                                    </FormItem>
                                         <Label htmlFor="program" className="text-black text-xs">Program</Label>
                                         <FormItem label="Program/Strand" className="w-3/5 mb-5">
-                                            <Select className="z-auto" {...register('program')}>
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder="Select Program/Strand" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup className='bg-slate-50'>
-                                                        <SelectLabel className="text-xs">Senior High School</SelectLabel>
-                                                        <SelectItem value="abm" className="pl-10">ABM</SelectItem>
-                                                        <SelectItem value="humss" className="pl-10">HUMSS</SelectItem>
-                                                        <SelectItem value="stem" className="pl-10">STEM</SelectItem>
-                                                        <SelectItem value="arts_design" className="pl-10">Arts and Design</SelectItem>
-                                                        <SelectItem value="tvl_ict" className="pl-10">TVL-ICT</SelectItem>
-                                                    </SelectGroup>
-                                                    <SelectGroup className='bg-slate-50'>
-                                                        <SelectLabel className="text-xs">College</SelectLabel>
-                                                        <SelectLabel className="text-black pl-5">ATYCB</SelectLabel>
-                                                        <SelectItem value="bs_entrepreneurship" className="pl-10">BS Entrepreneurship</SelectItem>
-                                                        <SelectItem value="bs_management_accounting" className="pl-10">BS Management Accounting</SelectItem>
-                                                        <SelectItem value="bs_real_estate_management" className="pl-10">BS Real Estate Management</SelectItem>
-                                                        <SelectItem value="bs_tourism_management" className="pl-10">BS Tourism Management</SelectItem>
-                                                        <SelectItem value="bs_accountancy" className="pl-10">BS Accountancy</SelectItem>
-                                                        <SelectLabel className="text-black pl-5">CAS</SelectLabel>
-                                                        <SelectItem value="bs_communication" className="pl-10">BS Communication</SelectItem>
-                                                        <SelectItem value="bs_multimedia_arts" className="pl-10">BS Multimedia Arts</SelectItem>
-                                                        <SelectLabel className="text-black pl-5">CCIS</SelectLabel>
-                                                        <SelectItem value="bs_computer_science" className="pl-10">BS Computer Science</SelectItem>
-                                                        <SelectItem value="bs_entertainment_multimedia_computing" className="pl-10">BS Entertainment and Multimedia Computing</SelectItem>
-                                                        <SelectItem value="bs_information_systems" className="pl-10">BS Information Systems</SelectItem>
-                                                        <SelectLabel className="text-black pl-5">CEA</SelectLabel>
-                                                        <SelectItem value="bs_architecture" className="pl-10">BS Architecture</SelectItem>
-                                                        <SelectItem value="bs_chemical_engineering" className="pl-10">BS Chemical Engineering</SelectItem>
-                                                        <SelectItem value="bs_civil_engineering" className="pl-10">BS Civil Engineering</SelectItem>
-                                                        <SelectItem value="bs_computer_engineering" className="pl-10">BS Computer Engineering</SelectItem>
-                                                        <SelectItem value="bs_electrical_engineering" className="pl-10">BS Electrical Engineering</SelectItem>
-                                                        <SelectItem value="bs_electronics_engineering" className="pl-10">BS Electronics Engineering</SelectItem>
-                                                        <SelectItem value="bs_industrial_engineering" className="pl-10">BS Industrial Engineering</SelectItem>
-                                                        <SelectItem value="bs_mechanical_engineering" className="pl-10">BS Mechanical Engineering</SelectItem>
-                                                        <SelectLabel className="text-black pl-5">CHS</SelectLabel>
-                                                        <SelectItem value="bs_biology" className="pl-10">BS Biology</SelectItem>
-                                                        <SelectItem value="bs_psychology" className="pl-10">BS Psychology</SelectItem>
-                                                        <SelectItem value="bs_pharmacy" className="pl-10">BS Pharmacy</SelectItem>
-                                                        <SelectItem value="bs_physical_therapy" className="pl-10">BS Physical Therapy</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
+                                            <Controller
+                                                name="program"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Select {...field} onValueChange={(value) => field.onChange(value)}>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Select Program/Strand" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectGroup className='bg-slate-50'>
+                                                                <SelectLabel className="text-xs">Senior High School</SelectLabel>
+                                                                <SelectItem value="abm" className="pl-10 hover:bg-slate-200">ABM</SelectItem>
+                                                                <SelectItem value="humss" className="pl-10 hover:bg-slate-200">HUMSS</SelectItem>
+                                                                <SelectItem value="stem" className="pl-10 hover:bg-slate-200">STEM</SelectItem>
+                                                                <SelectItem value="arts_design" className="pl-10 hover:bg-slate-200">Arts and Design</SelectItem>
+                                                                <SelectItem value="tvl_ict" className="pl-10 hover:bg-slate-200">TVL-ICT</SelectItem>
+                                                            </SelectGroup>
+                                                            <SelectGroup className='bg-slate-50'>
+                                                                <SelectLabel className="text-xs">College</SelectLabel>
+                                                                <SelectLabel className="text-black pl-5">ATYCB</SelectLabel>
+                                                                <SelectItem value="bs_entrepreneurship" className="pl-10 hover:bg-slate-200">BS Entrepreneurship</SelectItem>
+                                                                <SelectItem value="bs_management_accounting" className="pl-10 hover:bg-slate-200">BS Management Accounting</SelectItem>
+                                                                <SelectItem value="bs_real_estate_management" className="pl-10 hover:bg-slate-200">BS Real Estate Management</SelectItem>
+                                                                <SelectItem value="bs_tourism_management" className="pl-10 hover:bg-slate-200">BS Tourism Management</SelectItem>
+                                                                <SelectItem value="bs_accountancy" className="pl-10 hover:bg-slate-200">BS Accountancy</SelectItem>
+                                                                <SelectLabel className="text-black pl-5">CAS</SelectLabel>
+                                                                <SelectItem value="bs_communication" className="pl-10 hover:bg-slate-200">BS Communication</SelectItem>
+                                                                <SelectItem value="bs_multimedia_arts" className="pl-10 hover:bg-slate-200">BS Multimedia Arts</SelectItem>
+                                                                <SelectLabel className="text-black pl-5">CCIS</SelectLabel>
+                                                                <SelectItem value="bs_computer_science" className="pl-10 hover:bg-slate-200">BS Computer Science</SelectItem>
+                                                                <SelectItem value="bs_entertainment_multimedia_computing" className="pl-10 hover:bg-slate-200">BS Entertainment and Multimedia Computing</SelectItem>
+                                                                <SelectItem value="bs_information_systems" className="pl-10 hover:bg-slate-200">BS Information Systems</SelectItem>
+                                                                <SelectLabel className="text-black pl-5">CEA</SelectLabel>
+                                                                <SelectItem value="bs_architecture" className="pl-10 hover:bg-slate-200">BS Architecture</SelectItem>
+                                                                <SelectItem value="bs_chemical_engineering" className="pl-10 hover:bg-slate-200">BS Chemical Engineering</SelectItem>
+                                                                <SelectItem value="bs_civil_engineering" className="pl-10 hover:bg-slate-200">BS Civil Engineering</SelectItem>
+                                                                <SelectItem value="bs_computer_engineering" className="pl-10 hover:bg-slate-200">BS Computer Engineering</SelectItem>
+                                                                <SelectItem value="bs_electrical_engineering" className="pl-10 hover:bg-slate-200">BS Electrical Engineering</SelectItem>
+                                                                <SelectItem value="bs_electronics_engineering" className="pl-10 hover:bg-slate-200">BS Electronics Engineering</SelectItem>
+                                                                <SelectItem value="bs_industrial_engineering" className="pl-10 hover:bg-slate-200">BS Industrial Engineering</SelectItem>
+                                                                <SelectItem value="bs_mechanical_engineering" className="pl-10 hover:bg-slate-200">BS Mechanical Engineering</SelectItem>
+                                                                <SelectLabel className="text-black pl-5">CHS</SelectLabel>
+                                                                <SelectItem value="bs_biology" className="pl-10 hover:bg-slate-200">BS Biology</SelectItem>
+                                                                <SelectItem value="bs_psychology" className="pl-10 hover:bg-slate-200">BS Psychology</SelectItem>
+                                                                <SelectItem value="bs_pharmacy" className="pl-10 hover:bg-slate-200">BS Pharmacy</SelectItem>
+                                                                <SelectItem value="bs_physical_therapy" className="pl-10 hover:bg-slate-200">BS Physical Therapy</SelectItem>
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                )}
+                                            />
                                             {errors.program && <span className="text-red-500 text-xs">{errors.program.message}</span>}
                                         </FormItem>
                                         <Label htmlFor="recentschoolyear" className="text-black text-xs">Previous School Attended</Label>
@@ -325,33 +390,33 @@ export default function AddStudent() {
                                                     <SelectValue placeholder="Select Scholarship" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectGroup className='bg-slate-50'>
+                                                    <SelectGroup className='bg-slate-50 '>
                                                         <SelectLabel className="text-xs">Scholarship</SelectLabel>
-                                                        <SelectItem value="academic_honoree_g11" className="pl-7">Academic Honoree - G11</SelectItem>
-                                                        <SelectItem value="academic_honoree_grade_7" className="pl-7">Academic Honoree - Grade 7</SelectItem>
-                                                        <SelectItem value="academic_honoree_rank_1_and_2" className="pl-7">Academic Honoree - Rank 1 and 2</SelectItem>
-                                                        <SelectItem value="academic_excellence_axa" className="pl-7">Academic Excellence (AXA)</SelectItem>
-                                                        <SelectItem value="academic_achiever_grade_11_top_20" className="pl-7">Academic Achiever - Grade 11 - Top 20</SelectItem>
-                                                        <SelectItem value="academic_honoree_grade_12_top_20" className="pl-7">Academic Honoree - Grade 12 - Top 20</SelectItem>
-                                                        <SelectItem value="presidents_list" className="pl-7">President&lsquo;s List</SelectItem>
-                                                        <SelectItem value="et_yuchengco" className="pl-7">E.T. Yuchengco</SelectItem>
-                                                        <SelectItem value="jose_rizal" className="pl-7">Jose Rizal Scholarship</SelectItem>
-                                                        <SelectItem value="mcm_cup" className="pl-7">MCM Cup</SelectItem>
-                                                        <SelectItem value="hyperlink" className="pl-7">Hyperlink</SelectItem>
-                                                        <SelectItem value="st_scholarship" className="pl-7">S&T Scholarship</SelectItem>
+                                                        <SelectItem value="academic_honoree_g11" className="pl-7 hover:bg-slate-200">Academic Honoree - G11</SelectItem>
+                                                        <SelectItem value="academic_honoree_grade_7" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 7</SelectItem>
+                                                        <SelectItem value="academic_honoree_rank_1_and_2" className="pl-7 hover:bg-slate-200">Academic Honoree - Rank 1 and 2</SelectItem>
+                                                        <SelectItem value="academic_excellence_axa" className="pl-7 hover:bg-slate-200">Academic Excellence (AXA)</SelectItem>
+                                                        <SelectItem value="academic_achiever_grade_11_top_20" className="pl-7 hover:bg-slate-200">Academic Achiever - Grade 11 - Top 20</SelectItem>
+                                                        <SelectItem value="academic_honoree_grade_12_top_20" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 12 - Top 20</SelectItem>
+                                                        <SelectItem value="presidents_list" className="pl-7 hover:bg-slate-200">President&lsquo;s List</SelectItem>
+                                                        <SelectItem value="et_yuchengco" className="pl-7 hover:bg-slate-200">E.T. Yuchengco</SelectItem>
+                                                        <SelectItem value="jose_rizal" className="pl-7 hover:bg-slate-200">Jose Rizal Scholarship</SelectItem>
+                                                        <SelectItem value="mcm_cup" className="pl-7 hover:bg-slate-200">MCM Cup</SelectItem>
+                                                        <SelectItem value="hyperlink" className="pl-7 hover:bg-slate-200">Hyperlink</SelectItem>
+                                                        <SelectItem value="st_scholarship" className="pl-7 hover:bg-slate-200">S&T Scholarship</SelectItem>
                                                     </SelectGroup>
                                                     <SelectGroup className='bg-slate-50'>
                                                         <SelectLabel className="text-xs">Financial Assistance</SelectLabel>
-                                                        <SelectItem value="paid_fund" className="pl-7">PAID Fund</SelectItem>
-                                                        <SelectItem value="bukas_ph" className="pl-7">Bukas.ph</SelectItem>
+                                                        <SelectItem value="paid_fund" className="pl-7 hover:bg-slate-200">PAID Fund</SelectItem>
+                                                        <SelectItem value="bukas_ph" className="pl-7 hover:bg-slate-200">Bukas.ph</SelectItem>
                                                     </SelectGroup>
                                                     <SelectGroup className='bg-slate-50'>
                                                         <SelectLabel className="text-xs">Discounts</SelectLabel>
-                                                        <SelectItem value="early_bird" className="pl-7">Early Bird</SelectItem>
-                                                        <SelectItem value="referral" className="pl-7">Referral</SelectItem>
-                                                        <SelectItem value="sibling" className="pl-7">Sibling</SelectItem>
-                                                        <SelectItem value="ygc" className="pl-7">YGC</SelectItem>
-                                                        <SelectItem value="study_aid" className="pl-7">Study Aid</SelectItem>
+                                                        <SelectItem value="early_bird" className="pl-7 hover:bg-slate-200">Early Bird</SelectItem>
+                                                        <SelectItem value="referral" className="pl-7 hover:bg-slate-200">Referral</SelectItem>
+                                                        <SelectItem value="sibling" className="pl-7 hover:bg-slate-200">Sibling</SelectItem>
+                                                        <SelectItem value="ygc" className="pl-7 hover:bg-slate-200">YGC</SelectItem>
+                                                        <SelectItem value="study_aid" className="pl-7 hover:bg-slate-200">Study Aid</SelectItem>
                                                     </SelectGroup>
                                                 </SelectContent>
                                             </Select>
@@ -364,13 +429,13 @@ export default function AddStudent() {
             
                 </div>
                 <div className="tab">
-                    <div className="contact-info">
-                        <h1 className='text-stone-600 text-sm'>Contact Information</h1>
+                    <div className="contact-info border pt-8 hover:border-blue-200">
+                        <h1 className='text-stone-600 text-sm font-semibold'>Contact Information</h1>
                         <div className='pl-5 pt-5'>
                             <div>
                                 <Label htmlFor="telNumber" className="text-black text-xs">Telephone Number</Label>
                                 <FormItem label="telNumber">
-                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" {...register('telNumber')} />
+                                    <Input type="tel" placeholder="0XX-XXX-YYYY" className="w-11/12 mb-3" {...register('telNumber')} />
                                     {errors.telNumber && <span className="text-red-500 text-xs">{errors.telNumber.message}</span>}
                                 </FormItem>
                                 <Label htmlFor="contactNumber" className="text-black text-xs">Phone Number</Label>
@@ -394,12 +459,12 @@ export default function AddStudent() {
                         </div>
                     </div>
                 </div>
-                <div className="tab">
+                <div className="tab ">
                     {/* Address Info  */}
-                        <div className="contact-info">
+                        <div className="contact-info border hover:border-blue-200">
                             <div className='grid-cols-2'>
-                                <div className='text-stone-600 text-sm'>Permanent Address</div>
-                                <div className='text-stone-600 text-sm'>Mailing Address</div>
+                                <div className='text-stone-600 text-sm font-semibold'>Permanent Address</div>
+                                <div className='text-stone-600 text-sm font-semibold'>Mailing Address</div>
                                     
                             </div>
                             <div className='pl-5 pt-5'>
@@ -481,8 +546,8 @@ export default function AddStudent() {
                 <div className="tab">
                     {/* Parent/Guardian Info  */}
                     <div className="grid grid-cols-2 gap-5">
-                        <div className="personal-info">
-                            <h1 className='text-stone-600 text-sm'>Parent/Guardian Information</h1>
+                        <div className="card-add-student border hover:border-blue-200">
+                            <h1 className='text-stone-600 text-sm font-semibold'>Parent/Guardian Information</h1>
                             <div className='pl-5 pt-5'>
                                 <Label htmlFor="parentFirstName" className="text-black text-xs">First Name</Label>
                                 <FormItem label="parentFirstName">
@@ -541,8 +606,8 @@ export default function AddStudent() {
                                 </FormItem>
                             </div>   
                         </div>
-                        <div className="personal-info">
-                            <h1 className='text-stone-600 text-sm'>Parent/Guardian Information</h1>
+                        <div className="card-add-student border hover:border-blue-200">
+                            <h1 className='text-stone-600 text-sm font-semibold'>Parent/Guardian Information</h1>
                             <div className='pl-5 pt-5'>
                                 <Label htmlFor="parentFirstName" className="text-black text-xs">First Name</Label>
                                 <FormItem label="parentFirstName">
@@ -603,8 +668,8 @@ export default function AddStudent() {
                         </div>
                     </div>
                     {/* Sibling Info  */}
-                    <div className="contact-info">
-                        <h1 className='text-stone-600 text-sm'>Sibling Information</h1>
+                    <div className="contact-info border hover:border-blue-200">
+                        <h1 className='text-stone-600 text-sm font-semibold'>Sibling Information</h1>
                         <div className='pl-5 pt-5'>
                             <div>
                                 <Label htmlFor="siblingFirstName" className="text-black text-xs">First Name</Label>
@@ -643,11 +708,10 @@ export default function AddStudent() {
                                 <Label htmlFor="siblingDateOfBirth" className="text-black text-xs">Date of Birth</Label>
                                 <FormItem label="siblingDateOfBirth">
                                     <Input type="date" className="w-40 mb-3" {...register('siblingDateOfBirth')} onChange={(e) => handleDateChange(e, 'siblingAge')} />
-                                    {errors.siblingDateOfBirth && <span className="text-red-500 text-xs">{errors.siblingDateOfBirth.message}</span>}
                                 </FormItem>
                                 <Label htmlFor="siblingAge" className="text-black text-xs">Age</Label>
                                 <FormItem label="siblingAge">
-                                    <Input type="text" className="w-40 mb-3" value={age} readOnly {...register('siblingAge')} />
+                                    <Input type="text" className="w-40 mb-3" value={watch('siblingAge')} readOnly {...register('siblingAge')} />
                                     {errors.siblingAge && <span className="text-red-500 text-xs">{errors.siblingAge.message}</span>}
                                 </FormItem>
                             </div>
@@ -668,9 +732,9 @@ export default function AddStudent() {
                 </div>
                 <div className="tab">
                     {/* Upload Documents & Picture / Submit Page */}
-                    <div className="grid grid-cols-2 gap-5">
-                        <div className="upload-files">
-                            <h1 className='text-stone-600 text-sm'>Upload Documents</h1>
+                    <div className="grid grid-cols-2 gap-5 ">
+                        <div className="upload-files border hover:border-blue-200">
+                            <h1 className='text-stone-600 text-sm font-semibold'>Upload Documents</h1>
                             <div className='pl-5 pt-5'>
                                 <Label htmlFor="form137" className="text-black text-xs">Form 137</Label>
                                 <FormItem label="form137">
@@ -699,8 +763,8 @@ export default function AddStudent() {
                                 </FormItem>
                             </div>
                         </div>
-                        <div className="upload-picture">
-                            <h1 className='text-stone-600 text-sm'>Upload Picture</h1>
+                        <div className="upload-picture border hover:border-blue-200">
+                            <h1 className='text-stone-600 text-sm font-semibold'>Upload Picture</h1>
                             <div className='pl-5 pt-5'>
                                 <Label htmlFor="profilePic" className="text-black text-xs">Profile Picture</Label>
                                 <FormItem label="profilePic">
@@ -713,7 +777,79 @@ export default function AddStudent() {
                 </div>
                 <div className="tab">
                     {/* Preview & Submit Page */}
-                    <h1 className='text-stone-600 text-sm'>Review Your Information</h1>
+                    <div className="grid bg-white place-items-center pt-1 h-4">
+                         <h1 className='text-stone-600 text-sm font-semibold pr-16'>Review Information</h1>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="card-add-student-preview grid-cols-1 place-items-center justify-center justify-items-center">
+                        
+                            <div>
+                                <h1 className='text-black text-lg font-bold pb-4'>Profile</h1>
+                            </div>
+                            <div>
+                                <img 
+                                    src={profilePic && profilePic.length > 0 ? URL.createObjectURL(profilePic[0]) : defaultProfilePic} 
+                                    alt='profile-pic' 
+                                    className="w-32 h-32 object-cover border border-black justify-center"
+                                />
+                            </div>
+                            <div className='pt-2'>
+                                <p className='text-black text-lg font-semibold'>
+                                    {`${watch('firstName') || ''} ${watch('middleName') || ''} ${watch('lastName') || ''} ${watch('suffix') || ''}`.trim()}
+                                </p>
+                            </div>
+                            <div>
+                                <p className='text-black text-sm font-semibold'>{watch('studentNumber')}</p>
+                            </div>
+                            <Separator className="my-2" />
+                            <div>
+                                <p className='text-black text-sm font-semibold'>{yearLevelMapping[watch('yearLevel')]}</p>
+                            </div>
+                            <div>
+                                <p className='text-blue-800 text-xs font-semibold'>{programMapping[watch('program')]}</p>
+                            </div>
+                            <div>
+                                <p className='text-gray-500 text-xs mt-2'>Program</p>
+                            </div>
+                            <div className="justify-center">
+                                <p className='text-black text-sm font-semibold pt-4'>{formattedDateOfBirth}</p>
+                            </div>
+                            <div>
+                                <p className='text-gray-500 text-xs'>Date of Birth</p>
+                            </div>
+                            <div>
+                                <p className='text-black text-sm font-semibold mt-4'>{watch('age')}</p>
+                            </div>
+                            <div>
+                                <p className='text-gray-500 text-xs mt-2'>Age</p>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            
+
+                            
+
+                        </div>
+                        <div className="card-add-student-preview">
+                            <h1 className='text-stone-600 text-sm font-semibold'>Student Information</h1>
+                        </div>     
+                        <div className="card-add-student-preview">
+                            <h1 className='text-stone-600 text-sm font-semibold'>Student Information</h1>
+                        </div>        
+                    </div>
+                    {/* <h1 className='text-stone-600 text-sm'>Review Your Information</h1>
                     <div className='pl-5 pt-5'>
                         <div className="grid grid-cols-2 gap-5">
                             <div className="personal-info">
@@ -785,7 +921,7 @@ export default function AddStudent() {
                                 <p><strong>Profile Picture:</strong> {watch('profilePic') ? 'Uploaded' : 'Not Uploaded'}</p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </Form>
             <div className="add-student-toolbar">
