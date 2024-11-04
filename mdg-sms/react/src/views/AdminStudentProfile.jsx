@@ -77,11 +77,11 @@ export default function AdminStudentProfile() {
                     <h1 className='text-black font-bold font-sans text-lg'>Students</h1>             
                 </div>
                 <div className="students-toolbar">
-                    <Button className='back-btn' onClick={() => navigate(-1)}>Back</Button>                   
+                    <Button type="button" id="Edit" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs px-5" >Back</Button>                   
                     <div className="students-toolbar-btns">
-                        <button>Edit</button>
-                        <button>Export</button>
-                        <button className='delete-student'>Delete</button>
+                    <Button type="button" id="Edit" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs" >Edit</Button>
+                    <Button type="button" id="export" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs">Export</Button>
+                        <button className='bg-red-600 border hover:bg-red-500 hover:border-red-500 text-white text-sm font-semibold'>Delete</button>
                     </div>                          
                 </div>
                 
@@ -103,30 +103,30 @@ export default function AdminStudentProfile() {
                                 {student.full_name}
                             </p>
                         </div>
-                        <div>
+                        <div className='-m-7'>
                             <p className='text-black text-sm font-semibold'>{student.student_id}</p>
                         </div>
-                        <Separator className="my-2" />
+                        <Separator className="-mt-6" />
                         <div>
-                            <p className='text-black text-sm font-semibold'>{student.program_year} Year</p>
+                            <p className='text-black text-lg font-semibold -mt-6'>{student.program_year} Year</p>
                         </div>
                         <div>
-                            <p className='text-blue-800 text-xs font-semibold'>{student.program}</p>
+                            <p className='text-blue-800 text-xs font-semibold -mt-5'>{student.program}</p>
                         </div>
                         <div>
-                            <p className='text-gray-500 text-xs mt-2'>Program</p>
+                            <p className='text-gray-500 text-xs -mt-10'>Program</p>
                         </div>
                         <div className="justify-center">
-                            <p className='text-black text-sm font-semibold pt-4'>{student.dob}</p>
+                            <p className='text-black text-sm font-semibold -mt-6'>{student.dob}</p>
                         </div>
                         <div>
-                            <p className='text-gray-500 text-xs'>Date of Birth</p>
+                            <p className='text-gray-500 text-xs -mt-10'>Date of Birth</p>
                         </div>
                         <div>
-                            <p className='text-black text-sm font-semibold mt-4'>{student.age}</p>
+                            <p className='text-black text-sm font-semibold -mt-6'>{student.age}</p>
                         </div>
                         <div>
-                            <p className='text-gray-500 text-xs mt-2'>Age</p>
+                            <p className='text-gray-500 text-xs mt-2 -mt-11'>Age</p>
                         </div>
                     </div>
                     {/* Preview Enrollment Info */}
@@ -224,7 +224,7 @@ export default function AdminStudentProfile() {
                         </div>
                     )}
                     <div className="border rounded-lg hover:bg-blue-900 hover:text-white">
-                            <button className='text-xs mx-6 my-1 pb-1'>View Scholarship</button>
+                            <button className='text-xs mx-6 my-1 pb-1 mt-2'>All Documents</button>
                     </div>
                 </div> 
                     </div>
