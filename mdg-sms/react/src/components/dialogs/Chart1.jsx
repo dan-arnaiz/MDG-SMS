@@ -7,7 +7,7 @@ import {
   LegendComponent,
   DataZoomComponent
 } from 'echarts/components';
-import { BarChart } from 'echarts/charts';
+import { LineChart } from 'echarts/charts';
 import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 // import axiosClient from '../../axios-client';
@@ -18,7 +18,7 @@ echarts.use([
   GridComponent,
   LegendComponent,
   DataZoomComponent,
-  BarChart,
+  LineChart,
   CanvasRenderer,
   UniversalTransition
 ]);
@@ -138,7 +138,7 @@ const Chart1 = () => {
       yAxis: [
         {
           type: 'value',
-          name: 'Number of Active Students',
+          name: 'Number of Students',
           min: 0,
           axisLabel: {
             formatter: '{value}'
@@ -148,7 +148,7 @@ const Chart1 = () => {
       series: [
         {
           name: 'Active',
-          type: 'bar',
+          type: 'line',
           itemStyle: {
             color: '#0F2554'
           },
@@ -161,7 +161,7 @@ const Chart1 = () => {
         },
         {
           name: 'Inactive',
-          type: 'bar',
+          type: 'line',
           itemStyle: {
             color: '#d80000'
           },
@@ -175,7 +175,7 @@ const Chart1 = () => {
       ],
       grid: {
         containLabel: true
-      } 
+      }
     };
 
     option && myChart.setOption(option);
