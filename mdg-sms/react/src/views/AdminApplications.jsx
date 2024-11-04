@@ -28,7 +28,7 @@ export default function AdminApplications() {
                     </div>
                 </div>
                 <div className="admin-dash h-40">
-                    <div className="grid grid-cols-2 gap-4 h-96" style={{ gridTemplateColumns: '40% 60%' }}>
+                    <div className="grid grid-cols-2 gap-4 h-96" style={{ gridTemplateColumns: '40% 58%' }}>
                         <div className="bg-white border rounded-lg mb-9">
                             <div className="flex justify-start space-x-4 p-4 border-b">
                                 <div className="text-black text-sm font-semibold cursor-pointer hover:text-blue-900 relative">
@@ -76,7 +76,7 @@ export default function AdminApplications() {
                         <div className="bg-white w-auto border rounded-lg flex flex-col items-center justify-center mb-9">
                             <h1 className='text-black text-lg font-bold pt-2 mt-10'>Application Details</h1>
                             <Separator className="w-3/4" />
-                            <img src="/images/draft-template.jpg" alt="Draft Template" className="w-3/5 h-auto mt-4 pb-12" />
+                            <img src="/images/default-application-form.jpeg" alt="Application Form" className="w-3/5 h-auto mt-4 pb-12 border border-black" />
                         </div>
                     </div>
                 </div>
