@@ -699,11 +699,13 @@ export default function AddStudent() {
                                         <Input id="mailingZipCode" type="text" placeholder="" className="w-11/12 mb-3" {...register('mailingZipCode')} />
                                         {errors.mailingZipCode && <span className="text-red-500 text-xs">{errors.mailingZipCode.message}</span>}
                                     </FormItem>
-                                    <div className="flex items-center">
-                                    <FormItem label="sameAsPermanent">
-                                        <Input id="sameAsPermanent" type="checkbox" className="mb-3 w-3 h-3 mr-2" onChange={(e) => handleSameAsPermanent(e)} />
-                                    </FormItem>
-                                    <div className="text-black text-xs">Same as Permanent Address</div>
+                                    <div className='flex border border-red-600'>
+                                        <div className="flex-auto">
+                                            <FormItem label="sameAsPermanent">
+                                                <Input id="sameAsPermanent" type="checkbox" className="mb-3 w-3 h-3 mr-2" onChange={(e) => handleSameAsPermanent(e)} />
+                                            </FormItem>
+                                        </div>
+                                        <div className="text-black text-xs border border-blue-600">Same as Permanent Address</div>
                                 </div>
                                 </div>
                             </div>

@@ -55,10 +55,10 @@ export default function Students() {
                         <button className='addstudent-btn' onClick={() => navigate('/add-student')}>Add Student</button>
                     </div>                              
                 </div>
-                <div className="students-list">
-                    <table>
-                        <thead>
-                            <tr>
+                <div className="students-list place-items-center border border-blue-300 rounded-xl bg-white">
+                    <table className=' rounded-tl-full '>
+                        <thead className="bg-blue-950 text-white h-2 ">
+                            <tr className='justify-content'>
                                 <th></th>
                                 <th>Name</th>
                                 <th>Student ID</th>
