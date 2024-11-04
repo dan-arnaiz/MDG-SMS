@@ -69,8 +69,6 @@
       @apply bg-background text-foreground;
       }
   }
-  
-
 
 *{
     font-family: 'Open Sans', Helvetica, sans-serif;
@@ -355,6 +353,7 @@ header {
 
 .navbar li {
     height: auto; /* Adjust height to fit content */
+    width: 100%;
     border-radius: 5px;
     margin: 2px 0;
     width: 100%; /* Ensure it covers the entire row */
@@ -451,6 +450,7 @@ header {
     padding: 20px;
     padding-left: 250px; /* Adjust padding to account for the sidebar */
     height: 100vh;
+    background-color: #E8E8E8;
 }
 
 .header-toolbar {
@@ -1251,6 +1251,7 @@ header {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    height: 100vh;
 }
 
 .Data-Table Select{
@@ -1259,7 +1260,7 @@ header {
 }
 
 .Data-Table table{ 
-    min-height: 50vh;   
+    height: 100%;
 }
 
 .Data-Table table td {
