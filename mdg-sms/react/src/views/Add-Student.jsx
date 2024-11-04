@@ -668,7 +668,6 @@ export default function AddStudent() {
                                 </div>
                                 
                                 <div className="mailing-address">
-                                    
                                     <Label htmlFor="mailingHouseBlockUnitNo" className="text-black text-xs">House / Block / Unit No.</Label>
                                     <FormItem label="houseBlockUnitNo">
                                         <Input id="mailingHouseBlockUnitNo" type="text" placeholder="" className="w-11/12" {...register('mailingHouseBlockUnitNo')} />
@@ -699,14 +698,16 @@ export default function AddStudent() {
                                         <Input id="mailingZipCode" type="text" placeholder="" className="w-11/12 mb-3" {...register('mailingZipCode')} />
                                         {errors.mailingZipCode && <span className="text-red-500 text-xs">{errors.mailingZipCode.message}</span>}
                                     </FormItem>
-                                    <div className='flex border border-red-600'>
-                                        <div className="flex-auto">
-                                            <FormItem label="sameAsPermanent">
-                                                <Input id="sameAsPermanent" type="checkbox" className="mb-3 w-3 h-3 mr-2" onChange={(e) => handleSameAsPermanent(e)} />
-                                            </FormItem>
-                                        </div>
-                                        <div className="text-black text-xs border border-blue-600">Same as Permanent Address</div>
-                                </div>
+                                    <div className="grid grid-cols-2">
+                                            <div className='flex-auto'>
+                                                <FormItem label="sameAsPermanent">
+                                                    <Input id="sameAsPermanent" type="checkbox" className="mb-3 w-3 h-3 mr-2" onChange={(e) => handleSameAsPermanent(e)} />
+                                                </FormItem>
+                                                <div className="text-black text-xs">
+                                                    <h1>Same as Permanent Address</h1>
+                                                </div>
+                                            </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -953,7 +954,7 @@ export default function AddStudent() {
                 </div>
                 <div className="tab">
                     {/* Preview & Submit Page */}
-                    <div className="grid bg-white place-items-center pt-1 h-4">
+                    <div className="grid place-items-center pt-1 h-4">
                          <h1 className='text-stone-600 text-sm font-semibold pr-16'>Review Information</h1>
                     </div>
                     
@@ -1062,8 +1063,8 @@ export default function AddStudent() {
                     <span className="step"></span>
                 </div>
                 <div className="add-students-btns">
-                    <Button type="button" id="prevBtn" className="hover:bg-blue-800 hover:text-teal-50 font-sans text-xs" onClick={() => nextPrev(-1)}>Back</Button>
-                    <Button type="button" id="nextBtn" className="hover:bg-blue-800 hover:text-teal-50 font-sans text-xs" onClick={() => nextPrev(1)}>Next</Button>
+                    <Button type="button" id="prevBtn" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs" onClick={() => nextPrev(-1)}>Back</Button>
+                    <Button type="button" id="nextBtn" className="bg-blue-950 text-white hover:bg-blue-800 hover:border-blue-400 hover:text-teal-50 font-sans text-xs" onClick={() => nextPrev(1)}>Next</Button>
                 </div>
             </div>
         </div>
