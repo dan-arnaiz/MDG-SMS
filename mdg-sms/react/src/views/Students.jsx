@@ -3,8 +3,21 @@ import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js";
 import {Link, useNavigate} from "react-router-dom"
+import { DataTable } from "./Tables/Students-Data-Table.jsx";
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 
+import { MoreHorizontal } from "lucide-react"
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function Students() {
 
@@ -34,6 +47,152 @@ export default function Students() {
     const handleRowDoubleClick = (studentId) => {
         navigate(`/students/${studentId}`);
     };
+
+    const columns = [
+        {
+        id: "select",
+        header: ({ table }) => (
+        <Checkbox
+            checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+        />),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+        },
+        {
+            accessorKey: 'full_name',
+            header: ({ column }) => {
+                return (
+                  <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                  >
+                    Full Name
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                )
+              },
+        },
+        {
+            accessorKey: 'student_id',
+            header: ({ column }) => {
+                return (
+                  <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                  >
+                    Student ID
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                )
+              },
+
+        },
+        {
+            accessorKey: 'email',
+            header: ({ column }) => {
+                return (
+                  <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                  >
+                    Email
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                )
+              },
+
+        },
+        {
+            accessorKey: 'scholarship',
+            header: ({ column }) => {
+                return (
+                  <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                  >
+                    Scholarship
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                )
+              },
+
+        },
+        {
+            accessorKey: 'program',
+            header: ({ column }) => {
+                return (
+                  <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                  >
+                    Program
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                )
+              },
+
+        },
+        {
+            accessorKey: 'status',
+            header: ({ column }) => {
+                return (
+                  <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                  >
+                    Status
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                )
+              },
+            cell: ({ row }) => {
+                const status = row.getValue('status');
+                return (
+                    <div className="">
+                        <span className={status === 'Active' ? 'text-green-600' : 'text-red-600'}>{status}</span>
+                    </div>
+                );
+            },
+            
+        },
+        {
+            id: "actions",
+            cell: ({ row }) => {
+              const student = row.original
+         
+              return (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuItem
+                      onClick={() => navigate(`/students/${student.student_id}`)}
+                    >
+                      View Student
+                    </DropdownMenuItem>               
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )
+            },
+          },
+    ];
     
     return(
         <div>
@@ -41,72 +200,7 @@ export default function Students() {
                 <div className="header-toolbar">
                     <h1 className='text-black font-bold font-sans text-lg'>Students</h1>             
                 </div>
-                <div className="students-toolbar">
-                    <div className="students-searchbox">
-                        <div>
-                            <FontAwesomeIcon icon={Icons.faMagnifyingGlass} size='lg'/>
-                        </div>
-                        <input type="text"  placeholder="Search Students"/>
-                    </div>                    
-                    <div className="students-toolbar-btns">
-                        <button>Filter</button>
-                        <button>Import</button>
-                        <button>Export</button>
-                        <button className='addstudent-btn' onClick={() => navigate('/add-student')}>Add Student</button>
-                    </div>                              
-                </div>
-                <div className="students-list">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Name</th>
-                                <th>Student ID</th>
-                                <th>Scholarship</th>
-                                <th>Email Address</th>
-                                <th>Program</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {students.map(s => (
-                                <tr key={s.student_id} onDoubleClick={() => handleRowDoubleClick(s.student_id)}>
-                                <td> 
-                                    <img src={s.picture ? `/storage/${s.picture.replace(/\\/g, '/')}` : '/storage/pictures/default-profile-placeholder.png'}></img>
-                                </td>
-                                <td>{s.full_name}</td>
-                                <td>{s.student_id}</td>
-                                <td>{s.scholarship}</td>
-                                <td>{s.email}</td>
-                                <td>{s.program}</td>
-                                <td id='status'>
-                                    <span style={{display: 'inline-block',width: '10px',height: '10px',borderRadius: '50%', marginLeft: '8px', backgroundColor: s.status === 'Active' ? 'green' : 'red', margin: '0 10px' }}></span>
-                                    {s.status}</td>
-                                </tr>
-                            ))}                                                     
-                        </tbody>
-                    </table>
-                </div>
-                <div className="students-search-tools">
-                    <div className="students-list-numdisplay">
-                        <p>Display</p>
-                        <select>
-                            <option>10</option>
-                            <option>15</option>
-                            <option>20</option>
-                        </select>
-                        <p>Entries</p>
-                    </div>
-                    <p>Showing n of n of n entries</p>
-                    <div className='search-tools-btns'>
-                        <button><FontAwesomeIcon icon={Icons.faArrowLeft} size='lg'/></button>
-                        {/* PAGINATION HERE */}
-                        <button>1</button>
-                        <button>2</button>
-                        <button>3</button>
-                        <button><FontAwesomeIcon icon={Icons.faArrowRight} size='lg'/></button>
-                    </div>
-                </div>
+                <DataTable columns={columns} data={students}></DataTable>           
             </div>
         </div>
     )

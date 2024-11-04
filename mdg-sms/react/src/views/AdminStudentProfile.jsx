@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
-import {Link, useParams} from "react-router-dom"
+import {Link, useParams, useNavigate} from "react-router-dom"
 import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js";
+import { Button } from "@/components/ui/button"
 
 export default function AdminStudentProfile() {
 
@@ -10,6 +11,7 @@ export default function AdminStudentProfile() {
 
     const[student,setStudent] = useState([]);
     const[loading,setLoading] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getStudent();
@@ -38,9 +40,7 @@ export default function AdminStudentProfile() {
                     <h1 className='text-black font-bold font-sans text-lg'>Students</h1>             
                 </div>
                 <div className="students-toolbar">
-                    <div>
-                        <Link className='back-btn' to="/students">Back</Link>
-                    </div>                    
+                    <Button className='back-btn' onClick={() => navigate(-1)}>Back</Button>                   
                     <div className="students-toolbar-btns">
                         <button>Edit</button>
                         <button>Export</button>
