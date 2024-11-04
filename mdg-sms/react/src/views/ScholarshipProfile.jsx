@@ -217,7 +217,7 @@ export default function ScholarshipProfile() {
                     <h1 className='text-black font-bold font-sans text-lg'>Scholarships</h1>             
                 </div>
                 <div className="students-toolbar"> 
-                    <Button>Back</Button>                   
+                    <Button className="hover:bg-slate-500 border hover:black hover:text-white" onClick={() => window.history.back()}>Back</Button>                 
                     <div className="students-toolbar-btns">
                         <Button>Filter</Button>
                         <Button asChild>

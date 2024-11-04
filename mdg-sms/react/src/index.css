@@ -449,8 +449,9 @@ header {
     gap: 10px;
     padding: 20px;
     padding-left: 250px; /* Adjust padding to account for the sidebar */
-    height: 100vh;
+    min-height: 100vh;
     background-color: #E8E8E8;
+    background-size: cover;
 }
 
 .header-toolbar {
@@ -738,6 +739,8 @@ header {
     margin-top: 5rem;
 }
 
+
+
 .admin-student-info-main{
     display: flex;
     gap: 10px;
@@ -883,7 +886,7 @@ header {
 }
 
 .inactive-card {
-    color:rgb(236, 58, 58);
+    color: #d80000;
 }
 
 .chart-1{
