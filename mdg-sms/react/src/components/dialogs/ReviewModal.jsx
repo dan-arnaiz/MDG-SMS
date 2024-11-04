@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Toaster } from "@/components/ui/sonner";  
+import { useToast } from "@/hooks/use-toast"
+
+
+
 
 const enrollmentStatusMapping = {
     enrolled: { text: "Enrolled", img: "images/check.png" },
@@ -97,7 +102,7 @@ const programMapping = {
     bs_physical_therapy: "Bachelor of Science in Physical Therapy",
 };
 
-const ReviewModal = ({ isOpen, onClose, data = {} }) => {
+const ReviewModal = ({ isOpen, onClose, data, onSubmit, navigate }) => {
     const {
         profilePic,
         defaultProfilePic,
@@ -124,6 +129,8 @@ const ReviewModal = ({ isOpen, onClose, data = {} }) => {
         municipality,
         zipCode,
     } = data;
+
+    const { toast } = useToast();
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -270,11 +277,36 @@ const ReviewModal = ({ isOpen, onClose, data = {} }) => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onClose}>Back</Button>
-                    <Button type="submit" onClick={onClose}>Add Student</Button>
+                <Button onClick={onClose} className="hover:bg-slate-50 border hover:border-blue-950 text-xs font-semibold">Back</Button>
+                <Button 
+                    type="button" 
+                    className="hover:bg-blue-950 border hover:text-white text-xs font-semibold" 
+                    onClick={async () => {
+                        try {
+                            await onSubmit();
+                            toast({
+                                title: "Success",
+                                description: `${data.firstName} successfully added`,
+                                status: "success",
+                            });
+                            navigate('/students');
+                        } catch (error) {
+                            toast({
+                                title: "Error",
+                                description: "There was an error adding the student.",
+                                status: "error",
+                            });
+                        }
+                    }}
+                >
+                    Add Student
+                </Button>
                 </DialogFooter>
             </DialogContent>
+            <Toaster />
         </Dialog>
+        
+        
     );
 };
 
@@ -282,8 +314,6 @@ ReviewModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     data: PropTypes.shape({
-        profilePic: PropTypes.array,
-        defaultProfilePic: PropTypes.string,
         formattedDateOfBirth: PropTypes.string,
         firstName: PropTypes.string,
         middleName: PropTypes.string,
@@ -307,6 +337,8 @@ ReviewModal.propTypes = {
         municipality: PropTypes.string,
         zipCode: PropTypes.string,
     }),
+    onSubmit: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
 };
 
 export default ReviewModal;

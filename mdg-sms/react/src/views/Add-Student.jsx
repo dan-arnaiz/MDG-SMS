@@ -71,7 +71,7 @@ export default function AddStudent() {
         municipality: '',
         zipCode: '',
         profilePic: [],
-        defaultProfilePic: 'path/to/default/profile/pic',
+        defaultProfilePic: 'images/default-profile.png',
     });
 
     const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm({
@@ -143,11 +143,34 @@ export default function AddStudent() {
             });
     
             console.log('Form submitted successfully:', response.data);
+            localStorage.removeItem('formData'); // Clear localStorage
             navigate('/students'); // Redirect to /students route
         } catch (error) {
             console.error('Error submitting form:', error);
         }
     };
+
+    const handleReviewSubmit = () => {
+        handleSubmit(onSubmit)();
+        setIsModalOpen(false);
+    };
+
+    useEffect(() => {
+        const subscription = watch((value) => {
+            localStorage.setItem('formData', JSON.stringify(value));
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
+    useEffect(() => {
+        const savedFormData = localStorage.getItem('formData');
+        if (savedFormData) {
+            const parsedFormData = JSON.parse(savedFormData);
+            Object.keys(parsedFormData).forEach((key) => {
+                setValue(key, parsedFormData[key]);
+            });
+        }
+    }, [setValue]);
 
     
 
@@ -232,7 +255,7 @@ export default function AddStudent() {
 
                             <div className="grid gap-3 ">
                                 <div className=''>
-                                    <div className="card-add-student hover:border-blue-200">
+                                    <div className="card-add-student hover:border-blue-200 text-sm">
                                         <h1 className='text-stone-600 text-sm font-semibold'>Student Information</h1>
                                         <div className='pl-5 pt-5'>
                                             <div>
@@ -613,7 +636,14 @@ export default function AddStudent() {
                     Review Information
                 </Button>
             </div>
-            {isModalOpen && <ReviewModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} data={formData} />}
+            {isModalOpen && 
+            <ReviewModal 
+            isOpen={isModalOpen} 
+            onClose={() => setIsModalOpen(false)} 
+            data={watch()} 
+            onSubmit={handleReviewSubmit}
+            navigate={navigate} 
+            />}
         </div>
     </div>
     );
