@@ -281,12 +281,7 @@ header {
 }
 
 .Head-Toolbox a {
-    color: #0F2554;
-    text-decoration: none;
-    background: #D9D9D9;
-    padding: 10px 20px;
     border-radius: 10px;
-    letter-spacing: 1.5px;
 }
 
 .header-logo {
@@ -648,9 +643,7 @@ header {
     .students-list th, .students-list td{
         font-size: 0.8rem;
     }
-    .Head-Toolbox a{
-        font-size: 0.7rem;
-    }
+
 }
 
 /* student-profile */
