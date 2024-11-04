@@ -699,14 +699,14 @@ export default function AddStudent() {
                                         {errors.mailingZipCode && <span className="text-red-500 text-xs">{errors.mailingZipCode.message}</span>}
                                     </FormItem>
                                     <div className="grid grid-cols-2">
-                                            <div className='flex-auto'>
+                                                <div className='flex-auto'>
                                                 <FormItem label="sameAsPermanent">
-                                                    <Input id="sameAsPermanent" type="checkbox" className="mb-3 w-3 h-3 mr-2" onChange={(e) => handleSameAsPermanent(e)} />
+                                                    <Input id="sameAsPermanent" type="checkbox" className="mb-3 w-3 h-3 mr-2 " onChange={(e) => handleSameAsPermanent(e)} />
                                                 </FormItem>
-                                                <div className="text-black text-xs">
+                                            </div>
+                                            <div className="text-black text-xs translate-x-8 ml-3- -pl-1 -mt-9">
                                                     <h1>Same as Permanent Address</h1>
                                                 </div>
-                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -1035,19 +1035,64 @@ export default function AddStudent() {
                                     <h1 className='text-black text-xs font-semibold'>{scholarshipMapping[watch('scholarship')]}</h1>
                                 </div>
                             </div>
-                            <div id="col2row3" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
-                                <div>
-                                    <h1 className='text-stone-600 text-sm font-semibold'>Column2 third row</h1>
-                                </div>
-                            </div>
-                        </div>
 
+                                {/* Preview Contact Info */}
+
+                            <div id="col2row3" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
+                        <div>
+                            <h1 className='text-black text-lg font-bold pb-2'>Contact Information</h1>
+                        </div>
+                        <div>
+                            <p className='text-black text-sm font-semibold'>Student email here</p>
+                            <p className='text-gray-500 text-xs mt-2 pl-2'>School Email Address</p>
+                        </div>
+                        <div>
+                            <p className='text-black text-sm font-semibold'>Personal email here</p>
+                            <p className='text-gray-500 text-xs mt-2'>Personal Email Address</p>
+                        </div>
+                        <div>
+                            <p className='text-black text-sm font-semibold'>Phone Number here</p>
+                            <p className='text-gray-500 text-xs mt-2'>Phone Number</p>
+                        </div>
+                        <Separator className="my-2 w-3/4" />
+                        <div>
+                            <p className='text-black text-sm font-semibold'>addresshere</p>
+                            <p className='text-gray-500 text-xs mt-2'>Address</p>
+                        </div>
+                        <div className="border rounded-lg hover:bg-blue-900 hover:text-white">
+                            <button className='text-xs mx-6 my-1 pb-1'>Contact</button>
+                        </div>
+                    </div>
+                        </div>
+                                {/* Preview Scholarship Info */}
                         <div className='grid gap-3'>
-                            <div id="col3row1" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
-                                <h1 className='text-stone-600 text-sm font-semibold'>Column3 row1</h1>
+                                <div id="col3row1" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
+                                <div>
+                                <h1 className='text-black text-lg font-bold pb-2'>Scholarship</h1>
                             </div>
-                            <div id="col3row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
-                                <h1 className='text-stone-600 text-sm font-semibold'>Column3 row2</h1>
+                            <div>
+                                <p className='text-black text-sm font-semibold'>Scholarship Here</p>
+                            </div>
+                            <Separator className="my-2 w-3/4" />
+                            <div>
+                                <p className='text-gray-500 text-xs mt-2'>Benefits</p>
+                                <p className='text-black text-sm font-semibold'>Benefits Here</p>
+                            </div>
+                            <div>
+                                <p className='text-gray-500 text-xs mt-2'>Retention Policy</p>
+                                <p className='text-black text-sm font-semibold'>RetentionPolicyHere</p>
+                            </div>
+                            <div className="border rounded-lg hover:bg-blue-900 hover:text-white">
+                                <button className='text-xs mx-6 my-1 pb-1'>View Scholarship</button>
+                            </div>
+                                </div>
+                                <div id="col3row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
+                                <div>
+                            <h1 className='text-black text-lg font-bold pb-2'>Documents</h1>
+                        </div>
+                    <div className="border rounded-lg hover:bg-blue-900 hover:text-white">
+                            <button className='text-xs mx-6 my-1 pb-1 mt-2'>All Documents</button>
+                    </div>
                             </div> 
                         </div>
                                
