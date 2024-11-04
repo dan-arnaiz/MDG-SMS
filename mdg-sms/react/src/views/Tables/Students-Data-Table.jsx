@@ -46,6 +46,8 @@ import {
   import { Input } from "@/components/ui/input"
   import * as React from "react"
   import { useState } from 'react'
+  import { useNavigate } from 'react-router-dom';
+
 
   export function DataTable({ columns, data }) {
     const [sorting, setSorting] = useState([]);
@@ -69,6 +71,8 @@ import {
         onGlobalFilterChange: setGlobalFilter
     });
 
+    const navigate = useNavigate();
+
   
     return (
         <div className="Data-Table">
@@ -80,8 +84,14 @@ import {
                         className="max-w-sm"
                     />
                     <div className="flex gap-2">
-                            <Button>Export</Button>   
-                            <Button className='bg-[#0F2554] text-white'>Add Student</Button>
+                            <Button className="border hover:border-blue-900">Import</Button>
+                            <Button className="border hover:border-blue-900">Export</Button>   
+                            <Button
+                            className='bg-[#0F2554] text-white border hover:border-blue-600 hover:bg-blue-800'
+                            onClick={() => navigate('/add-student')}
+                            >
+                            Add Student
+                            </Button>
                             {/* show delete button when rows are selected                                                */}
                             {table.getFilteredSelectedRowModel().rows.length > 0 && (          
                             <Button className='bg-[rgb(236,58,58)] text-white'>Delete Student(s)</Button>
