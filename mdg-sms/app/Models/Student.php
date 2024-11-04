@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Student extends Model
 {
     use HasFactory;
+    use HasApiTokens, Notifiable;
 
     protected $fillable = ['id', 'person_id', 'prev_school_id', 'user_id', 'program_id'];
 

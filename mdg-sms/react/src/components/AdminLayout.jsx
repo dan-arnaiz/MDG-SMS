@@ -13,7 +13,12 @@ import {
   } from "@/components/ui/dropdown-menu"
 import { CircleUserRound } from 'lucide-react';
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+axiosClient.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+
 export default function AdminLayout() {
+    
 
     const {user, token, setToken, setUser} = useStateContext();
 

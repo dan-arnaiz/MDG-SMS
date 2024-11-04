@@ -279,28 +279,31 @@ const ReviewModal = ({ isOpen, onClose, data, onSubmit, navigate }) => {
                 <DialogFooter>
                 <Button onClick={onClose} className="hover:bg-slate-50 border hover:border-blue-950 text-xs font-semibold">Back</Button>
                 <Button 
-                    type="button" 
-                    className="hover:bg-blue-950 border hover:text-white text-xs font-semibold" 
-                    onClick={async () => {
-                        try {
-                            await onSubmit();
-                            toast({
-                                title: "Success",
-                                description: `${data.firstName} successfully added`,
-                                status: "success",
-                            });
-                            navigate('/students');
-                        } catch (error) {
-                            toast({
-                                title: "Error",
-                                description: "There was an error adding the student.",
-                                status: "error",
-                            });
-                        }
-                    }}
-                >
-                    Add Student
-                </Button>
+                type="button" 
+                className="hover:bg-blue-950 border hover:text-white text-xs font-semibold" 
+                onClick={async () => {
+                    console.log('Add Student button clicked');
+                    try {
+                        await onSubmit();
+                        console.log('Form submitted successfully');
+                        toast({
+                            title: "Success",
+                            description: `${data.firstName} successfully added`,
+                            status: "success",
+                        });
+                        navigate('/students');
+                    } catch (error) {
+                        console.log('Error submitting form:', error);
+                        toast({
+                            title: "Error",
+                            description: "There was an error adding the student.",
+                            status: "error",
+                        });
+                    }
+                }}
+            >
+                Add Student
+            </Button>
                 </DialogFooter>
             </DialogContent>
             <Toaster />

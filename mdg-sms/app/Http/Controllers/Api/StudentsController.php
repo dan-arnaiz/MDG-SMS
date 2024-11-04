@@ -15,6 +15,8 @@ use App\Models\Contact_num;
 use App\Models\Address;
 use App\Models\Address_person;
 use App\Models\Application;
+use App\Http\Requests\AddStudentRequest;
+
 
 class StudentsController extends Controller
 {
@@ -50,92 +52,80 @@ class StudentsController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-        {
-            $validatedData = $request->validate([
-                'first_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'middle_name' => 'nullable|string|max:255',
-                'suffix' => 'nullable|string|max:10',
-                'dob' => 'required|date',
-                'email' => 'required|email|unique:users,email',
-                'personal_email' => 'nullable|email',
-                'mobile_num' => 'nullable|string|max:15',
-                'program_id' => 'required|exists:programs,id',
-                'scholarship_id' => 'nullable|exists:scholarships,id',
-                'scholarship_status_id' => 'required|exists:scholarship_statuses,id',
-                'address' => 'nullable|array',
-                'address.house_block_unit_no' => 'nullable|string|max:255',
-                'address.street' => 'nullable|string|max:255',
-                'address.barangay' => 'nullable|string|max:255',
-                'address.city' => 'nullable|string|max:255',
-                'address.municipality' => 'nullable|string|max:255',
-                'address.zip_code' => 'nullable|string|max:10',
-            ]);
-
-            DB::beginTransaction();
-
-            try {
-                // Create the person
-                $person = Person::create([
-                    'first_name' => $validatedData['first_name'],
-                    'last_name' => $validatedData['last_name'],
-                    'middle_name' => $validatedData['middle_name'],
-                    'suffix' => $validatedData['suffix'],
-                    'dob' => $validatedData['dob'],
-                ]);
-
-                // Create the user
-                $user = User::create([
-                    'email' => $validatedData['email'],
-                    'scholarship_status_id' => $validatedData['scholarship_status_id'],
-                ]);
-
-                // Create the student
-                $student = Student::create([
-                    'user_id' => $user->id,
-                    'person_id' => $person->id,
-                    'program_id' => $validatedData['program_id'],
-                ]);
-
-                // Create the application
-                if (isset($validatedData['scholarship_id'])) {
-                    Application::create([
-                        'student_id' => $student->id,
-                        'scholarship_id' => $validatedData['scholarship_id'],
-                        'is_current' => 1,
+            /**
+             * Store a newly created resource in storage.
+             */
+            public function store(AddStudentRequest $request)
+            {
+                $validatedData = $request->validated();
+            
+                DB::beginTransaction();
+            
+                try {
+                    // Create the person
+                    $person = Person::create([
+                        'first_name' => $validatedData['first_name'],
+                        'last_name' => $validatedData['last_name'],
+                        'middle_name' => $validatedData['middle_name'],
+                        'suffix' => $validatedData['suffix'],
+                        'dob' => $validatedData['dob'],
                     ]);
-                }
-
-                // Create the contact number
-                if (isset($validatedData['mobile_num'])) {
-                    Contact_num::create([
+            
+                    // Create the user
+                    $user = User::create([
+                        'email' => $validatedData['email'],
+                        'scholarship_status_id' => $validatedData['scholarship_status_id'],
+                    ]);
+            
+                    // Create the student
+                    $student = Student::create([
+                        'user_id' => $user->id,
                         'person_id' => $person->id,
-                        'nums' => $validatedData['mobile_num'],
+                        'program_id' => $validatedData['program_id'],
                     ]);
+            
+                    // Create the application
+                    if (isset($validatedData['scholarship_id'])) {
+                        Application::create([
+                            'student_id' => $student->id,
+                            'scholarship_id' => $validatedData['scholarship_id'],
+                            'is_current' => 1,
+                        ]);
+                    }
+            
+                    // Create the contact number
+                    if (isset($validatedData['mobile_num'])) {
+                        Contact_num::create([
+                            'person_id' => $person->id,
+                            'nums' => $validatedData['mobile_num'],
+                        ]);
+                    }
+            
+                    // Create the address
+                    if (isset($validatedData['address'])) {
+                        $address = Address::create([
+                            'house_block_unit_no' => $validatedData['address']['house_block_unit_no'],
+                            'street' => $validatedData['address']['street'],
+                            'barangay' => $validatedData['address']['barangay'],
+                            'city' => $validatedData['address']['city'],
+                            'municipality' => $validatedData['address']['municipality'],
+                            'zip_code' => $validatedData['address']['zip_code'],
+                        ]);
+                        Address_person::create([
+                            'person_id' => $person->id,
+                            'address_id' => $address->id,
+                        ]);
+                    }
+            
+                    DB::commit();
+            
+                    return response()->json(['message' => 'Student created successfully'], 201);
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    \Log::error('Error creating student: ' . $e->getMessage());
+                    return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
                 }
-
-                // Create the address
-                if (isset($validatedData['address'])) {
-                    $address = Address::create($validatedData['address']);
-                    Address_person::create([
-                        'person_id' => $person->id,
-                        'address_id' => $address->id,
-                    ]);
-                }
-
-                DB::commit();
-
-                return response()->json(['message' => 'Student created successfully'], 201);
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
             }
-        }
-
     /**
      * Display the specified resource.
      */

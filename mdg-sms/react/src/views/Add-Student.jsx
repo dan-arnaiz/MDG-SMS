@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Form, FormItem } from '@/components/ui/form';
 import { useForm, Controller } from 'react-hook-form'; // Import useForm
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { z } from 'zod';
+import { Toaster } from "@/components/ui/sonner";  
+import { useToast } from "@/hooks/use-toast"
 import {
     Select,
     SelectContent,
@@ -19,6 +21,7 @@ import {
 import { Label } from '@/components/ui/label';
 import axiosClient from "../axios-client.js";
 import ReviewModal from '../components/dialogs/ReviewModal.jsx';
+import { useStateContext } from '../contexts/ContextProvider.jsx'; // Import the context
 
 const formSchema = z.object({
     firstName: z.string().min(1, { message: "First Name is required" }), // first_name
@@ -44,6 +47,7 @@ const formSchema = z.object({
 export default function AddStudent() {
 
     const [age, setAge] = useState('');
+    const [loading, setLoading] = useState(false);
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -88,6 +92,9 @@ export default function AddStudent() {
 
 
     const navigate = useNavigate();
+    const { token } = useStateContext();
+    
+    const { toast } = useToast();
 
     const handleSameAsPermanent = (event) => {
         if (event.target.checked) {
@@ -107,47 +114,90 @@ export default function AddStudent() {
         }
     };
 
+    const firstNameRef = useRef();
+    const middleNameRef = useRef();
+    const lastNameRef = useRef();
+    const suffixRef = useRef();
+    const dateOfBirthRef = useRef();
+    const emailRef = useRef();
+    const personalEmailRef = useRef();
+    const mobileNumRef = useRef();
+    const programRef = useRef();
+    const scholarshipRef = useRef();
+    const scholarshipStatusRef = useRef();
+    const houseBlockUnitNoRef = useRef();
+    const streetRef = useRef();
+    const barangayRef = useRef();
+    const cityRef = useRef();
+    const municipalityRef = useRef();
+    const zipCodeRef = useRef();
 
-    const mapFormDataToPayload = (data) => {
+    useEffect(() => {
+        // Initialize CSRF token
+        axiosClient.get('/sanctum/csrf-cookie').then(response => {
+            console.log('CSRF token initialized');
+        });
+
+        const savedFormData = localStorage.getItem('formData');
+        if (savedFormData) {
+            const parsedFormData = JSON.parse(savedFormData);
+            Object.keys(parsedFormData).forEach((key) => {
+                setValue(key, parsedFormData[key]);
+            });
+        }
+    }, [setValue]);
+
+    const mapFormDataToPayload = () => {
         return {
-            first_name: data.firstName,
-            last_name: data.lastName,
-            middle_name: data.middleName,
-            suffix: data.suffix,
-            dob: data.dateOfBirth,
-            email: data.schoolEmail,
-            personal_email: data.personalEmail,
-            mobile_num: data.contactNumber,
-            program_id: data.program,
-            scholarship_id: data.scholarship,
-            scholarship_status_id: data.scholarshipStatus,
+            first_name: firstNameRef.current.value,
+            last_name: lastNameRef.current.value,
+            middle_name: middleNameRef.current.value,
+            suffix: suffixRef.current.value,
+            dob: dateOfBirthRef.current.value,
+            email: emailRef.current.value,
+            personal_email: personalEmailRef.current.value,
+            mobile_num: mobileNumRef.current.value,
+            program_id: programRef.current.value,
+            scholarship_id: scholarshipRef.current.value,
+            scholarship_status_id: scholarshipStatusRef.current.value,
             address: {
-                house_block_unit_no: data.houseBlockUnitNo,
-                street: data.street,
-                barangay: data.barangay,
-                city: data.city,
-                municipality: data.municipality,
-                zip_code: data.zipCode,
+                house_block_unit_no: houseBlockUnitNoRef.current.value,
+                street: streetRef.current.value,
+                barangay: barangayRef.current.value,
+                city: cityRef.current.value,
+                municipality: municipalityRef.current.value,
+                zip_code: zipCodeRef.current.value,
             },
         };
     };
+    
+    const onSubmit = (ev) => {
+        ev.preventDefault();
+        console.log('Form submission triggered');
+        setLoading(true); // Set loading state
+        const payload = mapFormDataToPayload();
+        console.log('Payload:', payload);
 
-    const onSubmit = async (data) => {
-        try {
-            const payload = mapFormDataToPayload(data);
-    
-            const response = await axiosClient.post('/api/students', payload, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            console.log('Form submitted successfully:', response.data);
+        axiosClient.post('/students', payload, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`, // Include token in headers
+            },
+        })
+        .then(({ data }) => {
+            setLoading(false); // Clear loading state
+            console.log('Form submitted successfully:', data);
             localStorage.removeItem('formData'); // Clear localStorage
             navigate('/students'); // Redirect to /students route
-        } catch (error) {
-            console.error('Error submitting form:', error);
-        }
+        })
+        .catch((error) => {
+            console.error('Error submitting form:', error.response ? error.response.data : error.message);
+            setLoading(false); // Clear loading state
+            if (error.response && error.response.status === 422) {
+                // Handle validation errors
+                console.error('Validation errors:', error.response.data.errors);
+            }
+        });
     };
 
     const handleReviewSubmit = () => {
@@ -184,6 +234,8 @@ export default function AddStudent() {
             </div>
             <Form id="regForm" onSubmit={handleSubmit(onSubmit)}>
                 <div className="tab mt-3">
+                <input type="hidden" name="csrf-token" value={document.querySelector('meta[name="csrf-token"]').getAttribute('content')} />
+                
                     {/* Personal Info  */}
                         <div className="grid grid-cols-2 gap-2">
                             <div className="card-add-student hover:border-blue-200">
@@ -191,23 +243,23 @@ export default function AddStudent() {
                                 <div className='pl-5 pt-5 '>
                                     <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
                                     <FormItem label="first-name">
-                                        <Input type="text" placeholder="First Name" className="w-11/12 mb-3" {...register('firstName')} />
+                                        <Input ref={firstNameRef} type="text" placeholder="First Name" className="w-11/12 mb-3" {...register('firstName')} />
                                         {errors.firstName && <span className="text-red-500 text-xs">{errors.firstName.message}</span>}
                                     </FormItem>
                                     <Label htmlFor="middlename" className="text-black text-xs">Middle Name</Label>
                                     <FormItem label="middle-name">
-                                        <Input type="text" placeholder="Middle Name" className="w-11/12 mb-3" {...register('middleName')} />
+                                        <Input ref={middleNameRef} type="text" placeholder="Middle Name" className="w-11/12 mb-3" {...register('middleName')} />
                                     </FormItem>
                                     <Label htmlFor="lastname" className="text-black text-xs">Last Name</Label>
                                     <FormItem label="last-name">
-                                        <Input type="text" placeholder="Last Name" className="w-11/12 mb-3" {...register('lastName')} />
+                                        <Input ref={lastNameRef} type="text" placeholder="Last Name" className="w-11/12 mb-3" {...register('lastName')} />
                                         {errors.lastName && <span className="text-red-500 text-xs">{errors.lastName.message}</span>}
                                     </FormItem>
                                     <Label htmlFor="suffix" className="text-black text-xs">Suffix</Label>
-                                    <FormItem label="Suffix">
-                                        <Select>
+                                    <FormItem label="Suffix" >
+                                        <Select >
                                             <SelectTrigger className="w-auto mb-3" defaultValue="blank">
-                                                <SelectValue placeholder="Suffix" />
+                                                <SelectValue ref={suffixRef} placeholder="Suffix" />
                                             </SelectTrigger>
                                             <SelectContent>
                                             <SelectGroup className="bg-slate-50">
@@ -224,7 +276,7 @@ export default function AddStudent() {
                                     </FormItem>
                                     <Label htmlFor="dateofbirth" className="text-black text-xs">Date of Birth</Label>
                                     <FormItem label="dateofbirth">
-                                        <Input type="date" className="w-35 mb-3 text-xs" {...register('dateOfBirth')} />
+                                        <Input ref={dateOfBirthRef} type="date" className="w-35 mb-3 text-xs" {...register('dateOfBirth')} />
                                     </FormItem>
                                     <Label htmlFor="age" className="text-black text-xs">Age</Label>
                                     <FormItem label="age">
@@ -302,7 +354,7 @@ export default function AddStudent() {
                                                         render={({ field }) => (
                                                             <Select {...field} onValueChange={(value) => field.onChange(value)}>
                                                                 <SelectTrigger className="w-full">
-                                                                    <SelectValue placeholder="Select Program/Strand" />
+                                                                    <SelectValue ref={programRef} placeholder="Select Program/Strand" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
                                                                     <SelectGroup className='bg-slate-50'>
@@ -424,7 +476,7 @@ export default function AddStudent() {
                                                     render={({ field }) => (
                                                         <Select {...field} onValueChange={(value) => field.onChange(value)}>
                                                             <SelectTrigger>
-                                                                <SelectValue placeholder="Select Scholarship" />
+                                                                <SelectValue ref={scholarshipRef} placeholder="Select Scholarship" />
                                                             </SelectTrigger>
                                                             <SelectContent>
                                                                 <SelectGroup className='bg-slate-50'>
@@ -469,7 +521,7 @@ export default function AddStudent() {
                                                     render={({ field }) => (
                                                         <Select {...field} onValueChange={(value) => field.onChange(value)}>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Select Enrollment Status" />
+                                                            <SelectValue ref={scholarshipStatusRef} placeholder="Select Enrollment Status" />
                                                         </SelectTrigger>
                                                         <SelectContent>
                                                             <SelectGroup className='bg-slate-50'>
@@ -517,7 +569,7 @@ export default function AddStudent() {
                             <div>
                                 <Label htmlFor="telNumber" className="text-black text-xs">Telephone Number</Label>
                                 <FormItem label="telNumber">
-                                    <Input type="tel" placeholder="0XX-XXX-YYYY" className="w-11/12 mb-3" {...register('telNumber')} />
+                                    <Input ref={mobileNumRef} type="tel" placeholder="0XX-XXX-YYYY" className="w-11/12 mb-3" {...register('telNumber')} />
                                     {errors.telNumber && <span className="text-red-500 text-xs">{errors.telNumber.message}</span>}
                                 </FormItem>
                                 <Label htmlFor="contactNumber" className="text-black text-xs">Phone Number</Label>
@@ -529,12 +581,12 @@ export default function AddStudent() {
                             <div>
                                 <Label htmlFor="personalEmail" className="text-black text-xs">Personal Email Address</Label>
                                 <FormItem label="personalEmail">
-                                    <Input type="email" placeholder="student@gmail.com" className="w-11/12 mb-3" {...register('personalEmail')} />
+                                    <Input  ref={personalEmailRef} type="email" placeholder="student@gmail.com" className="w-11/12 mb-3" {...register('personalEmail')} />
                                     {errors.personalEmail && <span className="text-red-500 text-xs">{errors.personalEmail.message}</span>}
                                 </FormItem>
                                 <Label htmlFor="schoolEmail" className="text-black text-xs">School Email Address</Label>
                                 <FormItem label="schoolEmail">
-                                    <Input type="email" placeholder="student@mcm.edu.ph" className="w-11/12 mb-3" {...register('schoolEmail')} />
+                                    <Input ref={emailRef} type="email" placeholder="student@mcm.edu.ph" className="w-11/12 mb-3" {...register('schoolEmail')} />
                                     {errors.schoolEmail && <span className="text-red-500 text-xs">{errors.schoolEmail.message}</span>}
                                 </FormItem>
                             </div>
@@ -551,32 +603,32 @@ export default function AddStudent() {
                                 <div>
                                     <Label htmlFor="BlockUnitNo" className="text-black text-xs">House / Block / Unit No.</Label>
                                     <FormItem label="houseBlockUnitNo">
-                                        <Input id="HouseBlockUnitNo" type="text" placeholder="" className="w-11/12" {...register('houseBlockUnitNo')} />
+                                        <Input ref={houseBlockUnitNoRef} id="HouseBlockUnitNo" type="text" placeholder="" className="w-11/12" {...register('houseBlockUnitNo')} />
                                         {errors.houseBlockUnitNo && <span className="text-red-500 text-xs">{errors.houseBlockUnitNo.message}</span>}
                                     </FormItem>
                                     <Label htmlFor="Street" className="text-black text-xs">Street Name</Label>
                                     <FormItem label="street">
-                                        <Input id="Street" type="text" placeholder="" className="w-11/12" {...register('street')} />
+                                        <Input ref={streetRef} id="Street" type="text" placeholder="" className="w-11/12" {...register('street')} />
                                         {errors.street && <span className="text-red-500 text-xs">{errors.street.message}</span>}
                                     </FormItem>
                                     <Label htmlFor="Barangay" className="text-black text-xs">Barangay</Label>
                                     <FormItem label="barangay">
-                                        <Input id="Barangay" type="text" placeholder="" className="w-11/12" {...register('barangay')} />
+                                        <Input ref={barangayRef} id="Barangay" type="text" placeholder="" className="w-11/12" {...register('barangay')} />
                                         {errors.barangay && <span className="text-red-500 text-xs">{errors.barangay.message}</span>}
                                     </FormItem>
                                     <Label htmlFor="City" className="text-black text-xs">City</Label>
                                     <FormItem label="city">
-                                        <Input id="City" type="text" placeholder="" className="w-11/12" {...register('city')} />
+                                        <Input ref={cityRef} id="City" type="text" placeholder="" className="w-11/12" {...register('city')} />
                                         {errors.city && <span className="text-red-500 text-xs">{errors.city.message}</span>}
                                     </FormItem>
                                     <Label htmlFor="Municipality" className="text-black text-xs">Municipality</Label>
                                     <FormItem label="municipality">
-                                        <Input id="Municipality" type="text" placeholder="" className="w-11/12" {...register('municipality')} />
+                                        <Input ref={municipalityRef} id="Municipality" type="text" placeholder="" className="w-11/12" {...register('municipality')} />
                                         {errors.municipality && <span className="text-red-500 text-xs">{errors.municipality.message}</span>}
                                     </FormItem>
                                     <Label htmlFor="ZipCode" className="text-black text-xs">ZipCode</Label>
                                     <FormItem label="zipCode">
-                                        <Input id="ZipCode" type="text" placeholder="" className="w-11/12 mb-3" {...register('zipCode')} />
+                                        <Input ref={zipCodeRef} id="ZipCode" type="text" placeholder="" className="w-11/12 mb-3" {...register('zipCode')} />
                                         {errors.zipCode && <span className="text-red-500 text-xs">{errors.zipCode.message}</span>}
                                     </FormItem>
                                 </div>
@@ -624,9 +676,8 @@ export default function AddStudent() {
                                     </div>
                                 </div>
                             </div>
-                        </div>                
-            </Form>
-            <div>
+                        </div>       
+                        <div>
             <div className="add-student-toolbar">
                 <Button 
                     type="button" 
@@ -635,6 +686,7 @@ export default function AddStudent() {
                 >
                     Review Information
                 </Button>
+                
             </div>
             {isModalOpen && 
             <ReviewModal 
@@ -644,7 +696,9 @@ export default function AddStudent() {
             onSubmit={handleReviewSubmit}
             navigate={navigate} 
             />}
-        </div>
+        </div>         
+            </Form>
+            
     </div>
     );
 }
