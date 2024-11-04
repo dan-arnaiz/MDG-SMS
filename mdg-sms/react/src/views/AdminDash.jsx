@@ -3,6 +3,7 @@
 // import { Link } from "react-router-dom"
 import { useEffect, useState } from "react";
 import axiosClient from "../axios-client.js";
+import Chart1 from "../components/dialogs/Chart1.jsx";
 
 export default function AdminDash() {
 
@@ -34,11 +35,10 @@ export default function AdminDash() {
             <div className="main">
                 <div className="header-toolbar">
                     <h1 className="text-black font-bold font-sans text-lg">Dashboard</h1>   
-                </div>
-                <div className="dashboard-main grid-cols-3 gap-2">
-                    <div className="chart-1 border hover:border-blue-100">
-                        <h2 className="font-semibold  text-right mr-6">Chart 1</h2>
-                        <p>Analytics</p>
+                    </div>
+                    <div className="dashboard-main grid-cols-3 gap-2">
+                    <div className="chart-1 border hover:border-blue-100 flex justify-center items-center">
+                        <Chart1 className="mx-12 h-4"/>
                     </div>
                     <div className="cards-container">
                         <div className="active-card mb-2 border hover:border-blue-100 w-10 grid">
