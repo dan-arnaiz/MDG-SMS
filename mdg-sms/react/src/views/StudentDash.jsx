@@ -1,7 +1,7 @@
 export default function StudentDash() {
     
     return(
-        <div>
+        <div className="bg-blue">
             Hello Student!
         </div>
     )

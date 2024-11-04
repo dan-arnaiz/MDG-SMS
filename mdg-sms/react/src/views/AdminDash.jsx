@@ -3,6 +3,7 @@
 // import { Link } from "react-router-dom"
 import { useEffect, useState } from "react";
 import axiosClient from "../axios-client.js";
+import Chart1 from "../components/dialogs/Chart1.jsx";
 
 export default function AdminDash() {
 
@@ -34,28 +35,30 @@ export default function AdminDash() {
             <div className="main">
                 <div className="header-toolbar">
                     <h1 className="text-black font-bold font-sans text-lg">Dashboard</h1>   
-                </div>
-                <div className="page-title">
-                    <div className="chart-1">
-                        <h2>Chart 1</h2>
-                        <p>Analytics</p>
+                    </div>
+                    <div className="dashboard-main grid-cols-3 gap-2">
+                    <div className="chart-1 border hover:border-blue-100 flex justify-center items-center">
+                        <Chart1 className="mx-12 h-4"/>
                     </div>
                     <div className="cards-container">
-                        <div className="active-card">
-                            <h2>{scholars.activeScholars}</h2>
-                            <p>Active Scholars</p>
+                        <div className="active-card mb-2 border hover:border-blue-100 w-10 grid">
+                                <h2 className="font-semibold  text-right mr-6">{scholars.activeScholars}</h2>
+                                <p className="font-semibold  text-right mr-8">Active Scholars</p>
                         </div>
-                        <div className="inactive-card">
-                            <h2>{scholars.inactiveScholars}</h2>
-                            <p>Inactive Scholars</p>
+                        <div className="inactive-card mb-2 border hover:border-blue-100">
+                            <h2 className="font-semibold  text-right mr-6">{scholars.inactiveScholars}</h2>
+                            <p className="font-semibold  text-right mr-8">Inactive Scholars</p>
                         </div>
-                        <div className="card">
-                            <h2>{scholars.scholarships}</h2>
-                            <p>Scholarships</p>
+                        
+                    </div>
+                    <div className="cards-container pb-2">
+                        <div className="card mb-2 border hover:border-blue-100">
+                            <h2 className="font-semibold  text-right mr-6">{scholars.scholarships}</h2>
+                            <p className="font-semibold  text-right mr-8">Scholarships</p>
                         </div>
-                        <div className="card">
-                        <h2>{scholars.scholarsTotal}</h2>
-                        <p>Scholarship to date</p>
+                        <div className="card mb-2 border hover:border-blue-100">
+                        <h2 className="font-semibold  text-right mr-6">{scholars.scholarsTotal}</h2>
+                        <p className="font-semibold  text-right mr-8">Total Scholars</p>
                         </div>
                     </div>
                 </div>
