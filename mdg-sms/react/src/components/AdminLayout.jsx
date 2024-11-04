@@ -59,16 +59,16 @@ export default function AdminLayout() {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/applications" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <NavLink to="/scholarships" className={({ isActive }) => isActive ? 'active' : ''}>
                             <div className="nav-item">
-                                <Mailbox size={24} /> Applications
+                                <HandCoins size={24} /> Scholarships
                             </div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/scholarships" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <NavLink to="/applications" className={({ isActive }) => isActive ? 'active' : ''}>
                             <div className="nav-item">
-                                <HandCoins size={24} /> Scholarships
+                                <Mailbox size={24} /> Applications
                             </div>
                         </NavLink>
                     </li>
