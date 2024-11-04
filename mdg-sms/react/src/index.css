@@ -449,7 +449,7 @@ header {
     gap: 10px;
     padding: 20px;
     padding-left: 250px; /* Adjust padding to account for the sidebar */
-    height: 100vh;
+    height: auto;
     background-color: #E8E8E8;
 }
 
