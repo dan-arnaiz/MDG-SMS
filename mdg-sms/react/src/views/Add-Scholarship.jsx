@@ -50,7 +50,10 @@ import {
 const formSchema = z.object({
     name: z.string().min(1, { message: "Name is required" }),
     description: z.string().min(1, { message: "Description is required" }),
-    maxSlots: z.number().min(1, { message: "Max Slots must be greater than 0" })
+    maxSlots: z.number().min(1, { message: "Max Slots must be greater than 0" }),
+    takenSlots: z.number().min(1, { message: "Taken Slots must be greater than 0" }),
+    availableSlots: z.number().min(1, { message: "Available Slots must be greater than 0" }),
+    isFull: z.boolean()
 });
 
 export default function AddScholarship() {
@@ -134,37 +137,57 @@ export default function AddScholarship() {
         setComboValue(null);
     };
 
-    const onSubmit = (data) => {
+    useEffect(() => {
+        // Initialize CSRF token
+        const initializeCsrf = async () => {
+            await axiosClient.get('/sanctum/csrf-cookie');
+        };
+        initializeCsrf();
+    }, []);
 
+    const onSubmit = async (data) => {
         console.log("Types:", types);
         console.log("Benefits:", benefits);
         console.log("Retentions:", retentionPolicies);
         console.log("Qualifications:", qualifications);
         console.log("New Files:", newFiles);
         console.log("Existing Files:", existingFiles);
-
-
+    
         const payload = {
             name: data.name,
             description: data.description,
-            maxSlots: Number(data.maxSlots),
+            maxSlots: data.maxSlots ? Number(data.maxSlots) : null, // Allow maxSlots to be null
+            takenSlots: data.takenSlots ? Number(data.takenSlots) : 0, // Default to 0 if not provided
+            availableSlots: data.availableSlots ? Number(data.availableSlots) : 0, // Default to 0 if not provided
+            isFull: data.isFull ? 1 : 0, // Convert boolean to integer
             types: types,
             benefits: benefits,
             retentions: retentionPolicies,
             qualifications: qualifications,
             newFiles: newFiles,
             existingFiles: existingFiles,
-        }
+        };
         console.log(payload);
-
-        try{
-            axiosClient.post('/scholarships', payload)
-            navigate('/scholarships')
-        } catch(err ) {
-            console.error('Error:', error.response ? error.response.data : error.message);
-            const response = err.response;
+    
+        try {
+            // Initialize CSRF token
+            await axiosClient.get('/sanctum/csrf-cookie');
+    
+            // Make a GET request to /scholarships to establish connection
+            await axiosClient.get('/scholarships');
+    
+            // Make the POST request with the CSRF token included
+            await axiosClient.post('/scholarships', payload, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN')).split('=')[1],
+                },
+            });
+            navigate('/scholarships');
+        } catch (err) {
+            console.error('Error:', err.response ? err.response.data : err.message);
         }
-    }
+    };
     
     return(
         <div className="main">
@@ -173,7 +196,8 @@ export default function AddScholarship() {
                 <Button className="hover:bg-slate-500 border hover:black hover:text-white" onClick={() => window.history.back()}>Cancel</Button>
             </div>
             <Form >
-                <form onSubmit={handleSubmit(onSubmit)}>    
+                <form onSubmit={handleSubmit(onSubmit)}>
+                <input type="hidden" name="csrf-token" value={document.querySelector('meta[name="csrf-token"]').getAttribute('content')} />    
                     <Card className='p-5 flex flex-col gap-2'>
                         <Label>Name</Label>
                             <FormItem>
@@ -191,7 +215,32 @@ export default function AddScholarship() {
                             <Input type="number" placeholder="Max Slots" {...register('maxSlots', {setValueAs: value => Number(value)})} className={`w-[20%] mb-3 ${errors.maxSlots ? 'border-red-500' : ''}`} />
                             {errors.maxSlots && <span className="text-red-500 text-xs">{errors.maxSlots.message}</span>}
                             </FormItem>
-                        </div>                    
+                        </div>
+                        <div>
+                            <Label>Taken Slots</Label>
+                            <FormItem>
+                            <Input type="number" placeholder="Taken Slots" {...register('takenSlots', {setValueAs: value => Number(value)})} className={`w-[20%] mb-3 ${errors.takenSlots ? 'border-red-500' : ''}`} />
+                            {errors.takenSlots && <span className="text-red-500 text-xs">{errors.takenSlots.message}</span>}
+                            </FormItem>
+                        </div>    
+                        <div>
+                            <Label>Available Slots</Label>
+                            <FormItem>
+                            <Input type="number" placeholder="Available Slots" {...register('availableSlots', {setValueAs: value => Number(value)})} className={`w-[20%] mb-3 ${errors.availableSlots ? 'border-red-500' : ''}`} />
+                            {errors.availableSlots && <span className="text-red-500 text-xs">{errors.availableSlots.message}</span>}
+                            </FormItem>
+                        </div>
+                        <div>
+                            <Label>Is full?</Label>
+                            <FormItem>
+                                <label className="flex items-center space-x-3">
+                                    <input type="checkbox" {...register('isFull')} className="form-checkbox" />
+                                    <span className="text-sm">Yes</span>
+                                </label>
+                                {errors.isFull && <span className="text-red-500 text-xs">{errors.isFull.message}</span>}
+                            </FormItem>
+                        </div> 
+
                         <div className='flex gap-20 justify-evenly'>
                             <div className='w-[100%]'>
                                 <Label>Types</Label>
