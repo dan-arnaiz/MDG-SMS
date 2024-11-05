@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../axios-client.js";
 import Chart1 from "../components/dialogs/Chart1.jsx";
 
+
 export default function AdminDash() {
 
     const [scholars, setScholars] = useState([]);

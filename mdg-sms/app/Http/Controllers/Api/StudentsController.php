@@ -5,6 +5,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\StudentProfileResource;
+use App\Models\Student;
+use App\Models\User;
+use App\Models\Person;
+use App\Models\Program;
+use App\Models\Scholarship;
+use App\Models\Scholarship_status;
+use App\Models\Contact_num;
+use App\Models\Address;
+use App\Models\Address_person;
+use App\Models\Application;
+use App\Http\Requests\AddStudentRequest;
+
 
 class StudentsController extends Controller
 {
@@ -40,14 +52,80 @@ class StudentsController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
+            /**
+             * Store a newly created resource in storage.
+             */
+            public function store(AddStudentRequest $request)
+            {
+                $validatedData = $request->validated();
+            
+                DB::beginTransaction();
+            
+                try {
+                    // Create the person
+                    $person = Person::create([
+                        'first_name' => $validatedData['first_name'],
+                        'last_name' => $validatedData['last_name'],
+                        'middle_name' => $validatedData['middle_name'],
+                        'suffix' => $validatedData['suffix'],
+                        'dob' => $validatedData['dob'],
+                    ]);
+            
+                    // Create the user
+                    $user = User::create([
+                        'email' => $validatedData['email'],
+                        'scholarship_status_id' => $validatedData['scholarship_status_id'],
+                    ]);
+            
+                    // Create the student
+                    $student = Student::create([
+                        'user_id' => $user->id,
+                        'person_id' => $person->id,
+                        'program_id' => $validatedData['program_id'],
+                    ]);
+            
+                    // Create the application
+                    if (isset($validatedData['scholarship_id'])) {
+                        Application::create([
+                            'student_id' => $student->id,
+                            'scholarship_id' => $validatedData['scholarship_id'],
+                            'is_current' => 1,
+                        ]);
+                    }
+            
+                    // Create the contact number
+                    if (isset($validatedData['mobile_num'])) {
+                        Contact_num::create([
+                            'person_id' => $person->id,
+                            'nums' => $validatedData['mobile_num'],
+                        ]);
+                    }
+            
+                    // Create the address
+                    if (isset($validatedData['address'])) {
+                        $address = Address::create([
+                            'house_block_unit_no' => $validatedData['address']['house_block_unit_no'],
+                            'street' => $validatedData['address']['street'],
+                            'barangay' => $validatedData['address']['barangay'],
+                            'city' => $validatedData['address']['city'],
+                            'municipality' => $validatedData['address']['municipality'],
+                            'zip_code' => $validatedData['address']['zip_code'],
+                        ]);
+                        Address_person::create([
+                            'person_id' => $person->id,
+                            'address_id' => $address->id,
+                        ]);
+                    }
+            
+                    DB::commit();
+            
+                    return response()->json(['message' => 'Student created successfully'], 201);
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    \Log::error('Error creating student: ' . $e->getMessage());
+                    return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
+                }
+            }
     /**
      * Display the specified resource.
      */

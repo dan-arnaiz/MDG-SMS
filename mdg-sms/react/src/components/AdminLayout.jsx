@@ -3,8 +3,22 @@ import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client.js";
 import { Home, Users, FileChartPie, Mailbox, HandCoins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+import { CircleUserRound } from 'lucide-react';
+
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+axiosClient.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
 export default function AdminLayout() {
+    
 
     const {user, token, setToken, setUser} = useStateContext();
 
@@ -34,11 +48,26 @@ export default function AdminLayout() {
                     <img src="images/Logo-Final-2.png" alt="Logo"/>
                 </div>
                 <div className="Head-Toolbox">
-                    <NavLink to="">Need help?</NavLink>
-                    <NavLink to="">{user && user.name}</NavLink> 
-                    <div>
-                        <a href="#" onClick={onLogout} className="btn-logout">Sign out</a>
-                    </div>   
+                <NavLink to="" className="text-sm -translate-x-2 font-semibold text-black hover:text-blue-500">
+                    Need help?
+                </NavLink>
+                
+                <DropdownMenu className="bg-white border z-[1050]">
+                    <DropdownMenuTrigger asChild>
+                        <button className="bg-slate-200 text-sm justify-center place-items-center font-semibold text-black border hover:bg-slate-500 px-3 py-2 h-9 hover:text-white rounded-md">
+                            <CircleUserRound className="inline-block mr-2  h-5 -mt-1" />
+                            {user && user.name}
+                        </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white opacity-100">
+                        <DropdownMenuItem className="hover:bg-slate-400" onSelect={() => console.log('Profile clicked')}>
+                            Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="hover:bg-slate-400" onSelect={onLogout}>
+                            Sign out
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 </div>
             </header>
             <aside className="navbar">

@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AnalyticsController;
 use App\Http\Controllers\Api\ScholarshipsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
+
 
 Route::middleware('auth:sanctum')->get('/AdminDash', function (Request $request) {
     return $request->user();
@@ -17,3 +19,4 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/analytics', [AnalyticsController::class, 'index'])->middleware('auth:sanctum');
 Route::apiResource('/students', StudentsController::class)->middleware('auth:sanctum');
 Route::apiResource('/scholarships', ScholarshipsController::class)->middleware('auth:sanctum');
+Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
