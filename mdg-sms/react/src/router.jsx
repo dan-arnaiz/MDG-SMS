@@ -15,6 +15,7 @@ import AddStudent from "./views/Add-Student.jsx";
 import AdminApplications from "./views/AdminApplications.jsx";
 import AddStudentModal from "./components/dialogs/AddStudentModal.jsx";
 import ScholarshipProfile from "./views/ScholarshipProfile.jsx";
+import AddScholarship from "./views/Add-Scholarship.jsx";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
             {
                 path: '/scholarships/:id',
                 element: <ScholarshipProfile/>
+            },
+            {
+                path: '/add-scholarship',
+                element: <AddScholarship/>
             },
             {
                 path: '/applications',

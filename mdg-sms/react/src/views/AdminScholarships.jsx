@@ -53,7 +53,7 @@ export default function AdminScholarships() {
                     </div>                    
                     <div className="students-toolbar-btns">
                         <button>Filter</button>
-                        <Link className='addstudent-btn' to="">Add Scholarship</Link>
+                        <Link className='addstudent-btn' to="/add-scholarship">Add Scholarship</Link>
                     </div>                          
                 </div>
                 <div className='scholarship-list'>
