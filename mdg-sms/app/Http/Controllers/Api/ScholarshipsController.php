@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\ScholarshipResource;
 use App\Http\Resources\ScholarshipProfileResource;
+use App\Models\Scholarship;
 
 class ScholarshipsController extends Controller
 {
@@ -40,7 +41,9 @@ class ScholarshipsController extends Controller
                 'name' => $request['name'],
                 'description' => $request['description'],
                 'max_slots' => $request['max_slots'],
-                'available_slots' => $request['max_slots'],
+                'taken_slots' => $request['taken_slots'],
+                'available_slots' => $request['available_slots'],
+                'is_full' => $request['is_full'],
                 'status' => 1
             ]);
     
