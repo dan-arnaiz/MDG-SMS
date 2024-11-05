@@ -35,7 +35,96 @@ class ScholarshipsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $scholarship = Scholarship::create([
+                'name' => $request['name'],
+                'description' => $request['description'],
+                'max_slots' => $request['max_slots'],
+                'available_slots' => $request['max_slots'],
+                'status' => 1
+            ]);
+    
+            // Create subtypes
+            $createdTypes = [];
+            foreach ($request['types'] as $typeName) {
+                $typeRecord = subtypes::create([
+                    'scholarship_id' => $scholarship->id,
+                    'name' => $typeName,
+                    'description' => '',
+                ]);
+                $createdTypes[] = $typeRecord; 
+            }
+    
+            // Create benefits
+            $createdBenefits = [];
+            foreach ($request['benefits'] as $benefitName) {
+                $benefitRecord = benefits::create([
+                    'scholarship_id' => $scholarship->id,
+                    'description' => $benefitName,
+                ]);
+                $createdBenefits[] = $benefitRecord; // Fix here
+            }
+    
+            // Create retentions
+            $createdRetentions = [];
+            foreach ($request['retentions'] as $retentionName) {
+                $retentionRecord = retentions::create([
+                    'scholarship_id' => $scholarship->id,
+                    'description' => $retentionName,
+                ]);
+                $createdRetentions[] = $retentionRecord; 
+            }
+    
+            // Create qualifications
+            $createdQualifications = [];
+            foreach ($request['qualifications'] as $qualificationName) {
+                $qualificationRecord = qualifications::create([
+                    'scholarship_id' => $scholarship->id,
+                    'description' => $qualificationName,
+                ]);
+                $createdQualifications[] = $qualificationRecord; 
+            }
+    
+            // Create new files
+            $createdFiles = [];
+            foreach ($request['newFiles'] as $newFile) {
+                $fileRecord = files::create([
+                    'name' => $newFile,
+                    'description' => '',
+                ]);
+                $createdFiles[] = $fileRecord; 
+            }
+    
+            // Associate new files with the scholarship
+            foreach ($createdFiles as $relation) {
+                file_reqs::create([
+                    'scholarship_id' => $scholarship->id,
+                    'file_id' => $relation->id,
+                ]);
+            }
+    
+            // Associate existing files with the scholarship
+            foreach ($request['existingFiles'] as $relation) {
+                file_reqs::create([
+                    'scholarship_id' => $scholarship->id,
+                    'file_id' => $relation->id,
+                ]);
+            }
+    
+            return response()->json([
+                'message' => 'Scholarship and subtypes created successfully!',
+                'scholarship' => $scholarship,
+                'types' => $createdTypes,
+                'benefits' => $createdBenefits,
+                'retentions' => $createdRetentions,
+                'qualifications' => $createdQualifications,
+                'files' => $createdFiles,
+            ], 201);
+    
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage()); // Log the error for debugging
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     /**
