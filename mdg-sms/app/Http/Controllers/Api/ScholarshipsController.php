@@ -1,10 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\ScholarshipResource;
 use App\Http\Resources\ScholarshipProfileResource;
+use App\Models\Subtype;
+use App\Models\Benefit;
+use App\Models\Retention;
+use App\Models\Qualification;
+use App\Models\File;
+use App\Models\File_req;
+use App\Models\Scholarship;
 
 class ScholarshipsController extends Controller
 {
@@ -36,18 +45,35 @@ class ScholarshipsController extends Controller
     public function store(Request $request)
     {
         try{
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'maxSlots' => 'required|integer|min:1',
+                'types' => 'array',
+                'types.*' => 'string',
+                'benefits' => 'array',
+                'benefits.*' => 'nullable|string',
+                'retentions' => 'array',
+                'retentions.*' => 'nullable|string',
+                'qualifications' => 'array',
+                'qualifications.*' => 'nullable|string',
+                'newFiles' => 'array',
+                'newFiles.*' => 'nullable|string',
+                'existingFiles' => 'array',
+                'existingFiles.*' => 'nullable|string',
+            ]);
             $scholarship = Scholarship::create([
-                'name' => $request['name'],
-                'description' => $request['description'],
-                'max_slots' => $request['max_slots'],
-                'available_slots' => $request['max_slots'],
-                'status' => 1
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'max_slots' => $data['maxSlots'],
+                'taken_slots' => 0,
+                'is_full' => 1
             ]);
     
             // Create subtypes
             $createdTypes = [];
-            foreach ($request['types'] as $typeName) {
-                $typeRecord = subtypes::create([
+            foreach ($data['types'] as $typeName) {
+                $typeRecord = Subtype::create([
                     'scholarship_id' => $scholarship->id,
                     'name' => $typeName,
                     'description' => '',
@@ -57,8 +83,8 @@ class ScholarshipsController extends Controller
     
             // Create benefits
             $createdBenefits = [];
-            foreach ($request['benefits'] as $benefitName) {
-                $benefitRecord = benefits::create([
+            foreach ($data['benefits'] as $benefitName) {
+                $benefitRecord = Benefit::create([
                     'scholarship_id' => $scholarship->id,
                     'description' => $benefitName,
                 ]);
@@ -67,8 +93,8 @@ class ScholarshipsController extends Controller
     
             // Create retentions
             $createdRetentions = [];
-            foreach ($request['retentions'] as $retentionName) {
-                $retentionRecord = retentions::create([
+            foreach ($data['retentions'] as $retentionName) {
+                $retentionRecord = Retention::create([
                     'scholarship_id' => $scholarship->id,
                     'description' => $retentionName,
                 ]);
@@ -77,8 +103,8 @@ class ScholarshipsController extends Controller
     
             // Create qualifications
             $createdQualifications = [];
-            foreach ($request['qualifications'] as $qualificationName) {
-                $qualificationRecord = qualifications::create([
+            foreach ($data['qualifications'] as $qualificationName) {
+                $qualificationRecord = Qualification::create([
                     'scholarship_id' => $scholarship->id,
                     'description' => $qualificationName,
                 ]);
@@ -87,8 +113,8 @@ class ScholarshipsController extends Controller
     
             // Create new files
             $createdFiles = [];
-            foreach ($request['newFiles'] as $newFile) {
-                $fileRecord = files::create([
+            foreach ($data['newFiles'] as $newFile) {
+                $fileRecord = File::create([
                     'name' => $newFile,
                     'description' => '',
                 ]);
@@ -96,18 +122,20 @@ class ScholarshipsController extends Controller
             }
     
             // Associate new files with the scholarship
-            foreach ($createdFiles as $relation) {
-                file_reqs::create([
+            foreach ($createdFiles as $relation) {    
+                File_req::create([
                     'scholarship_id' => $scholarship->id,
                     'file_id' => $relation->id,
+                    'is_submitted'=> 0
                 ]);
             }
     
             // Associate existing files with the scholarship
-            foreach ($request['existingFiles'] as $relation) {
-                file_reqs::create([
+            foreach ($data['existingFiles'] as $relation) {
+                File_req::create([
                     'scholarship_id' => $scholarship->id,
                     'file_id' => $relation->id,
+                    'is_submitted'=> 0
                 ]);
             }
     
@@ -176,7 +204,7 @@ class ScholarshipsController extends Controller
                         ->get();
             
             $files = DB::table('file_reqs')
-                        ->join('files','file_reqs.file_id','=','scholarship_id')
+                        ->join('files','file_reqs.scholarship_id','=','scholarship_id')
                         ->select(
                             'file_reqs.id',
                             'files.name',
