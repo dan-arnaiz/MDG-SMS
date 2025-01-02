@@ -8,6 +8,17 @@ import { ArrowUpDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+
 import { MoreHorizontal } from "lucide-react"
 
 import {
@@ -210,6 +221,14 @@ export default function ScholarshipProfile() {
           },
     ];
 
+    const onDelete = () => {
+        axiosClient.delete(`/scholarships/${scholarshipId}`)
+        .then(() => {
+            getScholarship();
+            navigate('/scholarships')
+        })
+    }
+
     return(
         <div>
             <div className="main">
@@ -219,10 +238,27 @@ export default function ScholarshipProfile() {
                 <div className="students-toolbar"> 
                     <Button className="hover:bg-slate-500 border hover:black hover:text-white" onClick={() => window.history.back()}>Back</Button>                 
                     <div className="students-toolbar-btns">
-                        <Button>Filter</Button>
-                        <Button asChild>
-                            <Link className='addstudent-btn' to="">Add Scholarship</Link>
-                        </Button>
+                        <Dialog>
+                            <DialogTrigger>
+                                <Button className='bg-[rgb(236,58,58)] text-white hover:bg-white hover:text-black'>Delete</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                <DialogDescription className='pt-5 pb-5'>
+                                    This action cannot be undone. This will permanently delete the scholarship option. Students enrolled in this scholarship will become inactive.
+                                </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <div className="flex flex-row justify-between w-full pr-10 pl-10">
+                                        <DialogClose>
+                                            <Button className="hover:bg-slate-500 border hover:black hover:text-white">Cancel</Button>
+                                        </DialogClose>                                     
+                                        <Button onClick={ev => onDelete()} className='bg-[rgb(236,58,58)] text-white hover:bg-white hover:text-black'>Confirm</Button>
+                                    </div>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>                      
                     </div>                          
                 </div>
                 <Card className='bg-white'>
