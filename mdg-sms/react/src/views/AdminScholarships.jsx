@@ -52,7 +52,6 @@ export default function AdminScholarships() {
                         <input type="text"  placeholder="Search Scholarships"/>
                     </div>                    
                     <div className="students-toolbar-btns">
-                        <button>Filter</button>
                         <Link className='addstudent-btn' to="/add-scholarship">Add Scholarship</Link>
                     </div>                          
                 </div>

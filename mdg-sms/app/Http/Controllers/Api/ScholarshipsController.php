@@ -260,8 +260,10 @@ class ScholarshipsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Scholarship $scholarship)
     {
-        //
+        $scholarship->delete();
+
+        return response("", 204);
     }
 }
