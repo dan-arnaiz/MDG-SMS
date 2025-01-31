@@ -48,7 +48,6 @@ class ScholarshipProfileResource extends JsonResource
             })->toArray(), // Convert collection to array
             'files' => ($this->resource['files'] ?? collect())->map(function ($file) {
                 return [
-                    'id' => $file->id,
                     'name' => $file->name,
                     'description' => $file->description ?? null, // Assuming 'description' might be nullable
                 ];

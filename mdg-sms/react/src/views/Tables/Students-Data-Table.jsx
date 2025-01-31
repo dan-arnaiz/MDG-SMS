@@ -103,7 +103,7 @@ import {
             </Card>
             <Card className='flex flex-col gap-3 p-5 h-[100%]'>
                 <div className="rounded-md border h-[100%]">
-                    <Table>
+                    <Table> 
                         <TableHeader>                       
                             {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>

@@ -4,12 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Person extends Model
 {
     use HasFactory;
 
     protected $fillable = ['first_name', 'last_name', 'middle_name', 'suffix', 'dob', 'email'];
+
+    public function getAgeAttribute()
+    {
+        return $this->dob ? Carbon::parse($this->dob)->age : null;
+    }
 
     public function contactNumbers()
     {

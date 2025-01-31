@@ -52,12 +52,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
-            $table->boolean('is_submitted');
             $table->timestamps();
         });
    
         Schema::create('applications', function (Blueprint $table) {
-            $table->string('id',10)->primary;
+            $table->string('id',10)->primary();
             $table->string('student_id',10);
             $table->string('employee_id',10)->nullable();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
@@ -67,6 +66,15 @@ return new class extends Migration
             $table->datetime('date_filed');
             $table->datetime('date_terminated')->nullable();
             $table->boolean('is_current');
+            $table->timestamps();
+        });
+
+        Schema::create('files_submitted', function (Blueprint $table) {
+            $table->id();
+            $table->string('application_id',10);
+            $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
+            $table->string('name');
+            $table->boolean('is_submitted');
             $table->timestamps();
         });
 
@@ -84,5 +92,6 @@ return new class extends Migration
         Schema::dropIfExists('academic_years');
         Schema::dropIfExists('semesters');
         Schema::dropIfExists('terms');
+        Schema::dropIfExists('files_submitted');
     }
 };

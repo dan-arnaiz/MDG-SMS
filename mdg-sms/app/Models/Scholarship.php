@@ -38,6 +38,22 @@ class Scholarship extends Model
 
     public function files()
     {
-        return $this->hasManyThrough(File::class,FileReq::class);
+        return $this->belongsToMany(File::class, 'file_reqs', 'scholarship_id', 'file_id');
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($scholarship) {
+            $scholarship->is_full = $scholarship->taken_slots >= $scholarship->max_slots;
+        });
+    }
+
+    public function updateIsFull()
+    {
+        $this->is_full = $this->taken_slots >= $this->max_slots;
+        $this->save();
+    }
+
 }

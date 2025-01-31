@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name', 50);
             $table->string('middle_name', 50)->nullable();
             $table->string('suffix', 10)->nullable();
-            $table->date('dob');
+            $table->date('dob')->nullable();
             $table->string('email', 100)->unique();
             $table->timestamps();
         });
@@ -30,11 +30,29 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('provinces', function (Blueprint $table) {
+            $table->id();          
+            $table->string('name', 100);
+            $table->timestamps();
+        });
+
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('province_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('name', 100);
+            $table->timestamps();
+        });
+
+        Schema::create('barangays', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('city_id')->nullable()->constrained()->nullOnDelete();         
+            $table->string('name', 100);           
+            $table->timestamps();
+        });
+
         Schema::create('addresses', function (Blueprint $table) {
             $table->id(); 
-            $table->string('barangay', 100);
-            $table->string('city', 100);
-            $table->string('province', 100);
+            $table->foreignId('barangay_id')->nullable()->constrained()->nullOnDelete();                  
             $table->string('zipcode', 10);
             $table->string('street', 150);
             $table->timestamps();
@@ -47,7 +65,7 @@ return new class extends Migration
             $table->string('type', 20);
             $table->string('house_num', 10)->nullable();
             $table->timestamps();
-        });
+        });       
     }
 
     /**
@@ -59,5 +77,8 @@ return new class extends Migration
         Schema::dropIfExists('contact_nums');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('address_person');
+        Schema::dropIfExists('barangays');
+        Schema::dropIfExists('cities');
+        Schema::dropIfExists('provinces');
     }
 };

@@ -9,16 +9,11 @@ class Sibling extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['person_id', 'prev_school_id', 'age', 'edu_attain'];
+    protected $fillable = ['person_id', 'age', 'edu_attain'];
 
     public function person()
     {
         return $this->belongsTo(Person::class);
-    }
-
-    public function prevSchool()
-    {
-        return $this->belongsTo(Prev_school::class);
     }
 
     public function students()

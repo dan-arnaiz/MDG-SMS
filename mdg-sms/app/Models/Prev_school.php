@@ -9,12 +9,7 @@ class Prev_school extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['address_id', 'landline', 'name', 'email'];
-
-    public function address()
-    {
-        return $this->belongsTo(Address::class);
-    }
+    protected $fillable = [ 'landline', 'name', 'email'];
 
     public function siblings()
     {

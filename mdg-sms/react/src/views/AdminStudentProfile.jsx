@@ -77,7 +77,7 @@ export default function AdminStudentProfile() {
                     <h1 className='text-black font-bold font-sans text-lg'>Students</h1>             
                 </div>
                 <div className="students-toolbar">
-                    <Button type="button" id="Edit" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs px-5" >Back</Button>                   
+                    <Button onClick={() => window.history.back()}  type="button" id="Edit" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs px-5" >Back</Button>                   
                     <div className="students-toolbar-btns">
                     <Button type="button" id="Edit" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs" >Edit</Button>
                     <Button type="button" id="export" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs">Export</Button>

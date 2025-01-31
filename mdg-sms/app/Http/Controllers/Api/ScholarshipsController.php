@@ -58,9 +58,7 @@ class ScholarshipsController extends Controller
                 'qualifications' => 'array',
                 'qualifications.*' => 'nullable|string',
                 'newFiles' => 'array',
-                'newFiles.*' => 'nullable|string',
                 'existingFiles' => 'array',
-                'existingFiles.*' => 'nullable|string',
             ]);
             $scholarship = Scholarship::create([
                 'name' => $data['name'],
@@ -126,7 +124,6 @@ class ScholarshipsController extends Controller
                 File_req::create([
                     'scholarship_id' => $scholarship->id,
                     'file_id' => $relation->id,
-                    'is_submitted'=> 0
                 ]);
             }
     
@@ -134,8 +131,7 @@ class ScholarshipsController extends Controller
             foreach ($data['existingFiles'] as $relation) {
                 File_req::create([
                     'scholarship_id' => $scholarship->id,
-                    'file_id' => $relation->id,
-                    'is_submitted'=> 0
+                    'file_id' => $relation['id'],
                 ]);
             }
     
@@ -204,14 +200,12 @@ class ScholarshipsController extends Controller
                         ->get();
             
             $files = DB::table('file_reqs')
-                        ->join('files','file_reqs.scholarship_id','=','scholarship_id')
-                        ->select(
-                            'file_reqs.id',
-                            'files.name',
-                            'files.description'
-                        )
-                        ->where('file_reqs.scholarship_id','=',$id)
-                        ->get();
+                    ->join('files', 'file_reqs.file_id', '=', 'files.id')
+                    ->select(                         
+                        'files.name',
+                    )
+                    ->where('file_reqs.scholarship_id', '=', $id)
+                    ->get();
 
             $students = DB::table('applications')
                         ->join('students','applications.student_id','=','students.id')
