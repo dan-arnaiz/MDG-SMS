@@ -61,9 +61,9 @@ export default function Login() {
                             ))}
                         </div>}                            
                         <p className="font-semibold text-xs text-left mt-3">Email Address</p>
-                            <input className="text-sm pl-4" ref={emailRef} type="email"/>
+                            <input className="text-sm pl-4" ref={emailRef} type="email" placeholder="Email Address"/>
                         <p className="font-semibold text-xs mt-1 text-left">Password</p>
-                            <input className="text-sm pl-4" ref={passwordRef} type="password" />
+                            <input className="text-sm pl-4" ref={passwordRef} type="password" placeholder="Password" />
 
                             <div className="flex items-center justify-between">
                                 <label className="flex items-center space-x-2">

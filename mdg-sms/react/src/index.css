@@ -126,6 +126,7 @@ html, body {
 .login-background img {
     height: 100%; /* Adjust to fit within the viewport */
     width: auto;
+    object-fit: cover;
     transform: translateX(-70%) translateY(27%) scale(2); /* Center the image horizontally */
     z-index: 0; /* Ensure the image is below the overlay */
     filter: blur(2px); /* Add a blur effect to the image */
@@ -214,9 +215,12 @@ html, body {
     font-size: 15px;
     opacity: 100;
 }
-
 /* Responsive styles for login page */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+    .login-background img {
+        transform: translateX(-50%) translateY(20%) scale(1.5); /* Adjust image position and scale */
+    }
+
     .Login-Form {
         flex-direction: column;
         justify-content: center;
@@ -243,6 +247,58 @@ html, body {
 
     .loginform form {
         width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-background img {
+        transform: translateX(-50%) translateY(20%) scale(1.2); /* Adjust image position and scale */
+    }
+
+    .Login-Form {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .login-logo {
+        width: 100%;
+        height: auto;
+    }
+
+    .login-logo img {
+        width: 80%;
+    }
+
+    .loginform {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        margin: 0;
+    }
+
+    .loginform form {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-background img {
+        transform: translateX(-50%) translateY(20%) scale(1); /* Adjust image position and scale */
+    }
+
+    .login-logo img {
+        width: 70%;
+    }
+
+    .loginform {
+        padding: 15px;
+    }
+
+    .loginform form {
+        max-width: 280px; /* Adjust max-width for smaller screens */
     }
 }
 
