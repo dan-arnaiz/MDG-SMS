@@ -1,10 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import axiosClient from "../axios-client";
-import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../../axios-client";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 export default function Signup() {
-
     const nameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -21,22 +20,21 @@ export default function Signup() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value
-        }
+        };
         setError(null);
         axiosClient.post('/signup', payload)
             .then(({ data }) => {
-                setUser(null)
+                setUser(null);
                 setToken(null);
                 navigate('/login');
             })
             .catch((error) => {
                 const response = error.response;
-                console.log(response.data);
                 if (response.status === 422) {
                     setError(response.data.errors);
                 }
             });
-    }
+    };
 
     return (
         <main className="login-main">
@@ -49,21 +47,23 @@ export default function Signup() {
                 </div>
                 <div className="loginform">
                     <form onSubmit={onSubmit}>
-                        <h1 className="Title">Sign Up</h1>
+                        <p className="text-[25px] font-bold pb-6">Sign up</p>
                         <hr />
-                        {error && <div className="alert">
+                        {error && <div className="alert text-xs text-red-500">
                             {Object.keys(error).map(key => (
                                 <p key={key}>{error[key][0]}</p>
                             ))}
                         </div>}
-                        <input ref={nameRef} type="text" placeholder="Full Name" />
-                        <input ref={emailRef} type="email" placeholder="Email Address" />
-                        <input ref={passwordRef} type="password" placeholder="Password" />
-                        <input ref={passwordConfirmationRef} type="password" placeholder="Password Confirmation" />
-                        <button className="Btn">Sign up</button>
-                        <p className="message">
-                            Already registered? <Link to="/login">Sign in</Link>
-                        </p>
+                        <p className="font-semibold text-xs text-left mt-3">Full Name</p>
+                        <input className="text-sm pl-4" ref={nameRef} type="text" placeholder="Full Name" />
+                        <p className="font-semibold text-xs text-left mt-3">Email Address</p>
+                        <input className="text-sm pl-4" ref={emailRef} type="email" placeholder="Email Address" />
+                        <p className="font-semibold text-xs mt-1 text-left">Password</p>
+                        <input className="text-sm pl-4" ref={passwordRef} type="password" placeholder="Password" />
+                        <p className="font-semibold text-xs mt-1 text-left">Password Confirmation</p>
+                        <input className="text-sm pl-4" ref={passwordConfirmationRef} type="password" placeholder="Password Confirmation" />
+                        <button className="Btn mt-2 font-medium bg-blue-800 hover:bg-blue-950 transition-colors ease-linear duration-300">Sign up</button>
+                        <p className="text-sm pt-5">Already registered? <Link to="/login" className="font-medium text-blue-800 hover:text-blue-950 transition-colors ease-linear duration-300">Sign in</Link></p>
                     </form>
                 </div>
             </div>

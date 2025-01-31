@@ -108,12 +108,28 @@ html, body {
     height: 100%;
     align-items: center;
     justify-content: center; /* Center the background image */
+    overflow: hidden; /* Ensure the overlay covers the entire area */
+}
+
+.login-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.678); /* Light white overlay */
+    z-index: 1; /* Ensure the overlay is above the image */
+    
 }
 
 .login-background img {
     height: 100%; /* Adjust to fit within the viewport */
-    width: auto; /* Maintain aspect ratio */
-    transform: translateX(-50%); /* Center the image horizontally */
+    width: auto;
+    object-fit: cover;
+    transform: translateX(-70%) translateY(27%) scale(2); /* Center the image horizontally */
+    z-index: 0; /* Ensure the image is below the overlay */
+    filter: blur(2px); /* Add a blur effect to the image */
 }
 
 .Login-Form {
@@ -123,11 +139,11 @@ html, body {
     gap: 20px; /* Adjust gap for better responsiveness */
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(20px);
+    background-color: rgba(167, 167, 167, 0.281);
     position: relative;
     z-index: 2;
 }
+
 
 .login-logo {
     display: flex;
@@ -149,7 +165,7 @@ html, body {
     width: 90%; /* Adjust width for better responsiveness */
     max-width: 450px; /* Set a max-width */
     height: auto; /* Adjust height for better responsiveness */
-    padding: 75px 5px; /* Add padding for better spacing */
+    padding: 55px 5px; /* Add padding for better spacing */
     border-radius: 30px;
     background-color: white;
     animation: fade-down 0.5s;
@@ -159,55 +175,27 @@ html, body {
     display: flex;
     flex-direction: column;
     text-align: center;
-    align-items: center;
     width: 100%; /* Adjust width for better responsiveness */
-    max-width: 300px; /* Set a max-width */
+    max-width: 320px; /* Set a max-width */
     height: auto; /* Adjust height for better responsiveness */
 }
 
 .loginform button {
     width: 100%;
-    margin: 20px 0 10px 0; /* Adjust margin for better spacing */
     height: 40px;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 0;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-    background-color: #0F2554;
     color: white;
     font-size: 15px;
     cursor: pointer;
 }
 
-.loginform hr {
-    height: 1px;
-    background-color: black;
-    border: none;
-    margin: 9px;
-    width: 100%;
-}
-
-.loginform h1 {
-    text-align: center;
-    margin-bottom: 0;
-    font-size: 28px;
-}
-
 .loginform input {
-    width: 100%;
-    box-sizing: border-box;
     margin: 5px 0;
-    font-size: 15px;
-    height: 50px;
+    height: 40px;
     border: 0.1px solid rgba(0, 0, 0, 0.5);
-    border-radius: 12px;
-    padding: 0 20px;
-}
-
-.loginform p {
-    font-size: 11px;
-    margin-top: 20px;
-    color: black;
-    opacity: 0.4;
+    border-radius: 7px;
 }
 
 .alert {
@@ -216,20 +204,23 @@ html, body {
     background: rgb(236, 58, 58);
     border-radius: 7px;
     width: 100%;
-    padding: 0 10px 15px 20px;
     margin: 5px;
 }
 
 .alert p {
     color: white;
+    margin: 3px 0 3px 0px;
     font-weight: 500;
-    text-align: left;
+    text-align: center;
     font-size: 15px;
     opacity: 100;
 }
-
 /* Responsive styles for login page */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+    .login-background img {
+        transform: translateX(-50%) translateY(20%) scale(1.5); /* Adjust image position and scale */
+    }
+
     .Login-Form {
         flex-direction: column;
         justify-content: center;
@@ -256,6 +247,58 @@ html, body {
 
     .loginform form {
         width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-background img {
+        transform: translateX(-50%) translateY(20%) scale(1.2); /* Adjust image position and scale */
+    }
+
+    .Login-Form {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .login-logo {
+        width: 100%;
+        height: auto;
+    }
+
+    .login-logo img {
+        width: 80%;
+    }
+
+    .loginform {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        margin: 0;
+    }
+
+    .loginform form {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-background img {
+        transform: translateX(-50%) translateY(20%) scale(1); /* Adjust image position and scale */
+    }
+
+    .login-logo img {
+        width: 70%;
+    }
+
+    .loginform {
+        padding: 15px;
+    }
+
+    .loginform form {
+        max-width: 280px; /* Adjust max-width for smaller screens */
     }
 }
 
@@ -1144,7 +1187,7 @@ header {
 
 .scholarship-list ul{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto, minmax(100px, 1fr));
     gap: 16px;
     padding: 0;
     list-style: none;
