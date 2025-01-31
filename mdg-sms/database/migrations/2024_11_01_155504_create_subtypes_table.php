@@ -45,7 +45,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('subtypes');
-        Schema::dropIfExists('benfits');
+        Schema::dropIfExists('benefits');
         Schema::dropIfExists('retentions');
         Schema::dropIfExists('qualifications');
     }
