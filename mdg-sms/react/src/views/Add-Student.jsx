@@ -196,18 +196,24 @@ export default function AddStudent() {
       };
 
     const handleCityChange = (cityName, addresstype) => {
-        const cityId = cities.find((c) => c.name === cityName)?.id;
+        const isPermanent = addresstype === 'permanent';
+        let cityId = 0;
+
+        if (isPermanent) cityId = cities.find((c) => c.name === cityName)?.id;
+        else cityId = cities2.find((c) => c.name === cityName)?.id;
+
+        debugger;
 
         if (cityId) {
             axiosClient.get(`/barangays/${cityId}`)
                 .then(response => {
-                    if (addresstype === 'permanent') setBarangays(response.data);
+                    if (isPermanent) setBarangays(response.data);
                     else setBarangays2(response.data);
                     console.log(response.data);
                 })
                 .catch(error => console.error('Error fetching cities:', error));
         } else {
-            if (addresstype === 'permanent') setBarangays([]);
+            if (isPermanent) setBarangays([]);
             else setBarangays2([]);
         }
     };
