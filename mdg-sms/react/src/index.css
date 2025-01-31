@@ -108,12 +108,25 @@ html, body {
     height: 100%;
     align-items: center;
     justify-content: center; /* Center the background image */
+    overflow: hidden; /* Ensure the overlay covers the entire area */
+}
+
+.login-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(245, 248, 247); /* Light white overlay */
+    z-index: 1; /* Ensure the overlay is above the image */
 }
 
 .login-background img {
     height: 100%; /* Adjust to fit within the viewport */
     width: auto; /* Maintain aspect ratio */
-    transform: translateX(-50%); /* Center the image horizontally */
+    transform: translateX(-75%); /* Center the image horizontally */
+    z-index: 0; /* Ensure the image is below the overlay */
 }
 
 .Login-Form {
@@ -1144,7 +1157,7 @@ header {
 
 .scholarship-list ul{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto, minmax(100px, 1fr));
     gap: 16px;
     padding: 0;
     list-style: none;

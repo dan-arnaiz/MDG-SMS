@@ -63,7 +63,7 @@ export default function Login() {
                         <input ref={emailRef} type="email" placeholder="Email" />
                         <input ref={passwordRef} type="password" placeholder="Password" />
                         <button className="Btn">Sign in</button>
-                        <p>For new accounts or password resets, please contact the administrator</p>
+                        <p>Click here to subscribe</p>
                     </form>
                 </div>
             </div>
