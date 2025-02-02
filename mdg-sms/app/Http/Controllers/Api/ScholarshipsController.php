@@ -136,10 +136,9 @@ class ScholarshipsController extends Controller
                         'file_id' => $relation['id'],
                     ]);
                 }
+                
+                DB::commit();
             }          
-
-            DB::commit();
-    
             return response()->json([
                 'message' => 'Scholarship and subtypes created successfully!',
                 'scholarship' => $scholarship,
