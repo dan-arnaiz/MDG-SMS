@@ -9,7 +9,7 @@ class Guardian extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['person_id', 'occupation'];
+    protected $fillable = ['person_id', 'occupation','office_num'];
 
     public function person()
     {
@@ -18,6 +18,6 @@ class Guardian extends Model
 
     public function students()
     {
-        return $this->hasManyThrough(Student::class,Guardian_relation::class);
+        return $this->belongsToMany(Student::class, 'guardian_relations', 'guardian_id', 'student_id');
     }
 }

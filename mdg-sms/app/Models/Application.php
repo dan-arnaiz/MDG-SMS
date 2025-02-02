@@ -10,7 +10,10 @@ class Application extends Model
     use HasFactory;
 
     protected $primaryKey = 'id';
-    protected $fillable = ['student_id', 'employee_id', 'scholarship_id', 'term_id', 'date_filed', 'date_terminated', 'current'];
+    public $incrementing = false; 
+    protected $keyType = 'string';
+
+    protected $fillable = ['id','student_id', 'employee_id', 'scholarship_id', 'semester_id', 'academic_year_id', 'date_filed', 'date_terminated', 'is_current'];
 
     public function student()
     {
@@ -27,8 +30,13 @@ class Application extends Model
         return $this->belongsTo(Scholarship::class, 'scholarship_id');
     }
 
-    public function term()
+    public function academic_year()
     {
-        return $this->belongsTo(Term::class, 'term_id');
+        return $this->belongsTo(Academic_year::class, 'academic_year_id');
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class, 'semester_id');
     }
 }

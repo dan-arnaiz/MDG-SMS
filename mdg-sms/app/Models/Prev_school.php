@@ -11,11 +11,6 @@ class Prev_school extends Model
 
     protected $fillable = [ 'landline', 'name', 'email'];
 
-    public function siblings()
-    {
-        return $this->hasMany(Sibling::class);
-    }
-
     public function students()
     {
         return $this->hasMany(Student::class);

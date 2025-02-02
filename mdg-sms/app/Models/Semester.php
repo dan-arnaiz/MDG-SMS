@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Semester extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name'];
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

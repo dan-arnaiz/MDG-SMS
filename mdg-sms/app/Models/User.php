@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'scholarship_status_id',
+        'role_id',
     ];
 
     public function scholarshipStatus()

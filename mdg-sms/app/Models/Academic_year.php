@@ -9,11 +9,11 @@ class Academic_year extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['start_year', 'end_year'];
+    protected $fillable = ['name'];
 
-    public function terms()
+    public function applications()
     {
-        return $this->hasMany(Term::class);
+        return $this->hasMany(Application::class);
     }
 
 }

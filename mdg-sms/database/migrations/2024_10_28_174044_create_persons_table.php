@@ -26,7 +26,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->char('title',20);
-            $table->char('nums',11);  
+            $table->char('nums',11)->nullable();  
             $table->timestamps();
         });
 
@@ -63,7 +63,8 @@ return new class extends Migration
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->foreignId('address_id')->constrained()->onDelete('cascade');
             $table->string('type', 20);
-            $table->string('house_num', 10)->nullable();
+            $table->boolean('is_alsoMail');
+            $table->string('house_num', 200)->nullable();
             $table->timestamps();
         });       
     }

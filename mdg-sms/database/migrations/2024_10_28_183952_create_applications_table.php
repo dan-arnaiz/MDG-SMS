@@ -23,21 +23,13 @@ return new class extends Migration
 
         Schema::create('academic_years', function (Blueprint $table) {
             $table->id();
-            $table->year('start_year');
-            $table->year('end_year');
+            $table->string('name', 50);
             $table->timestamps();
         });
 
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
-            $table->char('name', 10);
-            $table->timestamps();
-        });
-
-        Schema::create('terms', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
-            $table->foreignId('semester_id')->constrained()->onDelete('cascade');
+            $table->char('name', 15);
             $table->timestamps();
         });
 
@@ -62,7 +54,8 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->nullOnDelete();
             $table->foreignId('scholarship_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('term_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('semester_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('academic_year_id')->nullable()->constrained()->nullOnDelete();
             $table->datetime('date_filed');
             $table->datetime('date_terminated')->nullable();
             $table->boolean('is_current');

@@ -9,7 +9,7 @@ class Sibling extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['person_id', 'age', 'edu_attain'];
+    protected $fillable = ['person_id', 'edu_attain'];
 
     public function person()
     {
@@ -18,6 +18,6 @@ class Sibling extends Model
 
     public function students()
     {
-        return $this->hasManyThrough(Student::class,SiblingRelation::class);
+        return $this->belongsToMany(Student::class, 'sibling_relations', 'sibling_id', 'student_id');
     }
 }

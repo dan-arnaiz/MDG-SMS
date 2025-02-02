@@ -15,21 +15,21 @@ return new class extends Migration
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->string('occupation', 100);
+            $table->char('office_num', 11)->nullable();
             $table->timestamps();
         });
 
         Schema::create('prev_schools', function (Blueprint $table) {
             $table->id();
-            $table->char('landline', 15);
+            $table->char('landline', 15)->nullable();
             $table->string('name', 150);           
-            $table->string('email', 100);           
+            $table->string('email', 100)->nullable();           
             $table->timestamps();
         });
 
         Schema::create('siblings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
-            $table->unsignedTinyInteger('age');
             $table->string('edu_attain', 100)->nullable();
             $table->timestamps();
         });
@@ -37,7 +37,6 @@ return new class extends Migration
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
             $table->string('name', 200);
-            $table->char('year', 10);
             $table->timestamps();
         });
 
