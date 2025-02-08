@@ -30,14 +30,15 @@ class StudentProfileResource extends JsonResource
         return [
             'student_id' => $this->id,
             'full_name' => $fullName,
-            'program_year' => $this->year,
             'program' => $this->program,           
             'dob' => $this->dob,
             'age' => $age,
             'schoolEmail' => $this->schoolEmail,
             'personalEmail' => $this->personalEmail,
             'mobileNum' => $this->mobileNum,     
-            'status' => $this->status       
+            'status' => $this->status,
+            'scholarship' => $this->scholarship,
+            'year' => $this->year    
         ];
     }
 }

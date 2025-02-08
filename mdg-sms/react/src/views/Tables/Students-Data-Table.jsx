@@ -8,8 +8,6 @@ import {
     RowSelection,
   } from "@tanstack/react-table"
 
-
-
   import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -42,7 +40,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-  
 
   import { Button } from "@/components/ui/button"
   import { Input } from "@/components/ui/input"
@@ -77,30 +74,7 @@ import {
 
   
     return (
-        <div className="Data-Table">
-            <Card className='px-5'>
-                <div className="flex justify-between items-center py-4">
-                    <Input
-                        onChange={e => table.setGlobalFilter(String(e.target.value))}
-                        placeholder="Search..."
-                        className="max-w-sm"
-                    />
-                    <div className="flex gap-2">
-                            <Button className="border hover:border-blue-900">Import</Button>
-                            <Button className="border hover:border-blue-900">Export</Button>   
-                            <Button
-                            className='bg-[#0F2554] text-white border hover:border-blue-600 hover:bg-blue-800'
-                            onClick={() => navigate('/add-student')}
-                            >
-                            Add Student
-                            </Button>
-                            {/* show delete button when rows are selected                                                */}
-                            {table.getFilteredSelectedRowModel().rows.length > 0 && (          
-                            <Button className='bg-[rgb(236,58,58)] text-white'>Delete Student(s)</Button>
-                             )}                     
-                    </div>
-                </div>
-            </Card>
+        <div className="Data-Table">           
             <Card className='flex flex-col gap-3 p-5 h-[100%]'>
                 <div className="rounded-md border h-[100%]">
                     <Table> 

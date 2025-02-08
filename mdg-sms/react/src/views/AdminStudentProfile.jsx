@@ -14,6 +14,7 @@ export default function AdminStudentProfile() {
     const { id } = useParams();
 
     const[student,setStudent] = useState([]);
+    const[files,setFiles] = useState([]);
     const[loading,setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -27,7 +28,8 @@ export default function AdminStudentProfile() {
         axiosClient.get(`/students/${id}`)
             .then(({data}) => {
                 setLoading(false)
-                setStudent(data.data);
+                setStudent(data.profile); 
+                setFiles(data.files);  
                 console.log(data);
             })
             .catch((error) => {
@@ -86,48 +88,33 @@ export default function AdminStudentProfile() {
                 </div>
                 
                 <div className="grid grid-cols-3 gap-2">
-                    <div className="card-add-student-preview grid-cols-1 place-items-center justify-center justify-items-center border hover:border-blue-900">
+                    <div className="card-add-student-preview border hover:border-blue-900">
                         {/* Preview Personal Info */}
-                        <div>
-                            <h1 className='text-black text-lg font-bold pb-4'>Profile</h1>
-                        </div>
-                        <div>
+                        <div className='flex flex-col justify-center items-center'>
                             <img 
                                 src={student.profilePic || defaultProfilePic} 
                                 alt='profile-pic' 
-                                className="w-32 h-32 object-cover border border-black justify-center"
-                            />
+                                className="w-32 h-32 object-cover border border-black"
+                            />          
+                            <p className='text-black text-lg font-semibold mt-5'>{student.full_name}</p>
+                            <p className='text-black text-sm font-semibold'>{student.student_id}</p>                 
                         </div>
-                        <div className='pt-2'>
-                            <p className='text-black text-lg font-semibold'>
-                                {student.full_name}
-                            </p>
-                        </div>
-                        <div className='-m-7'>
-                            <p className='text-black text-sm font-semibold'>{student.student_id}</p>
-                        </div>
-                        <Separator className="-mt-6" />
-                        <div>
-                            <p className='text-black text-lg font-semibold -mt-6'>{student.program_year} Year</p>
-                        </div>
-                        <div>
-                            <p className='text-blue-800 text-xs font-semibold -mt-5'>{student.program}</p>
-                        </div>
-                        <div>
-                            <p className='text-gray-500 text-xs -mt-10'>Program</p>
-                        </div>
-                        <div className="justify-center">
-                            <p className='text-black text-sm font-semibold -mt-6'>{student.dob}</p>
-                        </div>
-                        <div>
-                            <p className='text-gray-500 text-xs -mt-10'>Date of Birth</p>
-                        </div>
-                        <div>
-                            <p className='text-black text-sm font-semibold -mt-6'>{student.age}</p>
-                        </div>
-                        <div>
-                            <p className='text-gray-500 text-xs mt-2 -mt-11'>Age</p>
-                        </div>
+                        <Separator/>
+                        <div className='flex flex-col gap-10 text-center'>                       
+                            <div>
+                                <p className='text-black text-lg font-semibold'>{student.year}</p>
+                                <p className='text-blue-800 text-xs font-semibold'>{student.program}</p>
+                                <p className='text-gray-500 text-xs'>Program</p>
+                            </div>
+                            <div className="justify-center">
+                                <p className='text-black text-sm font-semibold'>{student.dob}</p>
+                                <p className='text-gray-500 text-xs'>Date of Birth</p>
+                            </div>
+                            <div className='flex flex-col '>
+                                <p className='text-black text-sm font-semibold'>{student.age}</p>
+                                <p className='text-gray-500 text-xs'>Age</p>
+                            </div>
+                        </div>                 
                     </div>
                     {/* Preview Enrollment Info */}
                     <div className='grid gap-3'>
@@ -193,39 +180,29 @@ export default function AdminStudentProfile() {
                             <h1 className='text-black text-lg font-bold pb-2'>Scholarship</h1>
                         </div>
                         <div>
-                            <p className='text-black text-sm font-semibold'>{student.scholarship?.name}</p>
+                            <p className='text-black text-lg font-semibold'>{student.scholarship}</p>
                         </div>
                         <Separator className="my-2 w-3/4" />
-                        <div>
-                            <p className='text-gray-500 text-xs mt-2'>Benefits</p>
-                            <p className='text-black text-sm font-semibold'>{student.scholarship?.benefits}</p>
-                        </div>
-                        <div>
-                            <p className='text-gray-500 text-xs mt-2'>Retention Policy</p>
-                            <p className='text-black text-sm font-semibold'>{student.scholarship?.retentionpolicy}</p>
-                        </div>
                         <div className="border rounded-lg hover:bg-blue-900 hover:text-white">
                             <button className='text-xs mx-6 my-1 pb-1'>View Scholarship</button>
                         </div>
                     </div>
-                    <div id="col3row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center justify-center justify-items-center border hover:border-blue-900">
+                    <div id="col3row2" className="card-add-student-preview grid-rows-3 gap-2 place-items-center border hover:border-blue-900">
                     <div>
                         <h1 className='text-black text-lg font-bold pb-2'>Documents</h1>
                     </div>
-                    {student.documents && student.documents.slice(0, 3).map((doc, index) => (
-                        <div key={index} className="text-center">
-                            <p className='text-black text-sm font-semibold'>{doc.name}</p>
-                            <p className='text-gray-500 text-xs'>{doc.type}, {doc.size}</p>
-                        </div>
-                    ))}
-                    {student.documents && student.documents.length > 3 && (
-                        <div className="text-center">
-                            <FontAwesomeIcon icon={Icons.faEllipsisH} className="text-gray-500" />
-                        </div>
-                    )}
-                    <div className="border rounded-lg hover:bg-blue-900 hover:text-white">
-                            <button className='text-xs mx-6 my-1 pb-1 mt-2'>All Documents</button>
-                    </div>
+                    <div>
+                        <ul>
+                            {files.map((file, index) => (
+                                <li 
+                                key={index}
+                                className={ file.isSubmitted ? "text-gray-500" : "text-green-500"}
+                                >
+                                {file.name}
+                                </li>
+                            ))}
+                        </ul> 
+                    </div>                          
                 </div> 
                     </div>
                 </div>
