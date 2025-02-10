@@ -34,8 +34,7 @@ class StudentProfileResource extends JsonResource
             'dob' => $this->dob,
             'age' => $age,
             'schoolEmail' => $this->schoolEmail,
-            'personalEmail' => $this->personalEmail,
-            'mobileNum' => $this->mobileNum,     
+            'personalEmail' => $this->personalEmail,  
             'status' => $this->status,
             'scholarship' => $this->scholarship,
             'year' => $this->year    

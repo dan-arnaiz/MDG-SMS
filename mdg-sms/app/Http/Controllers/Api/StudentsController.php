@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\StudentProfileResource;
+use App\Http\Resources\AddressResource;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Person;
@@ -143,11 +144,11 @@ class StudentsController extends Controller
                         ->join('programs','students.program_id','=','programs.id')
                         ->join('applications','applications.student_id','=','students.id')
                         ->join('scholarships','applications.scholarship_id','=','scholarships.id')                                              
-                        ->join('contact_nums','contact_nums.person_id','=','people.id')
                         ->join('years','students.year_id','=','years.id')
                         ->select(
                             'students.id',
                             'students.user_id',
+                            'people.id as personId',
                             'people.first_name',
                             'people.last_name',
                             'people.middle_name',
@@ -156,7 +157,6 @@ class StudentsController extends Controller
                             'programs.name as program',
                             'users.email as schoolEmail',
                             'people.email as personalEmail', 
-                            'contact_nums.nums as mobileNum', 
                             'applications.id as applicationId', 
                             'scholarship_statuses.name as status',
                             'scholarships.name as scholarship',
@@ -172,9 +172,30 @@ class StudentsController extends Controller
                     ->select(['name','is_submitted'])
                     ->get();
             
+            $contactNums = Contact_num::where('person_id',$profile->personId)
+                    ->select(['nums','title'])    
+                    ->get();
+            
+            $addresses = Address_person::where('person_id',$profile->personId)
+                    ->join('addresses','addresses.id','=','address_person.address_id')
+                    ->join('barangays','barangays.id','=','addresses.barangay_id')
+                    ->join('cities','cities.id','=','barangays.city_id')
+                    ->join('provinces','provinces.id','=','cities.province_id')
+                    ->select(
+                        'address_person.type',
+                        'addresses.street',
+                        'barangays.name as barangay',
+                        'cities.name as city',
+                        'provinces.name as province',
+                        'addresses.zipcode'
+                    )
+                    ->get();
+
             $response = [
                 'profile' => new StudentProfileResource($profile),
-                'files' => $files->toArray()
+                'files' => $files->toArray(),
+                'contactNums' => $contactNums->toArray(),
+                'addresses' => AddressResource::collection($addresses),
             ];
 
             return response()->json($response);
