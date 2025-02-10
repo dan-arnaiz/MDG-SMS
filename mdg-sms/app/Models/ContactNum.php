@@ -5,17 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Program extends Model
+class ContactNum extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'year',
+        'person_id',
+        'title',
+        'contactNum',
+        'telNum',
     ];
 
-    public function students()
+    public function person()
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsTo(Person::class);
     }
 }

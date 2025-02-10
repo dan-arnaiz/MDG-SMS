@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Program extends Model
+class AcademicYear extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'year',
-    ];
+    protected $fillable = ['start_year'];
 
     public function students()
     {

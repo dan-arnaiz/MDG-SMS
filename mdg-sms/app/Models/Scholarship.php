@@ -40,4 +40,9 @@ class Scholarship extends Model
     {
         return $this->hasManyThrough(File::class,FileReq::class);
     }
+    
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
 }

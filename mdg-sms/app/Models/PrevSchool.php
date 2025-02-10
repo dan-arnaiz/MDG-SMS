@@ -2,23 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Prev_school extends Model
+class PrevSchool extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['address_id', 'landline', 'name', 'email'];
+    protected $fillable = [
+        'address_id',
+        'landline',
+        'name',
+        'email',
+    ];
 
     public function address()
     {
         return $this->belongsTo(Address::class);
-    }
-
-    public function siblings()
-    {
-        return $this->hasMany(Sibling::class);
     }
 
     public function students()

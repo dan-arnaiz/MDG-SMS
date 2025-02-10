@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Program extends Model
+class ScholarshipStatus extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'year',
+        'description',
     ];
 
     public function students()
@@ -19,3 +19,4 @@ class Program extends Model
         return $this->hasMany(Student::class);
     }
 }
+

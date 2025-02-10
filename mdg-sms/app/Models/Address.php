@@ -2,22 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Address extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['barangay', 'city', 'province', 'zipcode', 'street'];
+    protected $fillable = [
+        'houseblockUnitNo',
+        'street',
+        'barangay',
+        'city',
+        'province',
+        'zipcode',
+    ];
 
-    public function addressPersons()
+    public function people()
     {
-        return $this->hasManyThrough(Person::class,Address_person::class);
+        return $this->belongsToMany(Person::class, 'address_person');
     }
 
     public function prevSchools()
     {
-        return $this->hasOne(Prev_school::class);
+        return $this->hasMany(PrevSchool::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
     }
 }
