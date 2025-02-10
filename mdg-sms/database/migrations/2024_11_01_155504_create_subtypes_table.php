@@ -48,5 +48,6 @@ return new class extends Migration
         Schema::dropIfExists('benefits');
         Schema::dropIfExists('retentions');
         Schema::dropIfExists('qualifications');
+        Schema::dropIfExists('files_submitted');
     }
 };

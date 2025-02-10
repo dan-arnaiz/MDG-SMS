@@ -15,23 +15,21 @@ return new class extends Migration
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->string('occupation', 100);
+            $table->char('office_num', 11)->nullable();
             $table->timestamps();
         });
 
         Schema::create('prev_schools', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
-            $table->char('landline', 15);
+            $table->char('landline', 15)->nullable();
             $table->string('name', 150);           
-            $table->string('email', 100);           
+            $table->string('email', 100)->nullable();           
             $table->timestamps();
         });
 
         Schema::create('siblings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
-            $table->foreignId('prev_school_id')->nullable()->constrained()->nullOnDelete();
-            $table->unsignedTinyInteger('age');
             $table->string('edu_attain', 100)->nullable();
             $table->timestamps();
         });
@@ -39,7 +37,12 @@ return new class extends Migration
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
             $table->string('name', 200);
-            $table->char('year', 10);
+            $table->timestamps();
+        });
+
+        Schema::create('years', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 200);
             $table->timestamps();
         });
 
@@ -49,6 +52,7 @@ return new class extends Migration
             $table->foreignId('prev_school_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('program_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('year_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
 
@@ -97,5 +101,6 @@ return new class extends Migration
         Schema::dropIfExists('sibling_relations');
         Schema::dropIfExists('job_titles');
         Schema::dropIfExists('employees');
+        Schema::dropIfExists('years');
     }
 };

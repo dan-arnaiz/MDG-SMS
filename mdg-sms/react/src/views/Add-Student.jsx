@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { z } from 'zod';
 import { Toaster } from "@/components/ui/sonner";  
 import { useToast } from "@/hooks/use-toast"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     Select,
     SelectContent,
@@ -18,687 +19,1033 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "@/components/ui/card"
+  import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+  import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table" 
 import { Label } from '@/components/ui/label';
 import axiosClient from "../axios-client.js";
 import ReviewModal from '../components/dialogs/ReviewModal.jsx';
 import { useStateContext } from '../contexts/ContextProvider.jsx'; // Import the context
+import { DialogClose } from '@radix-ui/react-dialog';
+import { Check, LucideSquareBottomDashedScissors } from 'lucide-react';
 
-const formSchema = z.object({
-    firstName: z.string().min(1, { message: "First Name is required" }), // first_name
-    middleName: z.string().optional(), // middle_name
-    lastName: z.string().min(1, { message: "Last Name is required" }), // last_name
-    suffix: z.string().optional(), // suffix
-    dateOfBirth: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }), // dob
-    email: z.string().email({ message: "Invalid email address" }), // email
-    personalEmail: z.string().email({ message: "Invalid email address" }).optional(), // personal_email
-    mobileNum: z.string().optional(), // mobile_num
-    program: z.string().min(1, { message: "Program is required" }), // program_id
-    scholarship: z.string().optional(), // scholarship_id
-    scholarshipStatus: z.string().min(1, { message: "Scholarship Status is required" }), // scholarship_status_id
-    houseBlockUnitNo: z.string().optional(), // address.house_block_unit_no
-    street: z.string().optional(), // address.street
-    barangay: z.string().optional(), // address.barangay
-    city: z.string().optional(), // address.city
-    municipality: z.string().optional(), // address.municipality
-    zipCode: z.string().optional(), // address.zip_code
+
+const noMailingSchema = z.object({
+    prevSchool: z.string().min(2),
+    prevSchoolLandline: z.string().min(7,'Invalid phone number').max(8,'Invalid phone number').optional().or(z.literal('')),
+    prevSchoolEmail: z.string().email(),
+    studentNo: z.string().length(10),
+    studentEmail: z.string().email().min(10),
+    firstName: z.string().min(2),
+    middleName: z.string().optional(),
+    lastName: z.string().min(2),
+    suffix: z.string().optional(),
+    dob: z.preprocess((arg) => new Date(arg), z.date().max(new Date(), 'Invalid Date')),
+    email: z.string().email(),
+    mobileNum: z.string().length(11, 'Invalid phone number'),
+    landline: z.string().min(7).min(7,'Invalid phone number').max(8,'Invalid phone number').optional().or(z.literal('')),
+    permHouse: z.string().min(2).max(200),
+    permStreet: z.string().min(2),
+    permZip: z.string().length(4, 'Invalid Zip Code'),
+    mailHouse: z.string().max(200).optional(),
+    mailStreet: z.string().optional(),
+    mailZip: z.string().length(4, 'Invalid Zip Code').optional().or(z.literal('')),
+    fatherFirstName: z.string().min(2).optional().or(z.literal('')),
+    fatherMiddleName: z.string().min(2).optional().or(z.literal('')),
+    fatherLastName: z.string().min(2).optional().or(z.literal('')),
+    fatherSuffix: z.string().min(2).optional().or(z.literal('')),
+    fatherEmail: z.string().email().or(z.literal("")).optional(),
+    fatherMobileNum: z.string().length(11, 'Invalid phone number').optional().or(z.literal('')),
+    fatherLandline: z.string().min(7,'Invalid phone number').max(8,'Invalid phone number').optional().or(z.literal('')),
+    fatherOfficeNo: z.string().length(11, 'Invalid phone number').optional().or(z.literal('')),
+    fatherOccupation: z.string().min(2).optional().or(z.literal('')),
+    motherFirstName: z.string().min(2).optional().or(z.literal('')),
+    motherMiddleName: z.string().min(2).optional().or(z.literal('')),
+    motherLastName: z.string().min(2).optional().or(z.literal('')),
+    motherSuffix: z.string().min(2).optional().or(z.literal('')),
+    motherEmail: z.string().email().or(z.literal("")).optional(),
+    motherMobileNum: z.string().length(11, 'Invalid phone number').optional().or(z.literal('')),
+    motherLandline: z.string().min(7,'Invalid phone number').max(8,'Invalid phone number').optional().or(z.literal('')),
+    motherOccupation: z.string().min(2).optional().or(z.literal('')),
+    motherOfficeNo: z.string().length(11, 'Invalid phone number').optional().or(z.literal('')),
+    scholarship: z.number().min(1),
+    program: z.number().min(1),
+    year: z.number().min(1),
+    academicYear: z.number().min(1),
+    semester: z.number().min(1),
+    provinceP: z.number().min(1),
+    cityP: z.number().min(1),
+    barangayP: z.number().min(1),
+    provinceM: z.number().optional(),
+    cityM: z.number().optional(),
+    barangayM: z.number().optional(),
+    addressSimilarity: z.literal(true),
 });
 
+const MailingSchema = noMailingSchema.extend({
+    mailHouse: z.string().min(2),  // Required for mailing
+    mailStreet: z.string().min(2),
+    mailZip: z.string().min(2),
+    provinceM: z.number().min(1),
+    cityM: z.number().min(1),
+    barangayM: z.number().min(1),
+    addressSimilarity: z.literal(false),
+});
+
+const formSchema = z.discriminatedUnion('addressSimilarity', [
+        MailingSchema,
+        noMailingSchema,
+]);
 
 export default function AddStudent() {
 
-    const [age, setAge] = useState('');
-    const [loading, setLoading] = useState(false);
-    
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState({
-        // Add your form data here
+    const [siblings, setSiblings] = useState([]);
+    const [siblingInput, setSiblingInput] = useState({
         firstName: '',
         middleName: '',
         lastName: '',
         suffix: '',
-        studentNumber: '',
-        yearLevel: '',
-        program: '',
-        formattedDateOfBirth: '',
-        age: '',
-        enrollmentStatus: '',
-        recentSchoolYear: '',
-        scholarshipStatus: '',
-        scholarship: '',
-        schoolEmail: '',
-        personalEmail: '',
-        contactNumber: '',
-        houseBlockUnitNo: '',
-        street: '',
-        barangay: '',
-        city: '',
-        municipality: '',
-        zipCode: '',
-        profilePic: [],
-        defaultProfilePic: 'images/default-profile.png',
+        dob: '',
+        educationalAttainment: '',
+    });
+    const [scholarships, setScholarships] = useState([]);
+    const [provinces, setProvinces] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [barangays, setBarangays] = useState([]);
+    const [cities2, setCities2] = useState([]);
+    const [barangays2, setBarangays2] = useState([]);
+    const [addressSimilarity, setAddressSimilarity] = useState(false);
+    const [files, setFiles] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [programs, setPrograms] = useState([]);
+    const [years, setYears] = useState([]);
+    const [academicYears,setAcademicYears] = useState([]);
+    const [semesters,setSemesters] = useState([]);
+    const {user} = useStateContext();
+
+
+    useEffect(() => {
+            loadFirstResources();
+            setAddressSimilarity(false);
+        }, []);
+
+    const calculateAge = (dob) => {
+      
+        const birthDate = new Date(dob);
+        const today = new Date();
+      
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+      
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (
+          monthDifference < 0 || 
+          (monthDifference === 0 && today.getDate() < birthDate.getDate())
+        ) {
+          age--;
+        }
+      
+        return age;
+    };
+
+    const loadFirstResources = () => {
+        axiosClient.get('/addstudent')
+      .then((response) => {
+        setScholarships(response.data.scholarships);
+        setProvinces(response.data.provinces);
+        setPrograms(response.data.programs);
+        setYears(response.data.years);
+        setAcademicYears(response.data.academicYears);
+        setSemesters(response.data.semesters);
+        console.log(response.data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+    }   
+
+    const addSibling = () => {
+        const { firstName, middleName, lastName, suffix, dob, educationalAttainment } =
+      siblingInput;
+
+      if (
+        firstName === "" ||
+        lastName === "" ||
+        dob === "" ||
+        educationalAttainment === ""
+      ) {
+        alert("Please fill in all fields.");
+        return;
+      }
+  
+      const duplicate = siblings.find(
+        (sibling) =>
+          sibling.firstName === firstName &&
+          sibling.lastName === lastName &&
+          sibling.suffix === suffix &&
+          sibling.dob === dob
+      );
+      if (duplicate) {
+        alert("This sibling already exists.");
+        return;
+      }
+
+      setSiblings([
+        ...siblings,
+        {
+            firstName,
+            middleName,
+            lastName,
+            suffix,
+            dob,
+            educationalAttainment,
+        },
+    ]);
+      setSiblingInput({
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        suffix: "",
+        dob: "",
+        educationalAttainment: "",
+      });
+
+      setOpen(false);
+    };
+
+    const { register, handleSubmit, setValue, watch, control, setError, formState: { errors, isSubmitting }, trigger } = useForm({
+            resolver: zodResolver(formSchema),
+            defaultValues: {
+                addressSimilarity: false,
+              },
     });
 
-    const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm({
-        resolver: zodResolver(formSchema),
-    });
+    const handleRemoveSibling = (index) => {
+        setSiblings((prevSiblings) => prevSiblings.filter((_, i) => i !== index));
+    };
 
-    const profilePic = watch('profilePic');
-    const defaultProfilePic = '/images/default-profile.png';
+    const handleSubmitFile = (index) => {
+        setFiles((prevFiles) => {
+            const newFiles = [...prevFiles];
+            newFiles[index].is_submitted = !newFiles[index].is_submitted;
+            return newFiles;
+        });
+    };
 
+    const handleProvinceChange = (provinceName, addresstype) => {
+        const isPermanent = addresstype == 'permanent'
 
+        const provinceId = provinces.find((p) => p.name === provinceName)?.id;
 
-    const dateOfBirth = watch('dateOfBirth');
-    const formattedDateOfBirth = dateOfBirth ? new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(dateOfBirth)) : '';
+        if(isPermanent){
+            setValue('provinceP',provinceId);
+            trigger('provinceP');
+        } else if (!addressSimilarity){
+            setValue('provinceM',provinceId);
+            trigger('provinceM');
+        }
 
-
-    const navigate = useNavigate();
-    const { token } = useStateContext();
-    
-    const { toast } = useToast();
-
-    const handleSameAsPermanent = (event) => {
-        if (event.target.checked) {
-            setValue('mailingHouseBlockUnitNo', watch('houseBlockUnitNo'));
-            setValue('mailingStreet', watch('street'));
-            setValue('mailingBarangay', watch('barangay'));
-            setValue('mailingCity', watch('city'));
-            setValue('mailingMunicipality', watch('municipality'));
-            setValue('mailingZipCode', watch('zipCode'));
+        if (provinceId) {
+            axiosClient.get(`/cities/${provinceId}`)
+                .then(response => {
+                    if (isPermanent) setCities(response.data);
+                    else setCities2(response.data);
+                    console.log(response.data);
+                })
+                .catch(error => console.error('Error fetching cities:', error));
         } else {
-            setValue('mailingHouseBlockUnitNo', '');
-            setValue('mailingStreet', '');
-            setValue('mailingBarangay', '');
-            setValue('mailingCity', '');
-            setValue('mailingMunicipality', '');
-            setValue('mailingZipCode', '');
+            if (isPermanent) setCities([]);
+            else setCities2([]);
         }
     };
 
-    const firstNameRef = useRef();
-    const middleNameRef = useRef();
-    const lastNameRef = useRef();
-    const suffixRef = useRef();
-    const dateOfBirthRef = useRef();
-    const emailRef = useRef();
-    const personalEmailRef = useRef();
-    const mobileNumRef = useRef();
-    const programRef = useRef();
-    const scholarshipRef = useRef();
-    const scholarshipStatusRef = useRef();
-    const houseBlockUnitNoRef = useRef();
-    const streetRef = useRef();
-    const barangayRef = useRef();
-    const cityRef = useRef();
-    const municipalityRef = useRef();
-    const zipCodeRef = useRef();
+    const handleCityChange = (cityName, addresstype) => {
+        const isPermanent = addresstype === 'permanent';
 
-    useEffect(() => {
-        // Initialize CSRF token
-        axiosClient.get('/sanctum/csrf-cookie').then(response => {
-            console.log('CSRF token initialized');
-        });
 
-        const savedFormData = localStorage.getItem('formData');
-        if (savedFormData) {
-            const parsedFormData = JSON.parse(savedFormData);
-            Object.keys(parsedFormData).forEach((key) => {
-                setValue(key, parsedFormData[key]);
-            });
+        let cityId = 0;
+
+        if (isPermanent) {
+            cityId = cities.find((c) => c.name === cityName)?.id;
+            setValue('cityP',cityId)
+            trigger('cityP')
+        } else if (!addressSimilarity){
+            cityId = cities2.find((c) => c.name === cityName)?.id;
+            setValue('cityM',cityId)
+            trigger('cityM')
         }
-    }, [setValue]);
 
-    const mapFormDataToPayload = () => {
-        return {
-            first_name: firstNameRef.current.value,
-            last_name: lastNameRef.current.value,
-            middle_name: middleNameRef.current.value,
-            suffix: suffixRef.current.value,
-            dob: dateOfBirthRef.current.value,
-            email: emailRef.current.value,
-            personal_email: personalEmailRef.current.value,
-            mobile_num: mobileNumRef.current.value,
-            program_id: programRef.current.value,
-            scholarship_id: scholarshipRef.current.value,
-            scholarship_status_id: scholarshipStatusRef.current.value,
-            address: {
-                house_block_unit_no: houseBlockUnitNoRef.current.value,
-                street: streetRef.current.value,
-                barangay: barangayRef.current.value,
-                city: cityRef.current.value,
-                municipality: municipalityRef.current.value,
-                zip_code: zipCodeRef.current.value,
-            },
+
+        if (cityId) {
+            axiosClient.get(`/barangays/${cityId}`)
+                .then(response => {
+                    if (isPermanent) setBarangays(response.data);
+                    else setBarangays2(response.data);
+                    console.log(response.data);
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        } else {
+            if (isPermanent) setBarangays([]);
+            else setBarangays2([]);
+        }
+    };
+
+    const handleBarangayChange = (barangayName,addresstype) => {
+        const isPermanent = addresstype === 'permanent';
+
+        let barangayId = 0
+
+        if (isPermanent) {
+            barangayId = barangays.find((b) => b.name === barangayName)?.id;
+            setValue('barangayP',barangayId)
+            trigger('barangayP')
+        } else if (!addressSimilarity){
+            barangayId = barangays2.find((b) => b.name === barangayName)?.id;
+            setValue('barangayM',barangayId)
+            trigger('barangayM')
+        }
+    }
+
+    const handleCheckboxChange = (e) => {
+        setAddressSimilarity(!addressSimilarity)
+
+        setValue('addressSimilarity', !addressSimilarity);
+        trigger('addressSimilarity');
+    };
+
+    const handleScholarshipChange = (scholarshipName) => {
+        const scholarshipId = scholarships.find((s) => s.name === scholarshipName)?.id;
+
+        setValue('scholarship', scholarshipId);
+        trigger('scholarship');
+
+        if (scholarshipId) {
+            axiosClient.get(`/reqfiles/${scholarshipId}`)
+                .then(({data}) => {
+                    setFiles(data.data);
+                    console.log(data);
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        } else {
+            setFiles([]);
+        }
+    };
+
+    const handleProgramChange = (programName) => {
+        const programId = programs.find((p) => p.name === programName)?.id;
+
+        setValue('program',programId);
+        trigger('program');
+    }
+
+    const handleYearChange = (yearName) => {
+        const yearId = years.find((y) => y.name === yearName)?.id;
+
+        setValue('year',yearId);
+        trigger('year');
+
+    }
+
+    const handleAcademicYearChange = (acadYearName) => {
+        const acadYearId = academicYears.find((a) => a.name === acadYearName)?.id;
+
+        setValue('academicYear',acadYearId);
+        trigger('academicYear');
+    }
+
+    const handleSemesterChange = (semesterName) => {
+        const semesterId = semesters.find((s) => s.name === semesterName)?.id;
+
+        setValue('semester',semesterId);
+        trigger('semester');
+    }
+
+
+    const onSubmit = async (data) => {
+
+        let userId = user?.id
+
+        let scholarshipData = {
+            prevSchool: data?.prevSchool?.trim(),
+            prevSchoolLandline: data?.prevSchoolLandline ? data.prevSchoolLandline.trim() : null,
+            prevSchoolEmail: data?.prevSchoolEmail?.toLowerCase().trim(),
+            scholarship: data?.scholarship,
         };
-    };
-    
-    const onSubmit = (ev) => {
-        ev.preventDefault();
-        console.log('Form submission triggered');
-        setLoading(true); // Set loading state
-        const payload = mapFormDataToPayload();
-        console.log('Payload:', payload);
 
-        axiosClient.post('/students', payload, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // Include token in headers
-            },
-        })
-        .then(({ data }) => {
-            setLoading(false); // Clear loading state
-            console.log('Form submitted successfully:', data);
-            localStorage.removeItem('formData'); // Clear localStorage
-            navigate('/students'); // Redirect to /students route
-        })
-        .catch((error) => {
-            console.error('Error submitting form:', error.response ? error.response.data : error.message);
-            setLoading(false); // Clear loading state
-            if (error.response && error.response.status === 422) {
-                // Handle validation errors
-                console.error('Validation errors:', error.response.data.errors);
-            }
-        });
-    };
-
-    const handleReviewSubmit = () => {
-        handleSubmit(onSubmit)();
-        setIsModalOpen(false);
-    };
-
-    useEffect(() => {
-        const subscription = watch((value) => {
-            localStorage.setItem('formData', JSON.stringify(value));
-        });
-        return () => subscription.unsubscribe();
-    }, [watch]);
-
-    useEffect(() => {
-        const savedFormData = localStorage.getItem('formData');
-        if (savedFormData) {
-            const parsedFormData = JSON.parse(savedFormData);
-            Object.keys(parsedFormData).forEach((key) => {
-                setValue(key, parsedFormData[key]);
-            });
+        let organization = {
+            studentNo: data?.studentNo?.trim(),
+            studentEmail: data?.studentEmail?.trim(),
+            program: data?.program,
+            year: data?.year,
+            academicYear: data?.academicYear,
+            semester: data?.semester,
         }
-    }, [setValue]);
 
+        let personal = {
+            firstName: data?.firstName,
+            middleName: data?.middleName?.trim(),
+            lastName: data?.lastName?.trim(),
+            suffix: data?.suffix?.trim() === "" ? null : data?.suffix?.trim(),
+            dob: data?.dob ? new Date(data.dob).toISOString().split('T')[0] : null,
+            email: data?.email?.trim(),
+            mobileNum: data?.mobileNum?.trim(),
+            landline: data?.landline?.trim() === "" ? null : data?.landline?.trim(),
+        }
+
+        let permAddress = {
+            houseBlockUnitNo: data?.permHouse,
+            street: data?.permStreet,
+            zipCode: data?.permZip?.trim(),
+            barangay: data?.barangayP
+        }
+
+        let sameAddress = addressSimilarity;
+
+        let mailAddress = null;
+
+        if (!addressSimilarity){
+
+            mailAddress = {
+                houseBlockUnitNo: data?.mailHouse,
+                street: data?.mailStreet,
+                zipCode: data?.mailZip?.trim(),
+                barangay: data?.barangayM
+            }
+        }
+
+        let father = {
+            firstName: data?.fatherFirstName,
+            middleName: data?.fatherMiddleName,
+            lastName: data?.fatherLastName,
+            suffix: data?.fatherSuffix?.trim() === "" ? null : data?.fatherSuffix?.trim(),
+            email: data?.fatherEmail,
+            mobileNum: data?.fatherMobileNum,
+            landline: data?.fatherLandline?.trim() === "" ? null : data?.fatherLandline?.trim(),
+            occupation: data?.fatherOccupation,
+            officeNo: data?.fatherOfficeNo?.trim() === "" ? null : data?.fatherOfficeNo?.trim(),           
+        }
+
+        let mother = {
+            firstName: data?.motherFirstName,
+            middleName: data?.motherMiddleName,
+            lastName: data?.motherLastName,
+            suffix: data?.motherSuffix?.trim() === "" ? null : data?.motherSuffix?.trim(),
+            email: data?.motherEmail,
+            mobileNum: data?.motherMobileNum,
+            landline: data?.motherLandline?.trim() === "" ? null : data?.motherLandline?.trim(),
+            occupation: data?.motherOccupation,
+            officeNo: data?.motherOfficeNo?.trim() === "" ? null : data?.motherOfficeNo?.trim(),
+        }
+
+        if (Object.values(father).every(value => value == null || value === "")) {
+            father = null; // Exclude father if all fields are empty or null
+        }
     
+        if (Object.values(mother).every(value => value == null || value === "")) {
+            mother = null; // Exclude mother if all fields are empty or null
+        }
 
-    
+        let siblingsData = siblings;
 
+        let filesData = files;
+
+        const payload ={
+            userId,
+            scholarshipData,
+            organization,
+            personal,
+            permAddress,
+            sameAddress,
+            mailAddress,
+            father,
+            mother,
+            siblingsData,
+            filesData,           
+        }
+
+        console.log(payload);
+
+        try{
+            await axiosClient.post('/addstudent', payload)
+            alert('Student successfully added!')
+            navigate('/students');
+        } catch(error) {
+            if (error.response && error.response.status === 409 && error.response.data.errors) {
+                const { errors: backendErrors } = error.response.data;
+                // Set the errors returned by the backend into react-hook-form
+                Object.keys(backendErrors).forEach((key) => {
+                    setError(key, {
+                        message: backendErrors[key]
+                    });
+                });
+            } else {
+                // Handle other errors if needed (e.g., network issues)
+                const errorMessage = error.response ? error.response.data.message : "An unexpected error occurred.";
+                alert(errorMessage);
+            }
+        }
+    }
+  
     return (
         <div className="main">
             <div className="header-toolbar">
                 <h1 className="text-black font-bold font-sans text-lg pt-1">Add Student</h1>
                 <Button className="hover:bg-slate-500 border hover:black hover:text-white" onClick={() => window.history.back()}>Cancel</Button>
             </div>
-            <Form id="regForm" onSubmit={handleSubmit(onSubmit)}>
-                <div className="tab mt-3">
-                <input type="hidden" name="csrf-token" value={document.querySelector('meta[name="csrf-token"]').getAttribute('content')} />
-                
-                    {/* Personal Info  */}
-                        <div className="grid grid-cols-2 gap-2">
-                            <div className="card-add-student hover:border-blue-200">
-                                <h1 className='text-stone-600 text-sm font-semibold'>Personal Information</h1>
-                                <div className='pl-5 pt-5 '>
-                                    <Label htmlFor="firstname" className="text-black text-xs">First Name</Label>
-                                    <FormItem label="first-name">
-                                        <Input ref={firstNameRef} type="text" placeholder="First Name" className="w-11/12 mb-3" {...register('firstName')} />
-                                        {errors.firstName && <span className="text-red-500 text-xs">{errors.firstName.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="middlename" className="text-black text-xs">Middle Name</Label>
-                                    <FormItem label="middle-name">
-                                        <Input ref={middleNameRef} type="text" placeholder="Middle Name" className="w-11/12 mb-3" {...register('middleName')} />
-                                    </FormItem>
-                                    <Label htmlFor="lastname" className="text-black text-xs">Last Name</Label>
-                                    <FormItem label="last-name">
-                                        <Input ref={lastNameRef} type="text" placeholder="Last Name" className="w-11/12 mb-3" {...register('lastName')} />
-                                        {errors.lastName && <span className="text-red-500 text-xs">{errors.lastName.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="suffix" className="text-black text-xs">Suffix</Label>
-                                    <FormItem label="Suffix" >
-                                        <Select >
-                                            <SelectTrigger className="w-auto mb-3" defaultValue="blank">
-                                                <SelectValue ref={suffixRef} placeholder="Suffix" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                            <SelectGroup className="bg-slate-50">
-                                                    <SelectLabel>Select Suffix</SelectLabel>
-                                                    <SelectItem value="blank" className="mb-3 hover:bg-slate-200"></SelectItem>
-                                                    <SelectItem value="jr" className="mb-2 hover:bg-slate-200">Jr.</SelectItem>
-                                                    <SelectItem value="sr" className="mb-2 hover:bg-slate-200">Sr.</SelectItem>
-                                                    <SelectItem value="ii" className="mb-2 hover:bg-slate-200">II</SelectItem>
-                                                    <SelectItem value="iii" className="mb-2 hover:bg-slate-200">III</SelectItem>
-                                                    <SelectItem value="iv" className="mb-2 hover:bg-slate-200">IV</SelectItem>
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormItem>
-                                    <Label htmlFor="dateofbirth" className="text-black text-xs">Date of Birth</Label>
-                                    <FormItem label="dateofbirth">
-                                        <Input ref={dateOfBirthRef} type="date" className="w-35 mb-3 text-xs" {...register('dateOfBirth')} />
-                                    </FormItem>
-                                    <Label htmlFor="age" className="text-black text-xs">Age</Label>
-                                    <FormItem label="age">
-                                        <Input type="number" className="w-24 mb-3" {...register('age')} />
-                                        {errors.age && <span className="text-red-500 text-xs">{errors.age.message}</span>}
-                                    </FormItem>
-                                </div>
-
-                            <h1 className='text-stone-600 text-sm font-semibold mt-2'>Upload Picture</h1>
-                            <div className='pl-5 pt-5 -translate-y-3'>
-                                <Label htmlFor="profilePic" className="text-black text-xs mt-4">Profile Picture</Label>
-                                <FormItem label="profilePic">
-                                    <Input type="file" className="w-11/12 mb-3 border hover:border-blue-500" {...register('profilePic')} />
-                                    {errors.profilePic && <span className="text-red-500 text-xs">{errors.profilePic.message}</span>}
+            <Form>
+                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>                               
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Scholarship</CardTitle>                    
+                        </CardHeader>
+                        <CardContent className='flex flex-col gap-5'>                        
+                            <FormItem>      
+                                <Label>Previous School</Label>                 
+                                <Input disabled={isSubmitting} type="text" {...register("prevSchool")} className={`w-[100%] mb-3 ${errors.prevSchool ? 'border-red-500' : ''}`}/>
+                            </FormItem>
+                            <div className='flex flex-row gap-[10%]'>
+                                <FormItem>
+                                    <Label>Landline</Label>
+                                    <Input disabled={isSubmitting} type="text" {...register("prevSchoolLandline")} className={`w-[100%] mb-3 ${errors.prevSchoolLandline ? 'border-red-500' : ''}`}/>
+                                    {errors.prevSchoolLandline && <p className="text-red-500 text-[10px] italic">{errors.prevSchoolLandline.message}</p>}
                                 </FormItem>
-                            </div>
-                            <div className="place-items-center">
-                                <img 
-                                    src={profilePic && profilePic.length > 0 ? URL.createObjectURL(profilePic[0]) : defaultProfilePic} 
-                                    alt='profile-pic' 
-                                    className="w-32 h-32 object-cover border border-black justify-center"
-                                />
-                            </div>
-                            
-                            </div>
-                            
-                            {/* Org Info  */}
-
-                            <div className="grid gap-3 ">
-                                <div className=''>
-                                    <div className="card-add-student hover:border-blue-200 text-sm">
-                                        <h1 className='text-stone-600 text-sm font-semibold'>Student Information</h1>
-                                        <div className='pl-5 pt-5'>
-                                            <div>
-                                                <Label htmlFor="MMCM Student Number" className="text-black text-xs mt-1">Student Number</Label>
-                                                <FormItem label="student-number">
-                                                    <Input type="text" placeholder="Student Number" className="w-11/12 mb-3" {...register('studentNumber')} />
-                                                    {errors.studentNumber && <span className="text-red-500 text-xs">{errors.studentNumber.message}</span>}
-                                                </FormItem>
-                                                <Label htmlFor="yearlevel" className="text-black text-xs mt-2">Year Level</Label>
-                                                <FormItem label="Current Year" className="w-3/5 mb-3">
-                                                <Controller
-                                                    name="yearLevel"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <Select {...field} onValueChange={(value) => field.onChange(value)}>
-                                                            <SelectTrigger>
-                                                                <SelectValue placeholder="Select Year" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectGroup className='bg-slate-50'>
-                                                                    <SelectLabel className="text-xs">Junior High School</SelectLabel>
-                                                                    <SelectItem value="jhs_grade_7" className="pl-7 hover:bg-slate-200">Grade 7</SelectItem>
-                                                                    <SelectLabel className="text-xs">Senior High School</SelectLabel>
-                                                                    <SelectItem value="shs_grade_11" className="pl-7 hover:bg-slate-200">Grade 11</SelectItem>
-                                                                    <SelectItem value="shs_grade_12" className="pl-7 hover:bg-slate-200">Grade 12</SelectItem>
-                                                                    <SelectLabel className="text-xs">College</SelectLabel>
-                                                                    <SelectItem value="college_first_year" className="pl-7 hover:bg-slate-200">First Year</SelectItem>
-                                                                    <SelectItem value="college_second_year" className="pl-7 hover:bg-slate-200">Second Year</SelectItem>
-                                                                    <SelectItem value="college_third_year" className="pl-7 hover:bg-slate-200">Third Year</SelectItem>
-                                                                    <SelectItem value="college_fourth_year" className="pl-7 hover:bg-slate-200">Fourth Year</SelectItem>
-                                                                    <SelectItem value="college_fifth_year" className="pl-7 hover:bg-slate-200">Fifth Year</SelectItem>
-                                                                </SelectGroup>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    )}
-                                                />
-                                                {errors.yearLevel && <span className="text-red-500 text-xs">{errors.yearLevel.message}</span>}
-                                            </FormItem>
-                                                <Label htmlFor="program" className="text-black text-xs">Program</Label>
-                                                <FormItem label="Program/Strand" className="w-3/5 mb-3">
-                                                    <Controller
-                                                        name="program"
-                                                        control={control}
-                                                        render={({ field }) => (
-                                                            <Select {...field} onValueChange={(value) => field.onChange(value)}>
-                                                                <SelectTrigger className="w-full">
-                                                                    <SelectValue ref={programRef} placeholder="Select Program/Strand" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">Senior High School</SelectLabel>
-                                                                        <SelectItem value="abm" className="pl-10 hover:bg-slate-200">ABM</SelectItem>
-                                                                        <SelectItem value="humss" className="pl-10 hover:bg-slate-200">HUMSS</SelectItem>
-                                                                        <SelectItem value="stem" className="pl-10 hover:bg-slate-200">STEM</SelectItem>
-                                                                        <SelectItem value="arts_design" className="pl-10 hover:bg-slate-200">Arts and Design</SelectItem>
-                                                                        <SelectItem value="tvl_ict" className="pl-10 hover:bg-slate-200">TVL-ICT</SelectItem>
-                                                                    </SelectGroup>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">College</SelectLabel>
-                                                                        <SelectLabel className="text-black pl-5">ATYCB</SelectLabel>
-                                                                        <SelectItem value="bs_entrepreneurship" className="pl-10 hover:bg-slate-200">BS Entrepreneurship</SelectItem>
-                                                                        <SelectItem value="bs_management_accounting" className="pl-10 hover:bg-slate-200">BS Management Accounting</SelectItem>
-                                                                        <SelectItem value="bs_real_estate_management" className="pl-10 hover:bg-slate-200">BS Real Estate Management</SelectItem>
-                                                                        <SelectItem value="bs_tourism_management" className="pl-10 hover:bg-slate-200">BS Tourism Management</SelectItem>
-                                                                        <SelectItem value="bs_accountancy" className="pl-10 hover:bg-slate-200">BS Accountancy</SelectItem>
-                                                                        <SelectLabel className="text-black pl-5">CAS</SelectLabel>
-                                                                        <SelectItem value="bs_communication" className="pl-10 hover:bg-slate-200">BS Communication</SelectItem>
-                                                                        <SelectItem value="bs_multimedia_arts" className="pl-10 hover:bg-slate-200">BS Multimedia Arts</SelectItem>
-                                                                        <SelectLabel className="text-black pl-5">CCIS</SelectLabel>
-                                                                        <SelectItem value="bs_computer_science" className="pl-10 hover:bg-slate-200">BS Computer Science</SelectItem>
-                                                                        <SelectItem value="bs_entertainment_multimedia_computing" className="pl-10 hover:bg-slate-200">BS Entertainment and Multimedia Computing</SelectItem>
-                                                                        <SelectItem value="bs_information_systems" className="pl-10 hover:bg-slate-200">BS Information Systems</SelectItem>
-                                                                        <SelectLabel className="text-black pl-5">CEA</SelectLabel>
-                                                                        <SelectItem value="bs_architecture" className="pl-10 hover:bg-slate-200">BS Architecture</SelectItem>
-                                                                        <SelectItem value="bs_chemical_engineering" className="pl-10 hover:bg-slate-200">BS Chemical Engineering</SelectItem>
-                                                                        <SelectItem value="bs_civil_engineering" className="pl-10 hover:bg-slate-200">BS Civil Engineering</SelectItem>
-                                                                        <SelectItem value="bs_computer_engineering" className="pl-10 hover:bg-slate-200">BS Computer Engineering</SelectItem>
-                                                                        <SelectItem value="bs_electrical_engineering" className="pl-10 hover:bg-slate-200">BS Electrical Engineering</SelectItem>
-                                                                        <SelectItem value="bs_electronics_engineering" className="pl-10 hover:bg-slate-200">BS Electronics Engineering</SelectItem>
-                                                                        <SelectItem value="bs_industrial_engineering" className="pl-10 hover:bg-slate-200">BS Industrial Engineering</SelectItem>
-                                                                        <SelectItem value="bs_mechanical_engineering" className="pl-10 hover:bg-slate-200">BS Mechanical Engineering</SelectItem>
-                                                                        <SelectLabel className="text-black pl-5">CHS</SelectLabel>
-                                                                        <SelectItem value="bs_biology" className="pl-10 hover:bg-slate-200">BS Biology</SelectItem>
-                                                                        <SelectItem value="bs_psychology" className="pl-10 hover:bg-slate-200">BS Psychology</SelectItem>
-                                                                        <SelectItem value="bs_pharmacy" className="pl-10 hover:bg-slate-200">BS Pharmacy</SelectItem>
-                                                                        <SelectItem value="bs_physical_therapy" className="pl-10 hover:bg-slate-200">BS Physical Therapy</SelectItem>
-                                                                    </SelectGroup>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        )}
-                                                    />
-                                                    {errors.program && <span className="text-red-500 text-xs">{errors.program.message}</span>}
-                                                </FormItem>
-
-                                                <Label htmlFor="recentSchoolYear" className="text-black text-xs">Most Recent School Year Attended</Label>
-                                                <FormItem label="recentSchoolYear" className="w-3/5 mb-3">
-                                                    <Controller
-                                                        name="recentSchoolYear"
-                                                        control={control}
-                                                        render={({ field }) => (
-                                                            <Select {...field} onValueChange={(value) => field.onChange(value)}>
-                                                                <SelectTrigger>
-                                                                    <SelectValue placeholder="Select School Year" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">AY 2024-2025</SelectLabel>
-                                                                        <SelectItem value="ay_2024_2025_2nd_term" className="pl-7 hover:bg-slate-200">2nd Term</SelectItem>
-                                                                        <SelectItem value="ay_2024_2025_1st_term" className="pl-7 hover:bg-slate-200">1st Term</SelectItem>
-                                                                    </SelectGroup>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">AY 2023-2024</SelectLabel>
-                                                                        <SelectItem value="ay_2023_2024_3rd_term" className="pl-7 hover:bg-slate-200">3rd Term</SelectItem>
-                                                                        <SelectItem value="ay_2023_2024_2nd_term" className="pl-7 hover:bg-slate-200">2nd Term</SelectItem>
-                                                                        <SelectItem value="ay_2023_2024_1st_term" className="pl-7 hover:bg-slate-200">1st Term</SelectItem>
-                                                                    </SelectGroup>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">AY 2022-2023</SelectLabel>
-                                                                        <SelectItem value="ay_2022_2023_3rd_term" className="pl-7 hover:bg-slate-200">3rd Term</SelectItem>
-                                                                        <SelectItem value="ay_2022_2023_2nd_term" className="pl-7 hover:bg-slate-200">2nd Term</SelectItem>
-                                                                        <SelectItem value="ay_2022_2023_1st_term" className="pl-7 hover:bg-slate-200">1st Term</SelectItem>
-                                                                    </SelectGroup>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">AY 2021-2022</SelectLabel>
-                                                                        <SelectItem value="ay_2021_2022_3rd_term" className="pl-7 hover:bg-slate-200">3rd Term</SelectItem>
-                                                                        <SelectItem value="ay_2021_2022_2nd_term" className="pl-7 hover:bg-slate-200">2nd Term</SelectItem>
-                                                                        <SelectItem value="ay_2021_2022_1st_term" className="pl-7 hover:bg-slate-200">1st Term</SelectItem>
-                                                                    </SelectGroup>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">AY 2020-2021</SelectLabel>
-                                                                        <SelectItem value="ay_2020_2021_3rd_term" className="pl-7 hover:bg-slate-200">3rd Term</SelectItem>
-                                                                        <SelectItem value="ay_2020_2021_2nd_term" className="pl-7 hover:bg-slate-200">2nd Term</SelectItem>
-                                                                        <SelectItem value="ay_2020_2021_1st_term" className="pl-7 hover:bg-slate-200">1st Term</SelectItem>
-                                                                    </SelectGroup>
-                                                                    <SelectGroup className='bg-slate-50'>
-                                                                        <SelectLabel className="text-xs">AY 2019-2020</SelectLabel>
-                                                                        <SelectItem value="ay_2019_2020_3rd_term" className="pl-7 hover:bg-slate-200">3rd Term</SelectItem>
-                                                                        <SelectItem value="ay_2019_2020_2nd_term" className="pl-7 hover:bg-slate-200">2nd Term</SelectItem>
-                                                                        <SelectItem value="ay_2019_2020_1st_term" className="pl-7 hover:bg-slate-200">1st Term</SelectItem>
-                                                                    </SelectGroup>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        )}
-                                                    />
-                                                    {errors.recentSchoolYear && <span className="text-red-500 text-xs">{errors.recentSchoolYear.message}</span>}
-                                                </FormItem>
-
-                                                <Label htmlFor="recentschoolyear" className="text-black text-xs">Previous School Attended</Label>
-                                                <FormItem label="Previous School">
-                                                    <Input type="text" className="w-11/12 mb-3" {...register('previousSchool')} />
-                                                    {errors.previousSchool && <span className="text-red-500 text-xs">{errors.previousSchool.message}</span>}
-                                                </FormItem>
-
-                                        </div>        
-                                    </div>
-                                 </div>
-                                    </div>
-                                        <div className='card-add-student border hover:border-blue-200 '> 
-                                            <h1 className='text-stone-600 text-sm font-semibold'>Scholarship Information</h1>
-                                            <div className='pl-5 pt-5'>
-                                            <Label htmlFor="scholarship" className="text-black text-xs mt-1">Scholarship</Label>
-                                            <FormItem label="scholarship" className="w-11/12 mb-5">
-                                                <Controller
-                                                    name="scholarship"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <Select {...field} onValueChange={(value) => field.onChange(value)}>
-                                                            <SelectTrigger>
-                                                                <SelectValue ref={scholarshipRef} placeholder="Select Scholarship" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectGroup className='bg-slate-50'>
-                                                                    <SelectLabel className="text-xs">Scholarship</SelectLabel>
-                                                                    <SelectItem value="academic_honoree_g11" className="pl-7 hover:bg-slate-200">Academic Honoree - G11</SelectItem>
-                                                                    <SelectItem value="academic_honoree_grade_7" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 7</SelectItem>
-                                                                    <SelectItem value="academic_honoree_rank_1_and_2" className="pl-7 hover:bg-slate-200">Academic Honoree - Rank 1 and 2</SelectItem>
-                                                                    <SelectItem value="academic_excellence_axa" className="pl-7 hover:bg-slate-200">Academic Excellence (AXA)</SelectItem>
-                                                                    <SelectItem value="academic_achiever_grade_11_top_20" className="pl-7 hover:bg-slate-200">Academic Achiever - Grade 11 - Top 20</SelectItem>
-                                                                    <SelectItem value="academic_honoree_grade_12_top_20" className="pl-7 hover:bg-slate-200">Academic Honoree - Grade 12 - Top 20</SelectItem>
-                                                                    <SelectItem value="presidents_list" className="pl-7 hover:bg-slate-200">President&lsquo;s List</SelectItem>
-                                                                    <SelectItem value="et_yuchengco" className="pl-7 hover:bg-slate-200">E.T. Yuchengco</SelectItem>
-                                                                    <SelectItem value="jose_rizal" className="pl-7 hover:bg-slate-200">Jose Rizal Scholarship</SelectItem>
-                                                                    <SelectItem value="mcm_cup" className="pl-7 hover:bg-slate-200">MCM Cup</SelectItem>
-                                                                    <SelectItem value="hyperlink" className="pl-7 hover:bg-slate-200">Hyperlink</SelectItem>
-                                                                    <SelectItem value="st_scholarship" className="pl-7 hover:bg-slate-200">S&T Scholarship</SelectItem>
-                                                                </SelectGroup>
-                                                                <SelectGroup className='bg-slate-50'>
-                                                                    <SelectLabel className="text-xs">Financial Assistance</SelectLabel>
-                                                                    <SelectItem value="paid_fund" className="pl-7 hover:bg-slate-200">PAID Fund</SelectItem>
-                                                                    <SelectItem value="bukas_ph" className="pl-7 hover:bg-slate-200">Bukas.ph</SelectItem>
-                                                                </SelectGroup>
-                                                                <SelectGroup className='bg-slate-50'>
-                                                                    <SelectLabel className="text-xs">Discounts</SelectLabel>
-                                                                    <SelectItem value="early_bird" className="pl-7 hover:bg-slate-200">Early Bird</SelectItem>
-                                                                    <SelectItem value="referral" className="pl-7 hover:bg-slate-200">Referral</SelectItem>
-                                                                    <SelectItem value="sibling" className="pl-7 hover:bg-slate-200">Sibling</SelectItem>
-                                                                    <SelectItem value="ygc" className="pl-7 hover:bg-slate-200">YGC</SelectItem>
-                                                                    <SelectItem value="study_aid" className="pl-7 hover:bg-slate-200">Study Aid</SelectItem>
-                                                                </SelectGroup>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    )}
-                                                />
-                                                {errors.scholarship && <span className="text-red-500 text-xs">{errors.scholarship.message}</span>}
-                                                </FormItem>
-                                            <Label htmlFor="enrollmentStatus" className="text-black text-xs">Enrollment Status</Label>
-                                            <FormItem label="enrollmentStatus" className="mb-3 w-3/5">
-                                                <Controller
-                                                    name="enrollmentStatus"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <Select {...field} onValueChange={(value) => field.onChange(value)}>
-                                                        <SelectTrigger>
-                                                            <SelectValue ref={scholarshipStatusRef} placeholder="Select Enrollment Status" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectGroup className='bg-slate-50'>
-                                                                <SelectLabel className="text-xs">Enrollment Status</SelectLabel>
-                                                                <SelectItem value="enrolled" className="pl-7 hover:bg-slate-200">Enrolled</SelectItem>
-                                                                <SelectItem value="not_enrolled" className="pl-7 hover:bg-slate-200">Not Enrolled</SelectItem>
-                                                            </SelectGroup>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    )}
-                                                />
-                                                {errors.enrollmentStatus && <span className="text-red-500 text-xs">{errors.enrollmentStatus.message}</span>}
-                                            </FormItem>
-                                        <Label htmlFor="scholarshipStatus" className="text-black text-xs">Scholarship Status</Label>
-                                            <FormItem label="scholarshipStatus" className="w-3/5">
-                                                <Controller
-                                                    name="scholarshipStatus"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <Select {...field} onValueChange={(value) => field.onChange(value)}>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select Scholarship Status" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                                <SelectGroup className='bg-slate-50'>
-                                                                    <SelectLabel className="text-xs">Scholarship Status</SelectLabel>
-                                                                    <SelectItem value="active" className="pl-7 hover:bg-slate-200">Active</SelectItem>
-                                                                    <SelectItem value="inactive" className="pl-7 hover:bg-slate-200">Inactive</SelectItem>
-                                                                </SelectGroup>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    )}
-                                                />
-                                                {errors.scholarshipStatus && <span className="text-red-500 text-xs">{errors.scholarshipStatus.message}</span>}
-                                            </FormItem>
-                                        </div>
-                                    </div>
-                            </div>
-                    </div>
-                </div>
-                {/* Contact Info  */}
-                    <div className="contact-info border pt-8 hover:border-blue-200">
-                        <h1 className='text-stone-600 text-sm font-semibold'>Contact Information</h1>
-                        <div className='pl-5 pt-5'>
-                            <div>
-                                <Label htmlFor="telNumber" className="text-black text-xs">Telephone Number</Label>
-                                <FormItem label="telNumber">
-                                    <Input ref={mobileNumRef} type="tel" placeholder="0XX-XXX-YYYY" className="w-11/12 mb-3" {...register('telNumber')} />
-                                    {errors.telNumber && <span className="text-red-500 text-xs">{errors.telNumber.message}</span>}
+                                <FormItem className='w-[100%]'>
+                                    <Label>Email</Label>
+                                    <Input disabled={isSubmitting} type="email" {...register('prevSchoolEmail')} className={`w-[100%] mb-3 ${errors.prevSchoolEmail ? 'border-red-500' : ''}`}/>
+                                    {errors.prevSchoolEmail && <p className="text-red-500 text-[10px] italic">{errors.prevSchoolEmail.message}</p>}
                                 </FormItem>
-                                <Label htmlFor="contactNumber" className="text-black text-xs">Phone Number</Label>
-                                <FormItem label="contactNumber">
-                                    <Input type="tel" placeholder="09123456789" className="w-11/12 mb-3" {...register('contactNumber')} />
-                                    {errors.contactNumber && <span className="text-red-500 text-xs">{errors.contactNumber.message}</span>}
-                                </FormItem>
-                            </div>
-                            <div>
-                                <Label htmlFor="personalEmail" className="text-black text-xs">Personal Email Address</Label>
-                                <FormItem label="personalEmail">
-                                    <Input  ref={personalEmailRef} type="email" placeholder="student@gmail.com" className="w-11/12 mb-3" {...register('personalEmail')} />
-                                    {errors.personalEmail && <span className="text-red-500 text-xs">{errors.personalEmail.message}</span>}
-                                </FormItem>
-                                <Label htmlFor="schoolEmail" className="text-black text-xs">School Email Address</Label>
-                                <FormItem label="schoolEmail">
-                                    <Input ref={emailRef} type="email" placeholder="student@mcm.edu.ph" className="w-11/12 mb-3" {...register('schoolEmail')} />
-                                    {errors.schoolEmail && <span className="text-red-500 text-xs">{errors.schoolEmail.message}</span>}
-                                </FormItem>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Address Info  */}
-                        <div className="contact-info border hover:border-blue-200">
-                            <div className='grid-cols-2'>
-                                <div className='text-stone-600 text-sm font-semibold'>Permanent Address</div>
-                                <div className='text-stone-600 text-sm font-semibold'>Mailing Address</div>
-                                    
-                            </div>
-                            <div className='pl-5 pt-5'>
-                                <div>
-                                    <Label htmlFor="BlockUnitNo" className="text-black text-xs">House / Block / Unit No.</Label>
-                                    <FormItem label="houseBlockUnitNo">
-                                        <Input ref={houseBlockUnitNoRef} id="HouseBlockUnitNo" type="text" placeholder="" className="w-11/12" {...register('houseBlockUnitNo')} />
-                                        {errors.houseBlockUnitNo && <span className="text-red-500 text-xs">{errors.houseBlockUnitNo.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="Street" className="text-black text-xs">Street Name</Label>
-                                    <FormItem label="street">
-                                        <Input ref={streetRef} id="Street" type="text" placeholder="" className="w-11/12" {...register('street')} />
-                                        {errors.street && <span className="text-red-500 text-xs">{errors.street.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="Barangay" className="text-black text-xs">Barangay</Label>
-                                    <FormItem label="barangay">
-                                        <Input ref={barangayRef} id="Barangay" type="text" placeholder="" className="w-11/12" {...register('barangay')} />
-                                        {errors.barangay && <span className="text-red-500 text-xs">{errors.barangay.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="City" className="text-black text-xs">City</Label>
-                                    <FormItem label="city">
-                                        <Input ref={cityRef} id="City" type="text" placeholder="" className="w-11/12" {...register('city')} />
-                                        {errors.city && <span className="text-red-500 text-xs">{errors.city.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="Municipality" className="text-black text-xs">Municipality</Label>
-                                    <FormItem label="municipality">
-                                        <Input ref={municipalityRef} id="Municipality" type="text" placeholder="" className="w-11/12" {...register('municipality')} />
-                                        {errors.municipality && <span className="text-red-500 text-xs">{errors.municipality.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="ZipCode" className="text-black text-xs">ZipCode</Label>
-                                    <FormItem label="zipCode">
-                                        <Input ref={zipCodeRef} id="ZipCode" type="text" placeholder="" className="w-11/12 mb-3" {...register('zipCode')} />
-                                        {errors.zipCode && <span className="text-red-500 text-xs">{errors.zipCode.message}</span>}
-                                    </FormItem>
-                                </div>
-                                
-                                <div className="mailing-address">
-                                    <Label htmlFor="mailingHouseBlockUnitNo" className="text-black text-xs">House / Block / Unit No.</Label>
-                                    <FormItem label="houseBlockUnitNo">
-                                        <Input id="mailingHouseBlockUnitNo" type="text" placeholder="" className="w-11/12" {...register('mailingHouseBlockUnitNo')} />
-                                        {errors.mailingHouseBlockUnitNo && <span className="text-red-500 text-xs">{errors.mailingHouseBlockUnitNo.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="mailingStreet" className="text-black text-xs">Street Name</Label>
-                                    <FormItem label="street">
-                                        <Input id="mailingStreet" type="text" placeholder="" className="w-11/12" {...register('mailingStreet')} />
-                                        {errors.mailingStreet && <span className="text-red-500 text-xs">{errors.mailingStreet.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="mailingBarangay" className="text-black text-xs">Barangay</Label>
-                                    <FormItem label="barangay">
-                                        <Input id="mailingBarangay" type="text" placeholder="" className="w-11/12" {...register('mailingBarangay')} />
-                                        {errors.mailingBarangay && <span className="text-red-500 text-xs">{errors.mailingBarangay.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="mailingCity" className="text-black text-xs">City</Label>
-                                    <FormItem label="city">
-                                        <Input id="mailingCity" type="text" placeholder="" className="w-11/12" {...register('mailingCity')} />
-                                        {errors.mailingCity && <span className="text-red-500 text-xs">{errors.mailingCity.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="mailingMunicipality" className="text-black text-xs">Municipality</Label>
-                                    <FormItem label="municipality">
-                                        <Input id="mailingMunicipality" type="text" placeholder="" className="w-11/12" {...register('mailingMunicipality')} />
-                                        {errors.mailingMunicipality && <span className="text-red-500 text-xs">{errors.mailingMunicipality.message}</span>}
-                                    </FormItem>
-                                    <Label htmlFor="mailingZipCode" className="text-black text-xs">ZipCode</Label>
-                                    <FormItem label="zipCode">
-                                        <Input id="mailingZipCode" type="text" placeholder="" className="w-11/12 mb-3" {...register('mailingZipCode')} />
-                                        {errors.mailingZipCode && <span className="text-red-500 text-xs">{errors.mailingZipCode.message}</span>}
-                                    </FormItem>
-                                    <div className="grid grid-cols-2">
-                                                <div className='flex-auto'>
-                                                <FormItem label="sameAsPermanent">
-                                                    <Input id="sameAsPermanent" type="checkbox" className="mb-3 w-3 h-3 mr-2 " onChange={(e) => handleSameAsPermanent(e)} />
-                                                </FormItem>
-                                            </div>
-                                            <div className="text-black text-xs translate-x-8 ml-3- -pl-1 -mt-9">
-                                                    <h1>Same as Permanent Address</h1>
+                            </div>                           
+                            <FormItem>                     
+                                <Select disabled={isSubmitting} onValueChange={(value) => handleScholarshipChange(value)}>
+                                    <SelectTrigger className={`w-[100%] mb-3 ${errors.scholarship ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Select a Scholarship"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {scholarships.map((scholarships, index) => (
+                                            <SelectItem key={index} value={scholarships.name} disabled={scholarships.is_full}>
+                                                <div className='flex w-full justify-between items-center'>
+                                                    <span className={scholarships.is_full ? "text-gray-400" : ""}>{scholarships.name}</span>
+                                                    <div className='flex flex-row ml-[100px]'>
+                                                        <span className={scholarships.is_full ? "text-gray-400" : ""}>{scholarships.taken_slots}</span>
+                                                        <span className={scholarships.is_full ? "text-gray-400" : ""}>/</span>
+                                                        <span className={scholarships.is_full ? "text-gray-400" : ""}>{scholarships.max_slots}</span>
+                                                    </div>
                                                 </div>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>                           
+                                </Select>                                
+                            </FormItem>                       
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Organization Information</CardTitle>
+                        </CardHeader>
+                        <CardContent className='flex flex-col gap-[20px]'>
+                            <div className='flex flex-row gap-[10%]'>
+                                <FormItem className='w-[50%]'>
+                                    <Label>MMCM Student No.</Label>
+                                    <Input disabled={isSubmitting} type="text" {...register('studentNo')} className={`w-[100%] mb-3 ${errors.studentNo ? 'border-red-500' : ''}`}/>
+                                    {errors.studentNo && <p className="text-red-500 text-[10px] italic">{errors.studentNo.message}</p>}
+                                </FormItem>
+                                <FormItem className='w-[50%]'>
+                                    <Label>School Email</Label>
+                                    <Input disabled={isSubmitting} type="email" {...register('studentEmail')} className={`w-[100%] mb-3 ${errors.studentEmail ? 'border-red-500' : ''}`}/>
+                                    {errors.studentEmail && <p className="text-red-500 text-[10px] italic">{errors.studentEmail.message}</p>}
+                                </FormItem>
+                            </div>               
+                            <div className='flex flex-row gap-[10%]'>
+                                <FormItem className='w-[50%]'>
+                                    <Select disabled={isSubmitting} onValueChange={(value) => handleProgramChange(value)}>
+                                        <SelectTrigger className={`w-[100%] mb-3 ${errors.program ? 'border-red-500' : ''}`}>
+                                            <SelectValue placeholder='Select your Program'></SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent>  
+                                            {programs.map((program, index) => (
+                                                        <SelectItem key={index} value={program.name}>
+                                                            {program.name}
+                                                        </SelectItem>
+                                                    ))}                                          
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                                <FormItem className='w-[50%]'>
+                                    <Select disabled={isSubmitting} onValueChange={(value) => handleYearChange(value)}>
+                                        <SelectTrigger className={`w-[100%] mb-3 ${errors.year ? 'border-red-500' : ''}`}>
+                                            <SelectValue placeholder='Select your Year Level'></SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent> 
+                                            {years.map((year, index) => (
+                                                    <SelectItem key={index} value={year.name}>
+                                                        {year.name}
+                                                    </SelectItem>
+                                                ))}                                          
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>                               
+                            </div>  
+                            <div className='flex flex-row gap-[10%]'>
+                                <FormItem className='w-[50%]'>
+                                    <Select disabled={isSubmitting} onValueChange={(value) => handleAcademicYearChange(value)}>
+                                        <SelectTrigger className={`w-[100%] mb-3 ${errors.academicYear ? 'border-red-500' : ''}`}>
+                                            <SelectValue placeholder='Select Academic Year'></SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent> 
+                                            {academicYears.map((year, index) => (
+                                                    <SelectItem key={index} value={year.name}>
+                                                        {year.name}
+                                                    </SelectItem>
+                                                ))}                                          
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                                <FormItem className='w-[50%]'>
+                                    <Select disabled={isSubmitting} onValueChange={(value) => handleSemesterChange(value)}>
+                                        <SelectTrigger className={`w-[100%] mb-3 ${errors.semester ? 'border-red-500' : ''}`}>
+                                            <SelectValue placeholder='Select Semester'></SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent> 
+                                            {semesters.map((semester, index) => (
+                                                    <SelectItem key={index} value={semester.name}>
+                                                        {semester.name}
+                                                    </SelectItem>
+                                                ))}                                          
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                            </div>             
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Personal Information</CardTitle>
+                        </CardHeader>
+                        <CardContent className='flex flex-col gap-5'>
+                            <FormItem>
+                                <Label>First Name</Label>
+                                <Input disabled={isSubmitting} type="text" {...register('firstName')} className={`w-[100%] mb-3 ${errors.firstName ? 'border-red-500' : ''}`}/>
+                            </FormItem>
+                            <FormItem>
+                                <Label>Middle Name</Label>
+                                <Input disabled={isSubmitting} type="text" {...register('middleName')} className={`w-[100%] mb-3 ${errors.middleName ? 'border-red-500' : ''}`}/>
+                            </FormItem>
+                            <FormItem>
+                                <Label>Last Name</Label>
+                                <Input disabled={isSubmitting} type="text" {...register('lastName')} className={`w-[100%] mb-3 ${errors.lastName ? 'border-red-500' : ''}`} />
+                            </FormItem>
+                            <div className='flex flex-row gap-[10%]'>
+                                <FormItem>
+                                    <Label>Suffix</Label>
+                                    <Input disabled={isSubmitting} type="text" {...register('suffix')} className={`w-[100%] mb-3 ${errors.suffix ? 'border-red-500' : ''}`}/>
+                                </FormItem>
+                                <FormItem>
+                                    <Label>Date of Birth</Label>
+                                    <Input disabled={isSubmitting} {...register('dob')} type='Date' className={`w-[100%] mb-3 ${errors.dob ? 'border-red-500' : ''}`}/>
+                                    {errors.dob && <p className="text-red-500 text-[10px] italic">{errors.dob.message}</p>}            
+                                </FormItem>
+                            </div>                      
+                            <FormItem>
+                                <Label>Personal Email</Label>
+                                <Input disabled={isSubmitting} type="email" {...register('email')} className={`w-[100%] mb-3 ${errors.email ? 'border-red-500' : ''}`}/>
+                                {errors.email && <p className="text-red-500 text-[10px] italic">{errors.email.message}</p>}
+                            </FormItem>
+                            <div className='flex flex-row gap-[10%] w-[100%]'>
+                                <FormItem className='w-[50%]'>
+                                    <Label>Mobile Number</Label>
+                                    <Input disabled={isSubmitting} type="text" {...register('mobileNum')} className={`w-[100%] mb-3 ${errors.mobileNum ? 'border-red-500' : ''}`}/>
+                                    {errors.mobileNum && <p className="text-red-500 text-[10px] italic">{errors.mobileNum.message}</p>}
+                                </FormItem>
+                                <FormItem className='w-[50%]'>
+                                    <Label>Landline Number</Label>
+                                    <Input disabled={isSubmitting} type="text" {...register('landline')} className={`w-[100%] mb-3 ${errors.landline ? 'border-red-500' : ''}`}/>
+                                    {errors.landline && <p className="text-red-500 text-[10px] italic">{errors.landline.message}</p>}            
+                                </FormItem>
+                            </div>                       
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Permanent Address</CardTitle>
+                        </CardHeader>
+                        <CardContent className='flex flex-col gap-5'>
+                            <FormItem>
+                                <Label>House/Block/Unit No.</Label>
+                                <Input disabled={isSubmitting} type="text" {...register('permHouse')} className={`w-[100%] mb-3 ${errors.permHouse ? 'border-red-500' : ''}`}/>
+                                {errors.permHouse && <p className="text-red-500 text-[10px] italic">{errors.permHouse.message}</p>}
+                            </FormItem>
+                            <FormItem>
+                                <Label>Street</Label>
+                                <Input disabled={isSubmitting} type="text" {...register('permStreet')} className={`w-[100%] mb-3 ${errors.permStreet ? 'border-red-500' : ''}`}/>                 
+                            </FormItem> 
+                            <FormItem>
+                                <Label>Province</Label>
+                                <Select disabled={isSubmitting} onValueChange={(value) => handleProvinceChange(value, 'permanent')}>
+                                        <SelectTrigger className={`w-[100%] mb-3 ${errors.provinceP ? 'border-red-500' : ''}`}>
+                                            <SelectValue placeholder="Select Province" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {provinces.map((provinces, index) => (
+                                                <SelectItem key={index} value={provinces.name}>
+                                                    {provinces.name}
+                                                </SelectItem>
+                                            ))}                           
+                                        </SelectContent>
+                                </Select>
+                            </FormItem>                    
+                            <FormItem>
+                                <Label>City</Label>
+                                <Select disabled={isSubmitting} onValueChange={(value) => handleCityChange(value, 'permanent')}>
+                                    <SelectTrigger className={`w-[100%] mb-3 ${errors.cityP ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Select City" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {cities.map((cities, index) => (
+                                                    <SelectItem key={index} value={cities.name}>
+                                                        {cities.name}
+                                                    </SelectItem>
+                                                ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormItem>                       
+                            <FormItem>
+                                <Label>Barangay</Label>
+                                <Select disabled={isSubmitting} onValueChange={(value) => handleBarangayChange(value, 'permanent')}>
+                                    <SelectTrigger className={`w-[100%] mb-3 ${errors.barangayP ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Select Barangay" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {barangays.map((barangays, index) => (
+                                                        <SelectItem key={index} value={barangays.name}>
+                                                            {barangays.name}
+                                                        </SelectItem>
+                                                    ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormItem>
+                            <div>
+                                <Label>Zip Code</Label>
+                                <div className='flex flex-row gap-[10%] justify-between'>
+                                    <FormItem>                               
+                                        <Input disabled={isSubmitting} type="text" {...register('permZip')} {...register('permZip')} className={`w-[100%] mb-3 ${errors.permZip ? 'border-red-500' : ''}`}  />
+                                        {errors.permZip && <p className="text-red-500 text-[10px] italic">{errors.permZip.message}</p>}
+                                    </FormItem>
+                                    <div className='flex flex-row gap-3 text-center'>
+                                        <Checkbox disabled={isSubmitting} onClick={handleCheckboxChange}></Checkbox>
+                                        <Label>Use permanent address as mailing address</Label>
+                                    </div>
+                                </div>                                                                        
+                            </div>                        
+                        </CardContent>
+                    </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Mailing Address</CardTitle>
+                            </CardHeader>
+                            <CardContent className='flex flex-col gap-5'>
+                                <FormItem>
+                                    <Label>House/Block/Unit No.</Label>
+                                    <Input disabled={addressSimilarity || isSubmitting} type="text" {...register('mailHouse')} className={`w-[100%] mb-3 ${errors.mailHouse ? 'border-red-500' : ''}`}/>
+                                    {errors.mailHouse && <p className="text-red-500 text-[10px] italic">{errors.mailHouse.message}</p>}                
+                                </FormItem>
+                                <FormItem>
+                                    <Label>Street</Label>
+                                    <Input disabled={addressSimilarity || isSubmitting} type="text" {...register('mailStreet')}  className={`w-[100%] mb-3 ${errors.mailStreet ? 'border-red-500' : ''}`}/>
+                                </FormItem>  
+                                <FormItem>
+                                    <Label>Province</Label>
+                                    <Select disabled={addressSimilarity || isSubmitting}  onValueChange={(value) => handleProvinceChange(value, 'mailing')}>
+                                            <SelectTrigger className={`w-[100%] mb-3 ${errors.provinceM ? 'border-red-500' : ''}`}>
+                                                <SelectValue placeholder="Select Province" />
+                                            </SelectTrigger>
+                                            <SelectContent>                                       
+                                                {provinces.map((provinces, index) => (
+                                                    <SelectItem key={index} value={provinces.name}>
+                                                        {provinces.name}
+                                                    </SelectItem>
+                                                ))}                           
+                                            </SelectContent>
+                                    </Select>
+                                </FormItem>                   
+                                <FormItem>
+                                    <Label>City</Label>
+                                    <Select disabled={addressSimilarity || isSubmitting} onValueChange={(value) => handleCityChange(value, 'mailing')}>
+                                        <SelectTrigger className={`w-[100%] mb-3 ${errors.cityM ? 'border-red-500' : ''}`}>
+                                            <SelectValue placeholder="Select City" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {cities2.map((cities2, index) => (
+                                                        <SelectItem key={index} value={cities2.name}>
+                                                            {cities2.name}
+                                                        </SelectItem>
+                                                    ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>                      
+                                <FormItem>
+                                    <Label>Barangay</Label>
+                                    <Select disabled={addressSimilarity || isSubmitting} onValueChange={(value) => handleBarangayChange(value, 'mailing')}>
+                                        <SelectTrigger className={`w-[100%] mb-3 ${errors.barangayM ? 'border-red-500' : ''}`}>
+                                            <SelectValue placeholder="Select Barangay" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {barangays2.map((barangays2, index) => (
+                                                            <SelectItem key={index} value={barangays2.name}>
+                                                                {barangays2.name}
+                                                            </SelectItem>
+                                                        ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                                <div>
+                                    <Label>Zip Code</Label>
+                                    <div className='flex flex-row gap-[10%] justify-between'>
+                                        <FormItem>                               
+                                            <Input disabled={addressSimilarity || isSubmitting} type="text" {...register('mailZip')} className={`w-[100%] mb-3 ${errors.mailZip ? 'border-red-500' : ''}`} />
+                                            {errors.mailZip && <p className="text-red-500 text-[10px] italic">{errors.mailZip.message}</p>} 
+                                        </FormItem>
+                                    </div>                                                                        
+                                </div>                        
+                            </CardContent>
+                        </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Family Information</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div>
+                                <Label className='text-bottom'>Father</Label>
+                                <div className='m-5'>
+                                    <FormItem>
+                                        <Label>First Name</Label>
+                                        <Input disabled={isSubmitting} type="text" {...register('fatherFirstName')} className={`w-[100%] mb-3 ${errors.fatherFirstName ? 'border-red-500' : ''}`}/>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Label>Middle Name</Label>
+                                        <Input disabled={isSubmitting} type="text" {...register('fatherMiddleName')} className={`w-[100%] mb-3 ${errors.fatherMiddleName ? 'border-red-500' : ''}`}/>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Label>Last Name</Label>
+                                        <Input disabled={isSubmitting} type="text" {...register('fatherLastName')} className={`w-[100%] mb-3 ${errors.fatherLastName ? 'border-red-500' : ''}`}/>
+                                    </FormItem>
+                                    <div className='flex flex-row gap-[10%]'>
+                                        <FormItem>
+                                            <Label>Suffix</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('fatherSuffix')} className={`w-[100%] mb-3 ${errors.fatherSuffix ? 'border-red-500' : ''}`}/>
+                                        </FormItem>
+                                    </div>                      
+                                    <FormItem>
+                                        <Label>Personal Email</Label>
+                                        <Input disabled={isSubmitting} type="email" {...register('fatherEmail')} className={`w-[100%] mb-3 ${errors.fatherEmail ? 'border-red-500' : ''}`}/>
+                                        {errors.fatherEmail && <p className="text-red-500 text-[10px] italic">{errors.fatherEmail.message}</p>} 
+                                    </FormItem>
+                                    <div className='flex flex-row gap-[10%] w-[100%]'>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Mobile Number</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('fatherMobileNum')} className={`w-[100%] mb-3 ${errors.fatherMobileNum ? 'border-red-500' : ''}`}/>
+                                            {errors.fatherMobileNum && <p className="text-red-500 text-[10px] italic">{errors.fatherMobileNum.message}</p>} 
+                                        </FormItem>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Landline Number</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('fatherLandline')} className={`w-[100%] mb-3 ${errors.fatherLandline ? 'border-red-500' : ''}`}/>
+                                            {errors.fatherLandline && <p className="text-red-500 text-[10px] italic">{errors.fatherLandline.message}</p>}             
+                                        </FormItem>
+                                    </div>
+                                    <div className='flex flex-row gap-[10%] w-[100%]'>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Occupation</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('fatherOccupation')} className={`w-[100%] mb-3 ${errors.fatherOccupation ? 'border-red-500' : ''}`}/>
+                                        </FormItem>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Office No.</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('fatherOfficeNo')} className={`w-[100%] mb-3 ${errors.fatherOfficeNo ? 'border-red-500' : ''}`}/>
+                                            {errors.fatherOfficeNo && <p className="text-red-500 text-[10px] italic">{errors.fatherOfficeNo.message}</p>}            
+                                        </FormItem>
+                                    </div>
+                                </div>                         
+                            </div>
+                            <div>
+                                <Label>Mother</Label>
+                                <div className='m-5'>
+                                    <FormItem>
+                                        <Label>First Name</Label>
+                                        <Input disabled={isSubmitting} type="text" {...register('motherFirstName')} className={`w-[100%] mb-3 ${errors.motherFirstName ? 'border-red-500' : ''}`}/>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Label>Middle Name</Label>
+                                        <Input disabled={isSubmitting} type="text" {...register('motherMiddleName')} className={`w-[100%] mb-3 ${errors.motherMiddleName? 'border-red-500' : ''}`}/>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Label>Last Name</Label>
+                                        <Input disabled={isSubmitting} type="text" {...register('motherLastName')} className={`w-[100%] mb-3 ${errors.motherLastName ? 'border-red-500' : ''}`}/>
+                                    </FormItem>
+                                    <div className='flex flex-row gap-[10%]'>
+                                        <FormItem>
+                                            <Label>Suffix</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('motherSuffix')} className={`w-[100%] mb-3 ${errors.motherSuffix ? 'border-red-500' : ''}`}/>
+                                        </FormItem>
+                                    </div>                      
+                                    <FormItem>
+                                        <Label>Personal Email</Label>
+                                        <Input disabled={isSubmitting} type="email" {...register('motherEmail')} className={`w-[100%] mb-3 ${errors.motherEmail ? 'border-red-500' : ''}`}/>
+                                        {errors.motherEmail && <p className="text-red-500 text-[10px] italic">{errors.motherEmail.message}</p>}                
+                                    </FormItem>
+                                    <div className='flex flex-row gap-[10%] w-[100%]'>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Mobile Number</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('motherMobileNum')} className={`w-[100%] mb-3 ${errors.motherMobileNum ? 'border-red-500' : ''}`}/>
+                                            {errors.motherMobileNum && <p className="text-red-500 text-[10px] italic">{errors.motherMobileNum.message}</p>}    
+                                        </FormItem>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Landline Number</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('motherLandline')} className={`w-[100%] mb-3 ${errors.motherLandline ? 'border-red-500' : ''}`}/>
+                                            {errors.motherLandline && <p className="text-red-500 text-[10px] italic">{errors.motherLandline.message}</p>}    
+                                        </FormItem>
+                                    </div>  
+                                    <div className='flex flex-row gap-[10%] w-[100%]'>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Occupation</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('motherOccupation')} className={`w-[100%] mb-3 ${errors.motherOccupation ? 'border-red-500' : ''}`}/>
+                                        </FormItem>
+                                        <FormItem className='w-[50%]'>
+                                            <Label>Office No.</Label>
+                                            <Input disabled={isSubmitting} type="text" {...register('motherOfficeNo')} className={`w-[100%] mb-3 ${errors.motherOfficeNo ? 'border-red-500' : ''}`}/>
+                                            {errors.motherOfficeNo && <p className="text-red-500 text-[10px] italic">{errors.motherOfficeNo.message}</p>} 
+                                        </FormItem>
+                                    </div>                             
+                                </div>                           
+                            </div>    
+                            <div>
+                                <Label>Siblings</Label>
+                                <div className='m-5'>
+                                    <Table className='mb-5 min-h-[100px] rounded-md border-2 border-solid border-grey-100 shadow-sm'>
+                                        <TableHeader className=''>
+                                            <TableRow>
+                                                <TableHead>First Name</TableHead>
+                                                <TableHead>Middle Name</TableHead>
+                                                <TableHead>Last Name</TableHead>
+                                                <TableHead>Suffix</TableHead>
+                                                <TableHead>Age</TableHead>
+                                                <TableHead>Educational Attainment</TableHead>
+                                                <TableHead></TableHead>
+                                            </TableRow>                                       
+                                        </TableHeader>
+                                        <TableBody>
+                                            {siblings.length > 0 ? (
+                                                siblings.map((sibling, index) => (
+                                                    <TableRow key={index}>
+                                                        <TableCell>{sibling.firstName}</TableCell>
+                                                        <TableCell>{sibling.middleName}</TableCell>
+                                                        <TableCell>{sibling.lastName}</TableCell>
+                                                        <TableCell>{sibling.suffix}</TableCell>
+                                                        <TableCell>{calculateAge(sibling.dob)}</TableCell>
+                                                        <TableCell>{sibling.educationalAttainment}</TableCell>
+                                                        <TableCell>
+                                                            <button
+                                                                disabled={isSubmitting}
+                                                                onClick={() => handleRemoveSibling(index)}
+                                                                className='text-red-500 hover:underline'
+                                                            >
+                                                                Remove
+                                                            </button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                    ))
+                                                ) : (
+                                                    <TableRow>
+                                                        <TableCell colSpan={8} className='text-center text-gray-500'>
+                                                            No siblings added yet.
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )}
+                                            </TableBody>
+                                    </Table>
+                                    <div className='flex justify-end'>                                      
+                                        <Dialog open={open} onOpenChange={setOpen}>    
+                                            <DialogTrigger asChild>
+                                                <Button disabled={isSubmitting}>Add Sibling</Button>                                       
+                                            </DialogTrigger>
+                                            <DialogContent>
+                                                <DialogHeader>
+                                                    <DialogTitle>Add Sibling</DialogTitle>
+                                                </DialogHeader>
+                                                <Label>First Name</Label>
+                                                <Input value={siblingInput.firstName} onChange={(e) => setSiblingInput({ ...siblingInput, firstName: e.target.value })}/>
+                                                <Label>Middle Name</Label>
+                                                <Input value={siblingInput.middleName} onChange={(e) => setSiblingInput({ ...siblingInput, middleName: e.target.value })}/>
+                                                <Label>Last Name</Label>
+                                                <Input value={siblingInput.lastName} onChange={(e) => setSiblingInput({ ...siblingInput, lastName: e.target.value })} />
+
+                                                <div className='flex flex-row gap-[10%]'>
+                                                    <div>
+                                                        <Label>Suffix</Label>
+                                                        <Input  value={siblingInput.suffix} onChange={(e) => setSiblingInput({ ...siblingInput, suffix: e.target.value })} />
+                                                    </div>  
+                                                    <div>
+                                                        <Label>Date of Birth</Label>
+                                                        <Input value={siblingInput.dob} type='Date' onChange={(e) => setSiblingInput({ ...siblingInput, dob: e.target.value })}/>
+                                                    </div>                                                                                                   
+                                                </div>  
+                                                <Label>Educational Attainment</Label>
+                                                <Input  value={siblingInput.educationalAttainment} onChange={(e) => setSiblingInput({...siblingInput,educationalAttainment: e.target.value,})}/>
+                                                <DialogFooter className='flex justify-between'>                                           
+                                                    <Button onClick={addSibling} className='w-20'>Add</Button>
+                                                </DialogFooter>
+                                            </DialogContent>
+                                        </Dialog>
                                     </div>
                                 </div>
-                            </div>
-                        </div>       
-                        <div>
-            <div className="add-student-toolbar">
-                <Button 
-                    type="button" 
-                    className="bg-blue-950 text-white hover:bg-blue-800 hover:border-blue-400 hover:text-teal-50 font-sans text-xs" 
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    Review Information
-                </Button>
-                
-            </div>
-            {isModalOpen && 
-            <ReviewModal 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
-            data={watch()} 
-            onSubmit={handleReviewSubmit}
-            navigate={navigate} 
-            />}
-        </div>         
-            </Form>
-            
+                            </div>                   
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Files</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Label>Select submitted required files.</Label>
+                            <div className='flex flex-col justify-center p-5'>
+                                <ul className='grid grid-cols-2 gap-5'>
+                                    {files.map((files, index) => (
+                                        <li key={index} value={files.name}>
+                                            <div className='flex gap-10'>
+                                                <Checkbox disabled={isSubmitting} onClick={() => handleSubmitFile(index)}></Checkbox>
+                                                <Label>{files.name}</Label>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>                      
+                        </CardContent>
+                    </Card>
+                    <div className='flex justify-center'>
+                        <Button disabled={isSubmitting} type="submit" className='w-[200px] mb-5 bg-white'>
+                            {isSubmitting ? "Loading..." : "Submit"}
+                        </Button>
+                    </div>
+                </form>
+            </Form>  
     </div>
-    );
+    );  
 }

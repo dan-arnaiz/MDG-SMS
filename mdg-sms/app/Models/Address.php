@@ -9,15 +9,15 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['barangay', 'city', 'province', 'zipcode', 'street'];
+    protected $fillable = ['zipcode', 'street','barangay_id'];
 
     public function addressPersons()
     {
         return $this->hasManyThrough(Person::class,Address_person::class);
     }
 
-    public function prevSchools()
+    public function barangay()
     {
-        return $this->hasOne(Prev_school::class);
+        return $this->hasOne(Barangay::class);
     }
 }

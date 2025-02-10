@@ -9,7 +9,7 @@ class File_req extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['scholarship_id', 'file_id','is_submitted'];
+    protected $fillable = ['scholarship_id', 'file_id'];
 
     public function scholarship()
     {

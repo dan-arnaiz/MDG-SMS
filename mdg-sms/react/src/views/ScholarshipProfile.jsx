@@ -239,7 +239,7 @@ export default function ScholarshipProfile() {
                     <Button className="hover:bg-slate-500 border hover:black hover:text-white" onClick={() => window.history.back()}>Back</Button>                 
                     <div className="students-toolbar-btns">
                         <Dialog>
-                            <DialogTrigger>
+                            <DialogTrigger asChild>
                                 <Button className='bg-[rgb(236,58,58)] text-white hover:bg-white hover:text-black'>Delete</Button>
                             </DialogTrigger>
                             <DialogContent>

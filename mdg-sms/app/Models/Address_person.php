@@ -11,7 +11,7 @@ class Address_person extends Model
 
     protected $table = 'address_person';
 
-    protected $fillable = ['person_id', 'address_id', 'type', 'house_num'];
+    protected $fillable = ['person_id', 'address_id', 'type', 'house_num', 'is_alsoMail'];
 
     public function person()
     {

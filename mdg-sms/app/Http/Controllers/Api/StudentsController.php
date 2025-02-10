@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\StudentProfileResource;
+use App\Http\Resources\AddressResource;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Person;
@@ -15,7 +16,9 @@ use App\Models\Contact_num;
 use App\Models\Address;
 use App\Models\Address_person;
 use App\Models\Application;
+use App\Models\File_submitted;
 use App\Http\Requests\AddStudentRequest;
+use Illuminate\Support\Facades\Log;
 
 
 class StudentsController extends Controller
@@ -140,29 +143,62 @@ class StudentsController extends Controller
                         ->join('addresses','address_person.address_id','=','addresses.id')
                         ->join('programs','students.program_id','=','programs.id')
                         ->join('applications','applications.student_id','=','students.id')
-                        ->join('scholarships','applications.scholarship_id','=','scholarships.id')
-                        ->join('contact_nums','contact_nums.person_id','=','people.id')
+                        ->join('scholarships','applications.scholarship_id','=','scholarships.id')                                              
+                        ->join('years','students.year_id','=','years.id')
                         ->select(
                             'students.id',
                             'students.user_id',
+                            'people.id as personId',
                             'people.first_name',
                             'people.last_name',
                             'people.middle_name',
                             'people.suffix',
                             'people.dob',
-                            'programs.year',
                             'programs.name as program',
                             'users.email as schoolEmail',
                             'people.email as personalEmail', 
-                            'contact_nums.nums as mobileNum',  
-                            'scholarship_statuses.name as status',         
+                            'applications.id as applicationId', 
+                            'scholarship_statuses.name as status',
+                            'scholarships.name as scholarship',
+                            'years.name as year'         
                         )
                         ->where('students.id','=',$id)
                         ->first();
             if (!$profile) {
                 return response()->json(['error' => "Student not found: {$id}"], 404);
             }
-            return new StudentProfileResource($profile);
+
+            $files = File_submitted::where('application_id',$profile->applicationId)
+                    ->select(['name','is_submitted'])
+                    ->get();
+            
+            $contactNums = Contact_num::where('person_id',$profile->personId)
+                    ->select(['nums','title'])    
+                    ->get();
+            
+            $addresses = Address_person::where('person_id',$profile->personId)
+                    ->join('addresses','addresses.id','=','address_person.address_id')
+                    ->join('barangays','barangays.id','=','addresses.barangay_id')
+                    ->join('cities','cities.id','=','barangays.city_id')
+                    ->join('provinces','provinces.id','=','cities.province_id')
+                    ->select(
+                        'address_person.type',
+                        'addresses.street',
+                        'barangays.name as barangay',
+                        'cities.name as city',
+                        'provinces.name as province',
+                        'addresses.zipcode'
+                    )
+                    ->get();
+
+            $response = [
+                'profile' => new StudentProfileResource($profile),
+                'files' => $files->toArray(),
+                'contactNums' => $contactNums->toArray(),
+                'addresses' => AddressResource::collection($addresses),
+            ];
+
+            return response()->json($response);
         } catch (\Exception $e){
             return response()->json(['error' => $e], 500);
         }
@@ -179,8 +215,35 @@ class StudentsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $ids = $request->input('student_id', []);
+
+
+            if (!is_array($ids) || empty($ids)) {
+                return response()->json(['error' => 'Invalid request data'], 400);
+            }
+
+
+            foreach ($ids as $id) {
+                $student = Student::where('id', $id)->first();
+
+                if (!$student) {
+                    return response()->json(['error' => "Student with ID $id not found"], 404);
+                }
+
+                Person::where('id', $student->person_id)->delete();
+            }
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Exception caught: ' . $e->getMessage(), ['exception' => $e]);
+
+            return response()->json(['error' => 'Something went wrong'], 500);
+        };
     }
 }

@@ -13,6 +13,6 @@ class File extends Model
 
     public function scholarships()
     {
-        return $this->hasManyThrough(Application::class,FileReq::class);
+        return $this->belongsToMany(Scholarship::class, 'file_reqs', 'file_id', 'scholarship_id');
     }
 }

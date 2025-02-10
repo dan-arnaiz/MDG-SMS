@@ -23,21 +23,13 @@ return new class extends Migration
 
         Schema::create('academic_years', function (Blueprint $table) {
             $table->id();
-            $table->year('start_year');
-            $table->year('end_year');
+            $table->string('name', 50);
             $table->timestamps();
         });
 
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
-            $table->char('name', 10);
-            $table->timestamps();
-        });
-
-        Schema::create('terms', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
-            $table->foreignId('semester_id')->constrained()->onDelete('cascade');
+            $table->char('name', 15);
             $table->timestamps();
         });
 
@@ -52,21 +44,30 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
-            $table->boolean('is_submitted');
             $table->timestamps();
         });
    
         Schema::create('applications', function (Blueprint $table) {
-            $table->string('id',10)->primary;
+            $table->string('id',10)->primary();
             $table->string('student_id',10);
             $table->string('employee_id',10)->nullable();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->nullOnDelete();
             $table->foreignId('scholarship_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('term_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('semester_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('academic_year_id')->nullable()->constrained()->nullOnDelete();
             $table->datetime('date_filed');
             $table->datetime('date_terminated')->nullable();
             $table->boolean('is_current');
+            $table->timestamps();
+        });
+
+        Schema::create('files_submitted', function (Blueprint $table) {
+            $table->id();
+            $table->string('application_id',10);
+            $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
+            $table->string('name');
+            $table->boolean('is_submitted');
             $table->timestamps();
         });
 
@@ -84,5 +85,6 @@ return new class extends Migration
         Schema::dropIfExists('academic_years');
         Schema::dropIfExists('semesters');
         Schema::dropIfExists('terms');
+        Schema::dropIfExists('files_submitted');
     }
 };
