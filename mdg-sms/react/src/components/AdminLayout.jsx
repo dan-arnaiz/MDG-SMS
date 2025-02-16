@@ -26,18 +26,21 @@ export default function AdminLayout() {
         return <Navigate to="/login" />
     }
 
-    const onLogout = (ev) => {
+    const onLogout = async (ev) => {
         ev.preventDefault();
 
-
-        axiosClient.post('/logout')
-        .then(({data}) => {
-            setToken(null)
+        try {
+            await axiosClient.post('/logout'); // Ensure logout request completes
+    
+            setToken(null);
             setUser(null);
-        })
-        localStorage.removeItem("ACCESS_TOKEN");
-        localStorage.removeItem("USER");
-        window.location.href = "/login";
+            localStorage.removeItem("ACCESS_TOKEN");
+            localStorage.removeItem("USER");
+    
+            window.location.href = "/login"; // Redirect to login
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     }
     
     return(

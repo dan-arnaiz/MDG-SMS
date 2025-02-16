@@ -49,6 +49,7 @@ class StudentsController extends Controller
                         )
                         ->where('applications.is_current','=','1')
                         ->get();
+                        
             return StudentResource::collection($students);     
         } catch (\Exception $e) {
             return response()->json(['error' => 'Something went wrong'], 500);
@@ -159,6 +160,7 @@ class StudentsController extends Controller
                             'people.email as personalEmail', 
                             'applications.id as applicationId', 
                             'scholarship_statuses.name as status',
+                            'scholarships.id as scholarshipId',
                             'scholarships.name as scholarship',
                             'years.name as year'         
                         )
@@ -199,6 +201,7 @@ class StudentsController extends Controller
             ];
 
             return response()->json($response);
+            
         } catch (\Exception $e){
             return response()->json(['error' => $e], 500);
         }

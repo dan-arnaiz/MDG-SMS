@@ -16,69 +16,88 @@ import AdminApplications from "./views/AdminApplications.jsx";
 import AddStudentModal from "./components/dialogs/AddStudentModal.jsx";
 import ScholarshipProfile from "./views/ScholarshipProfile.jsx";
 import AddScholarship from "./views/Add-Scholarship.jsx";
+import EditStudentProfile from "./views/EditStudentDetails/EditStudentProfile.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <AdminLayout />,
+        element: <ProtectedRoute allowedRoles={["Admin"]} />,
         children: [
             {
-                path: '/',
-                element: <Navigate to="/dashboard" />
-            },
-            {
-                path: '/dashboard',
-                element: <AdminDash />
-            },
-            {
-                path: '/students',
-                element: <Students/>
-            },
-            {
-                path: '/scholarships',
-                element: <AdminScholarships />
-            },
-            {
-                path: '/scholarships/:id',
-                element: <ScholarshipProfile/>
-            },
-            {
-                path: '/add-scholarship',
-                element: <AddScholarship/>
-            },
-            {
-                path: '/applications',
-                element: <AdminApplications />
-            },
-            {
-                path: '/reports',
-                element: <AdminReports/>
-            },
-            {
-                path: '/students/:id',
-                element: <AdminStudentProfile/>
-            },
-            {
-                path: '/add-student',
-                element: <AddStudent/>
-            },
-            {
-                path: '/new-student',
-                element: <AddStudentModal/>
-            },
+                path: '',
+                element: <AdminLayout />,
+                children: [
+                    {
+                        path: '/',
+                        element: <Navigate to="/dashboard" />
+                    },
+                    {
+                        path: '/dashboard',
+                        element: <AdminDash />
+                    },
+                    {
+                        path: '/students',
+                        element: <Students/>
+                    },
+                    {
+                        path: '/scholarships',
+                        element: <AdminScholarships />
+                    },
+                    {
+                        path: '/scholarships/:id',
+                        element: <ScholarshipProfile/>
+                    },
+                    {
+                        path: '/add-scholarship',
+                        element: <AddScholarship/>
+                    },
+                    {
+                        path: '/applications',
+                        element: <AdminApplications />
+                    },
+                    {
+                        path: '/reports',
+                        element: <AdminReports/>
+                    },
+                    {
+                        path: '/students/:id',
+                        element: <AdminStudentProfile/>
+                    },
+                    {
+                        path: '/add-student',
+                        element: <AddStudent/>
+                    },
+                    {
+                        path: '/new-student',
+                        element: <AddStudentModal/>
+                    },
+                    {
+                        path: '/edit-student-profile/:id',
+                        element: <EditStudentProfile/>
+                    },
+                ]
+            }
+            
         ]
     },
     {
         path: '/',
-        element: <StudentLayout />,
+        element: <ProtectedRoute allowedRoles={["Student"]} />,
         children: [
             {
-                path: '/',
-                element: <Navigate to="/student/dashboard" />
-            },
-            {
-                path: '/studentdashboard',
-                element: <StudentDash />
+                path: '',
+                element: <StudentLayout />, // Student Layout wraps child routes
+                children: [
+                    {
+                        path: '/',
+                        element: <Navigate to="/student-board" />
+                    },
+                    {
+                        path: '/student-board',
+                        element: <StudentDash/>
+                    }
+                ]
             }
         ]
     },

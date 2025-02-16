@@ -30,7 +30,7 @@ use App\Http\Resources\ProvinceResource;
 use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Support\Facades\Log;
 
-class AddStudentController
+class AddStudentController extends controller
 {
     /**
      * Display a listing of the resource.
@@ -181,8 +181,7 @@ class AddStudentController
 
             $scholarship = $data->input('scholarshipData') ?? [];
 
-            $existingPrevSchool = Prev_school::where('landline', $scholarship['prevSchoolLandline'])
-                 ->where('name', $scholarship['prevSchool'])
+            $existingPrevSchool = Prev_school::where('name', $scholarship['prevSchool'])
                  ->where('email', $scholarship['prevSchoolEmail'])
                  ->first();
  
@@ -205,7 +204,7 @@ class AddStudentController
                  'email' => $organization['studentEmail'],
                  'password' => bcrypt($organization['studentNo']),
                  'scholarship_status_id' => 1,
-                 'role_id' => null
+                 'role_id' => 3 //3 = Student Role
              ]);
 
             DB::afterCommit(function () use ($scholarship, $employee,$data,$organization,$studentPerson, $permAddress, $permanentAddress, $mailAddress, $mailingAddress, $studentUser, $prevSchool, $personal) {
@@ -459,9 +458,9 @@ class AddStudentController
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(string $id)
     {
-        //
+
     }
 
     /**

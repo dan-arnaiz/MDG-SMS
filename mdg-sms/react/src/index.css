@@ -298,7 +298,6 @@ header {
 
 .navbar {
     position: fixed; /* Fix the sidebar in place */
-    height: 100vh; /* Set the sidebar height to 100% of the viewport height */
     background: #0F2554;
     width: 20%;
     text-align: center;

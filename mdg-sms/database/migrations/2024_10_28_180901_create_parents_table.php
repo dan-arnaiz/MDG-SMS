@@ -50,7 +50,7 @@ return new class extends Migration
             $table->string('id',10)->primary();
             $table->foreignId('person_id')->constrained()->onDelete('cascade');
             $table->foreignId('prev_school_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('program_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('year_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
@@ -61,6 +61,7 @@ return new class extends Migration
             $table->string('student_id',10);
             $table->foreignId('guardian_id')->constrained()->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->string('relation', 100);
             $table->timestamps();
         });
         Schema::create('sibling_relations', function (Blueprint $table) {

@@ -363,9 +363,9 @@ export default function Students() {
                     </div>
                   </div>
                 </Card>
-                <Card className='flex flex-col gap-3 p-5 h-[100%]'>
+                <Card className='flex flex-col gap-3 p-5 h-screen'>
                   <div className="rounded-md border h-[100%]">
-                      <Table> 
+                      <Table className="h=[100%]"> 
                           <TableHeader>                       
                               {table.getHeaderGroups().map((headerGroup) => (
                               <TableRow key={headerGroup.id}>

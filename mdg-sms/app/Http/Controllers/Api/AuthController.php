@@ -24,7 +24,16 @@ class AuthController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
-        return response(compact('user', 'token'));
+        
+        return response([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role->title ?? 'user', // Include role here
+            ],
+            'token' => $token
+        ]);
     }
 
     public function signup(SignupRequest $request)

@@ -8,6 +8,7 @@ import { useForm, Controller } from 'react-hook-form'; // Import useForm
 import { zodResolver } from '@hookform/resolvers/zod'; // Import zodResolver
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
+import { MoreHorizontal } from "lucide-react"
 import {
     Card,
     CardContent,
@@ -16,6 +17,15 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function AdminStudentProfile() {
 
@@ -93,7 +103,6 @@ export default function AdminStudentProfile() {
                 <div className="students-toolbar">
                     <Button onClick={() => window.history.back()}  type="button" id="Edit" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs px-5" >Back</Button>                   
                     <div className="students-toolbar-btns">
-                    <Button type="button" id="Edit" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs" >Edit</Button>
                     <Button type="button" id="export" className="bg-slate-100 border hover:border-blue-800 font-sans text-xs">Export</Button>
                         <button className='bg-red-600 border hover:bg-red-500 hover:border-red-500 text-white text-sm font-semibold'>Delete</button>
                     </div>                          
@@ -101,7 +110,23 @@ export default function AdminStudentProfile() {
                 
                 <div className="grid grid-cols-3 gap-2 h-[100%]">
                     <Card className="hover:border-blue-900">
-                        <CardHeader></CardHeader>
+                        <CardHeader> 
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild className="ml-auto">
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                        <span className="sr-only">Open menu</span>
+                                        <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                        onClick={() => navigate(`/edit-student-profile/${student.student_id}`)}
+                                    >
+                                        Edit
+                                    </DropdownMenuItem>               
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </CardHeader>
                         <CardContent className='flex flex-col gap-5 justify-center items-center text-center'>
                                 {/* Preview Personal Info */}
                             <div className='flex flex-col justify-center items-center'>
@@ -198,7 +223,7 @@ export default function AdminStudentProfile() {
                                     <p className='text-black text-lg font-semibold'>{student.scholarship}</p>
                                 </div>
                                 <div className="border rounded-lg hover:bg-blue-900 hover:text-white">
-                                    <button className='text-xs mx-6 my-1 pb-1'>View Scholarship</button>
+                                    <button onClick={() => navigate(`/scholarships/${student.scholarshipId}`)} className='text-xs mx-6 my-1 pb-1'>View Scholarship</button>
                                 </div>
                             </CardContent>
                         </Card>

@@ -32,6 +32,7 @@ class ScholarshipsController extends Controller
                                 'is_full'
                             )
                             ->paginate();
+                            
             return ScholarshipResource::collection($scholarships);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Something went wrong'], 500);
