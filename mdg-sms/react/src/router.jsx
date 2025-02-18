@@ -18,6 +18,8 @@ import ScholarshipProfile from "./views/ScholarshipProfile.jsx";
 import AddScholarship from "./views/Add-Scholarship.jsx";
 import EditStudentProfile from "./views/EditStudentDetails/EditStudentProfile.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import EditStudentScholarship from "./views/EditStudentDetails/EditStudentScholarship.jsx";
+import EditStudentContact from "./views/EditStudentDetails/EditStudentContact.jsx";
 
 const router = createBrowserRouter([
     {
@@ -69,6 +71,10 @@ const router = createBrowserRouter([
                         element: <AddStudent/>
                     },
                     {
+                        path: '/add-student/:id',
+                        element: <AddStudent/>
+                    },
+                    {
                         path: '/new-student',
                         element: <AddStudentModal/>
                     },
@@ -76,6 +82,16 @@ const router = createBrowserRouter([
                         path: '/edit-student-profile/:id',
                         element: <EditStudentProfile/>
                     },
+                    {
+                        path: '/edit-student-scholarship/:id',
+                        element: <EditStudentScholarship/>
+                    },
+                    {
+                        path: '/edit-student-contact/:id',
+                        element: <EditStudentContact/>
+                    },
+
+
                 ]
             }
             

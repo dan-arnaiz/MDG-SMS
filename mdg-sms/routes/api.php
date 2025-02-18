@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\ScholarshipsController;
 use App\Http\Controllers\Api\FilesController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\Api\EditStudProfileController;
+use App\Http\Controllers\Api\EditStudScholarshipController;
+use App\Http\Controllers\Api\EditStudContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -33,4 +35,6 @@ Route::delete('/students', [StudentsController::class, 'destroy'])->middleware('
 Route::apiResource('/students', StudentsController::class)->middleware('auth:sanctum');
 Route::apiResource('/addstudent', AddStudentController::class)->middleware('auth:sanctum');
 Route::apiResource('/editstudentprofile', EditStudProfileController::class)->middleware('auth:sanctum');
+Route::apiResource('/editstudentscholarship', EditStudScholarshipController::class)->middleware('auth:sanctum');
+Route::apiResource('/editstudentcontact', EditStudContactController::class)->middleware('auth:sanctum');
 Route::apiResource('/scholarships', ScholarshipsController::class)->middleware('auth:sanctum');

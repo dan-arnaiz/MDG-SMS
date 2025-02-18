@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Scholarship_status extends Model
 {
-    protected $table = 'scholarhip_statuses';
+    protected $table = 'scholarship_statuses';
 
     use HasFactory;
 

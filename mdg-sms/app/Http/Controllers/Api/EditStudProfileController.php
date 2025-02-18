@@ -64,8 +64,7 @@ class EditStudProfileController extends Controller
 
         } catch (\Exception $e){
             return response()->json(['error' => $e], 500);
-        }
-        
+        }     
     }
 
     /**
@@ -82,8 +81,6 @@ class EditStudProfileController extends Controller
             if (!$student) {
                 return response()->json(['error' => 'Student not found'], 404);
             }
-            
-            $student->user->update(['email' => $request->studentEmail]);
 
             $existingPrevSchool = Prev_school::where('name', $request->prevSchool)
             ->where('email', $request->prevSchoolEmail)

@@ -171,7 +171,7 @@ class StudentsController extends Controller
             }
 
             $files = File_submitted::where('application_id',$profile->applicationId)
-                    ->select(['name','is_submitted'])
+                    ->select(['id','name','is_submitted'])
                     ->get();
             
             $contactNums = Contact_num::where('person_id',$profile->personId)
@@ -212,7 +212,67 @@ class StudentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if ($request == "reset"){
+            DB::beginTransaction();
+            try{
+
+                $student = Student::where('id',$id)->first();
+
+                if(!$student) return response()->json(['message' => 'Student not found'], 404);
+
+                $student->User->update(['password' => bcrypt($student->id)]);
+
+                DB::commit();
+
+            } catch (\Exception $e) {
+
+                DB::rollBack();
+    
+                Log::error('Detailed Error:', [
+                    'message' => $e->getMessage(), // Error message
+                    'file' => $e->getFile(),       // File where the error happened
+                    'line' => $e->getLine(),       // Line number of error
+                    'code' => $e->getCode(),       // Error code
+                    'trace' => $e->getTraceAsString() // Full stack trace
+                ]);
+                return response()->json(['error' => $e->getMessage()], 500);
+            } 
+        } else{
+            DB::beginTransaction();
+            try{
+                $application = Application::where('student_id',$id)->first();
+
+                if (!$application) {
+                    return response()->json(['error' => 'Application not found'], 404);
+                }           
+
+                $files = $request->input('files');
+
+                foreach ($files as $file) {
+                    if (!isset($file['id']) || !isset($file['is_submitted'])) {
+                        throw new \Exception("Missing required fields 'id' or 'is_submitted'");
+                    }
+            
+                    File_submitted::where('id', $file['id'])
+                        ->update(['is_submitted' => $file['is_submitted']]);
+                }
+
+                DB::commit();
+
+            } catch (\Exception $e) {
+
+                DB::rollBack();
+    
+                Log::error('Detailed Error:', [
+                    'message' => $e->getMessage(), // Error message
+                    'file' => $e->getFile(),       // File where the error happened
+                    'line' => $e->getLine(),       // Line number of error
+                    'code' => $e->getCode(),       // Error code
+                    'trace' => $e->getTraceAsString() // Full stack trace
+                ]);
+                return response()->json(['error' => $e->getMessage()], 500);
+            } 
+        }
     }
 
     /**

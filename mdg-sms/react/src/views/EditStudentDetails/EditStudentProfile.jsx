@@ -58,7 +58,6 @@ const formSchema = z.object({
     prevSchoolLandline: z.string().min(7,'Invalid phone number').max(8,'Invalid phone number').optional().or(z.literal('')),
     prevSchoolEmail: z.string().email(),
     studentNo: z.string().length(10),
-    studentEmail: z.string().email().min(10),
     firstName: z.string().min(2),
     middleName: z.string().optional(),
     lastName: z.string().min(2),
@@ -159,19 +158,16 @@ export default function EditStudentProfile() {
               },
     });
 
-    const handleRemoveSibling = (index) => {
-        setSiblings((prevSiblings) => prevSiblings.filter((_, i) => i !== index));
-    };
 
     const handleProgramChange = (programName) => {
 
-        setValue('program',programName);
+        setValue('program',programName, { shouldDirty: true });
         trigger('program');
     }
 
     const handleYearChange = (yearName) => {
 
-        setValue('year',yearName);
+        setValue('year',yearName, { shouldDirty: true });
         trigger('year');
 
     }
@@ -191,7 +187,6 @@ export default function EditStudentProfile() {
             prevSchoolLandline: data?.prevSchoolLandline,
             prevSchoolEmail: data?.prevSchoolEmail,
             studentNo: data?.studentNo,
-            studentEmail: data?.studentEmail,
             program: programId,
             year: yearId,
             firstName: data?.firstName,
@@ -247,15 +242,10 @@ export default function EditStudentProfile() {
                         </CardHeader>
                         <CardContent className='flex flex-col gap-[20px]'>
                             <div className='flex flex-row gap-[10%]'>
-                                <FormItem className='w-[50%]'>
+                                <FormItem className='w-[45%]'>
                                     <Label>MMCM Student No.</Label>
                                     <Input disabled={isSubmitting} type="text" {...register('studentNo')} className={`w-[100%] mb-3 ${errors.studentNo ? 'border-red-500' : ''}`}/>
                                     {errors.studentNo && <p className="text-red-500 text-[10px] italic">{errors.studentNo.message}</p>}
-                                </FormItem>
-                                <FormItem className='w-[50%]'>
-                                    <Label>School Email</Label>
-                                    <Input disabled={isSubmitting} type="email" {...register('studentEmail')} className={`w-[100%] mb-3 ${errors.studentEmail ? 'border-red-500' : ''}`}/>
-                                    {errors.studentEmail && <p className="text-red-500 text-[10px] italic">{errors.studentEmail.message}</p>}
                                 </FormItem>
                             </div>               
                             <div className='flex flex-row gap-[10%]'>

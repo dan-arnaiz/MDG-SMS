@@ -44,13 +44,7 @@ export default function AdminScholarships() {
                 <div className="header-toolbar">
                     <h1 className='text-black font-bold font-sans text-lg'>Scholarships</h1>             
                 </div>
-                <div className="students-toolbar">
-                    <div className="students-searchbox">
-                        <div>
-                            <FontAwesomeIcon icon={Icons.faMagnifyingGlass} size='lg'/>
-                        </div>
-                        <input type="text"  placeholder="Search Scholarships"/>
-                    </div>                    
+                <div className="students-toolbar">                   
                     <div className="students-toolbar-btns">
                         <Link className='addstudent-btn' to="/add-scholarship">Add Scholarship</Link>
                     </div>                          
