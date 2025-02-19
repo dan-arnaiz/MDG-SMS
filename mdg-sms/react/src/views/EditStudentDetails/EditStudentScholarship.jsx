@@ -56,6 +56,7 @@ import { Check, LucideSquareBottomDashedScissors } from 'lucide-react';
 const formSchema = z.object({
     scholarship: z.string().min(2),
     status: z.string().min(2),
+    subtype: z.string().min(2),
 });
 
 export default function EditStudentScholarship() {
@@ -63,12 +64,24 @@ export default function EditStudentScholarship() {
     const { id } = useParams();
     const [scholarships, setScholarships] = useState([]);
     const [statuses, setStatuses] = useState([]);
+    const [subtypes, setSubtypes] = useState([]);
+    const [subtype, setSubtype] = useState('');
     const {user} = useStateContext();
 
     useEffect(() => {
-            loadFirstResources();
-            loadStudent();
+        loadFirstResources();
     }, []);
+
+    useEffect(() => {
+        loadStudent();
+    },[scholarships]);
+
+    useEffect(() => {
+
+        if (scholarships.length > 0) {
+            handleSubtypeChange(subtype);
+        }
+    }, [subtypes]);
 
     const loadFirstResources = () => {
 
@@ -81,14 +94,19 @@ export default function EditStudentScholarship() {
         .catch((error) => console.error("Error fetching data:", error));
     }   
 
-    const loadStudent = () => {
+    const loadStudent = async() => {
 
         axiosClient.get(`/editstudentscholarship/${id}`)
-        .then(({ data }) => {
+        .then( async({ data }) => {
             reset({
-                scholarship: data.scholarship || "",
-                status: data.status || ""
+                scholarship: data.scholarship ?? "",
+                status: data.status ?? "",
+                subtype: data.type ?? ""
             });
+       
+            setSubtype(data.type);
+
+            handleScholarshipChange(data.scholarship);
         })
         .catch(error => {
             setError(error.response?.data?.message || "An error occurred");
@@ -100,10 +118,20 @@ export default function EditStudentScholarship() {
             resolver: zodResolver(formSchema),
     });
 
-    const handleScholarshipChange = (scholarshipName) => {
+    const handleScholarshipChange = async(scholarshipName) => {
+        const scholarshipId = scholarships.find((s) => s.name === scholarshipName)?.id;
 
         setValue('scholarship', scholarshipName, { shouldDirty: true });
         trigger('scholarship');
+
+        if (scholarshipId) {
+            await axiosClient.get(`/reqfiles/${scholarshipId}`)
+                .then(({data}) => {
+                    console.log(data);
+                    setSubtypes(data.types);                 
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        } 
 
     };
 
@@ -112,6 +140,12 @@ export default function EditStudentScholarship() {
         setValue('status',statusName, { shouldDirty: true });
         trigger('status');
     };
+
+    const handleSubtypeChange = (subtypeName) => {
+
+        setValue('subtype',subtypeName,{ shouldDirty: true });
+        trigger('subtype');
+    }
 
     const navigate = useNavigate();
 
@@ -122,11 +156,11 @@ export default function EditStudentScholarship() {
             return;
         }
 
-        const scholarshipId = scholarships.find((s) => s.name === data?.scholarship)?.id; 
+        const subtypeId = subtypes.find((s) => s.name === data?.subtype)?.id;
         const statusId = statuses.find((s) => s.name === data?.status)?.id; 
 
         const payload ={
-            scholarship: scholarshipId,
+            subtype: subtypeId,
             status: statusId 
         }
 
@@ -175,6 +209,18 @@ export default function EditStudentScholarship() {
                                     </SelectContent>                           
                                 </Select>                                
                             </FormItem>
+                            <FormItem>                     
+                                <Select value={getValues('subtype')} disabled={isSubmitting} onValueChange={(value) => handleSubtypeChange(value)}>
+                                    <SelectTrigger className={`w-[100%] mb-3 ${errors.subtype ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Select a Scholarship Type"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {subtypes.map((type, index) => (
+                                            <SelectItem key={index} value={type.name}>{type.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>                           
+                                </Select>                                
+                            </FormItem> 
                             <FormItem>                     
                                 <Select value={getValues('status')} disabled={isSubmitting} onValueChange={(value) => handleStatusChange(value)}>
                                     <SelectTrigger className={`w-[100%] mb-3 ${errors.scholarship ? 'border-red-500' : ''}`}>

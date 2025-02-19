@@ -14,6 +14,7 @@ use App\Models\Qualification;
 use App\Models\File;
 use App\Models\File_req;
 use App\Models\Scholarship;
+use Illuminate\Support\Facades\Log;
 
 class ScholarshipsController extends Controller
 {
@@ -47,21 +48,8 @@ class ScholarshipsController extends Controller
     {
         DB::beginTransaction();
         try{
-            $data = $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'maxSlots' => 'required|integer|min:1',
-                'types' => 'array',
-                'types.*' => 'string',
-                'benefits' => 'array',
-                'benefits.*' => 'nullable|string',
-                'retentions' => 'array',
-                'retentions.*' => 'nullable|string',
-                'qualifications' => 'array',
-                'qualifications.*' => 'nullable|string',
-                'newFiles' => 'array',
-                'existingFiles' => 'array',
-            ]);
+            $data = $request;
+
             $scholarship = Scholarship::create([
                 'name' => $data['name'],
                 'description' => $data['description'],
@@ -71,90 +59,80 @@ class ScholarshipsController extends Controller
             ]);
 
             DB::afterCommit(function () use ($scholarship, $data){
-                // Create subtypes
-                $createdTypes = [];
-                foreach ($data['types'] as $typeName) {
-                    $typeRecord = Subtype::create([
-                        'scholarship_id' => $scholarship->id,
-                        'name' => $typeName,
-                        'description' => '',
-                    ]);
-                    $createdTypes[] = $typeRecord; 
-                }
         
                 // Create benefits
                 $createdBenefits = [];
                 foreach ($data['benefits'] as $benefitName) {
-                    $benefitRecord = Benefit::create([
+                    $benefitRecord = Subtype::create([
                         'scholarship_id' => $scholarship->id,
-                        'description' => $benefitName,
+                        'name' => $benefitName['name'],
+                        'description' => $benefitName['description']
                     ]);
                     $createdBenefits[] = $benefitRecord; // Fix here
                 }
         
                 // Create retentions
                 $createdRetentions = [];
-                foreach ($data['retentions'] as $retentionName) {
+                foreach ($data['retentions'] as $retentionDesc) {
                     $retentionRecord = Retention::create([
                         'scholarship_id' => $scholarship->id,
-                        'description' => $retentionName,
+                        'description' => $retentionDesc,
                     ]);
                     $createdRetentions[] = $retentionRecord; 
                 }
         
                 // Create qualifications
                 $createdQualifications = [];
-                foreach ($data['qualifications'] as $qualificationName) {
+                foreach ($data['qualifications'] as $qualificationDesc) {
                     $qualificationRecord = Qualification::create([
                         'scholarship_id' => $scholarship->id,
-                        'description' => $qualificationName,
+                        'description' => $qualificationDesc,
                     ]);
                     $createdQualifications[] = $qualificationRecord; 
                 }
         
                 // Create new files
-                $createdFiles = [];
-                foreach ($data['newFiles'] as $newFile) {
-                    $fileRecord = File::create([
-                        'name' => $newFile,
-                        'description' => '',
-                    ]);
-                    $createdFiles[] = $fileRecord; 
-                }
-        
-                // Associate new files with the scholarship
-                foreach ($createdFiles as $relation) {    
-                    File_req::create([
-                        'scholarship_id' => $scholarship->id,
-                        'file_id' => $relation->id,
-                    ]);
-                }
-        
-                // Associate existing files with the scholarship
-                foreach ($data['existingFiles'] as $relation) {
-                    File_req::create([
-                        'scholarship_id' => $scholarship->id,
-                        'file_id' => $relation['id'],
-                    ]);
-                }
-              
+
+                foreach ($data['files'] as $newFile) {
+
+                    $existingFile = File::where('name',$newFile['name'])
+                    ->where('description',$newFile['description'])
+                    ->first();
+
+                    if($existingFile) {
+
+                        File_req::create([
+                            'scholarship_id' => $scholarship->id,
+                            'file_id' => $existingFile->id
+                        ]);
+
+                    } else {
+
+                        $files = File::create([
+                            'name' => $newFile['name'],
+                            'description' => $newFile['description']
+                        ]);
+                        
+                        File_req::create([
+                            'scholarship_id' => $scholarship->id,
+                            'file_id' => $files->id
+                        ]);
+
+                    };                                
+                };         
             }); 
 
             DB::commit();
-
-            return response()->json([
-                'message' => 'Scholarship and subtypes created successfully!',
-                'scholarship' => $scholarship,
-                'types' => $createdTypes,
-                'benefits' => $createdBenefits,
-                'retentions' => $createdRetentions,
-                'qualifications' => $createdQualifications,
-                'files' => $createdFiles,
-            ], 201);
     
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error($e->getMessage()); // Log the error for debugging
+            Log::error('Detailed Error:', [
+                'message' => $e->getMessage(), // Error message
+                'file' => $e->getFile(),       // File where the error happened
+                'line' => $e->getLine(),       // Line number of error
+                'code' => $e->getCode(),       // Error code
+                'trace' => $e->getTraceAsString() // Full stack trace
+            ]);
             return response()->json(['error' => 'Something went wrong'], 500);
         }
     }
@@ -168,6 +146,7 @@ class ScholarshipsController extends Controller
             $profile = DB::table('scholarships')
                         ->select(
                             'name',
+                            'description',
                             'max_slots',
                             'taken_slots',
                             'is_full',
@@ -179,16 +158,9 @@ class ScholarshipsController extends Controller
                         ->select(
                             'id',
                             'name',
-                        )
-                        ->where('subtypes.scholarship_id','=',$id)
-                        ->get();
-
-            $benefits = DB::table('benefits')
-                        ->select(
-                            'id',
                             'description'
                         )
-                        ->where('benefits.scholarship_id','=',$id)
+                        ->where('subtypes.scholarship_id','=',$id)
                         ->get();
             
             $retentions = DB::table('retentions')
@@ -211,6 +183,7 @@ class ScholarshipsController extends Controller
                     ->join('files', 'file_reqs.file_id', '=', 'files.id')
                     ->select(                         
                         'files.name',
+                        'files.description'
                     )
                     ->where('file_reqs.scholarship_id', '=', $id)
                     ->get();
@@ -222,6 +195,7 @@ class ScholarshipsController extends Controller
                         ->join('programs','students.program_id','=','programs.id')
                         ->join('users','students.user_id','=','users.id')
                         ->join('scholarship_statuses','users.scholarship_status_id','=','scholarship_statuses.id')
+                        ->join('subtypes','applications.subtype_id','=','subtypes.id')
                         ->select(                         
                             'people.first_name',
                             'people.last_name',
@@ -233,13 +207,12 @@ class ScholarshipsController extends Controller
                             'prev_schools.name as prevSchoolName',
                             'scholarship_statuses.name as status'
                         )
-                        ->where('applications.scholarship_id','=',$id)
+                        ->where('subtypes.scholarship_id','=',$id)
                         ->orderBy('prev_schools.name', 'asc')
                         ->get();
             $data = [
                 'profile' => $profile,
                 'types' => $types,
-                'benefits' => $benefits,
                 'retentions' => $retentions,
                 'qualifications' => $qualifications,
                 'files' => $files,
@@ -248,6 +221,13 @@ class ScholarshipsController extends Controller
             return new ScholarshipProfileResource($data);
                         
         }catch (\Exception $e){
+            Log::error('Detailed Error:', [
+                'message' => $e->getMessage(), // Error message
+                'file' => $e->getFile(),       // File where the error happened
+                'line' => $e->getLine(),       // Line number of error
+                'code' => $e->getCode(),       // Error code
+                'trace' => $e->getTraceAsString() // Full stack trace
+            ]);
             return response()->json(['error' => $e], 500);
         }
     }
@@ -257,7 +237,99 @@ class ScholarshipsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+
+            Scholarship::where('id',$id)
+            ->update([
+                'name' => $request['name'],
+                'description' => $request['description'],
+                'max_slots' => $request['maxSlots'],
+                'taken_slots' => $request['taken'],
+                'is_full' => $request['maxSlots'] === $request['taken'],
+            ]);
+
+            $scholarship = Scholarship::find($id);
+
+            $scholarship->Subtypes()->delete();
+
+            foreach ($request['benefits'] as $benefitName) {
+                $benefitRecord = Subtype::create([
+                    'id' => $benefitName['id'],
+                    'scholarship_id' => $scholarship->id,
+                    'name' => $benefitName['name'],
+                    'description' => $benefitName['description']
+                ]);
+                $createdBenefits[] = $benefitRecord; // Fix here
+            }
+
+            $scholarship->Retentions()->delete();
+    
+            // Create retentions
+            foreach ($request['retentions'] as $retentionDesc) {
+                $retentionRecord = Retention::create([
+                    'scholarship_id' => $scholarship->id,
+                    'description' => $retentionDesc['text'],
+                ]);
+                $createdRetentions[] = $retentionRecord; 
+            }
+
+            $scholarship->Qualifications()->delete();
+
+            // Create qualifications
+            foreach ($request['qualifications'] as $qualificationDesc) {
+                $qualificationRecord = Qualification::create([
+                    'scholarship_id' => $scholarship->id,
+                    'description' => $qualificationDesc['text'],
+                ]);
+                $createdQualifications[] = $qualificationRecord; 
+            }
+
+            $scholarship->files()->detach();
+    
+            // Create new files
+
+            foreach ($request['files'] as $newFile) {
+
+                $existingFile = File::where('name',$newFile['name'])
+                ->where('description',$newFile['description'])
+                ->first();
+
+                if($existingFile) {
+
+                    File_req::create([
+                        'scholarship_id' => $scholarship->id,
+                        'file_id' => $existingFile->id
+                    ]);
+
+                } else {
+
+                    $files = File::create([
+                        'name' => $newFile['name'],
+                        'description' => $newFile['description']
+                    ]);
+                    
+                    File_req::create([
+                        'scholarship_id' => $scholarship->id,
+                        'file_id' => $files->id
+                    ]);
+
+                };                                
+            };
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Detailed Error:', [
+                'message' => $e->getMessage(), // Error message
+                'file' => $e->getFile(),       // File where the error happened
+                'line' => $e->getLine(),       // Line number of error
+                'code' => $e->getCode(),       // Error code
+                'trace' => $e->getTraceAsString() // Full stack trace
+            ]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     /**

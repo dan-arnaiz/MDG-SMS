@@ -11,16 +11,6 @@ class Scholarship extends Model
 
     protected $fillable = ['name', 'description', 'max_slots', 'taken_slots', 'is_full'];
 
-    public function applications()
-    {
-        return $this->hasMany(Application::class);
-    }
-
-    public function benefits()
-    {
-        return $this->hasMany(Benefit::class);
-    }
-
     public function qualifications()
     {
         return $this->hasMany(Qualification::class);

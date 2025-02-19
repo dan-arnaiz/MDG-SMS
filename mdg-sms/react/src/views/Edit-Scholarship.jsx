@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus,Eraser, Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams, } from 'react-router-dom';
 
 import {
     Dialog,
@@ -41,11 +41,13 @@ const formSchema = z.object({
     maxSlots: z.number().min(1, { message: "Max Slots must be greater than 0" })
 });
 
-export default function AddScholarship() {
+export default function EditScholarship() {
 
+    const { id } = useParams();
     const [open, setOpen] = React.useState(false)
     const [comboValue, setComboValue] = React.useState(null)
     const[files,setFiles] = useState([]);
+    const[profile,setProfile] = useState([]);
 
     const [benefits, setBenefits] = useState([]);
     const [benefitName, setBenefitName] = useState('');
@@ -56,15 +58,42 @@ export default function AddScholarship() {
     const [qualificationDesc, setQualificationDesc] = useState('');
     const [fileName, setFileName] = useState('');
     const [fileDesc, setFileDesc] = useState('');
+    const [taken, setTaken] = useState(0);
+    const[loading,setLoading] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        getScholarship();
     }, [])
 
-    const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm({
+    const { register, handleSubmit, reset, formState: { errors, isDirty } } = useForm({
         resolver: zodResolver(formSchema),
     });
+
+    const getScholarship = () => {
+        setLoading(true)
+        axiosClient.get(`/scholarships/${id}`)
+            .then(({data}) => {
+                setLoading(false)
+                setBenefits(data.data.types);
+                setRetentionPolicies(data.data.retentions);
+                setQualifications(data.data.qualifications);
+                setFiles(data.data.files);
+                setTaken(data.data.profile.taken_slots);
+                console.log(data);
+
+                reset({
+                    name:data.data.profile.name,
+                    description: data.data.profile.description,
+                    maxSlots: data.data.profile.max_slots
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error.response ? error.response.data : error.message);
+                setLoading(false); 
+            });
+    }
 
     const addBenefit = () => {
         if (!benefitName) return; // Ensure both fields are filled
@@ -136,6 +165,11 @@ export default function AddScholarship() {
 
     const onSubmit = (data) => {
 
+        if(data.maxSlots < taken){
+            alert(`There are ${taken} student currently active in this scholarship. Max Slots cannot be less than that number...`)
+            return;
+        } 
+
         console.log("Benefits:", benefits);
         console.log("Retentions:", retentionPolicies);
         console.log("Qualifications:", qualifications);
@@ -145,6 +179,7 @@ export default function AddScholarship() {
             name: data.name,
             description: data.description,
             maxSlots: Number(data.maxSlots),
+            taken: taken,
             benefits: benefits,
             retentions: retentionPolicies,
             qualifications: qualifications,
@@ -153,8 +188,9 @@ export default function AddScholarship() {
         console.log(payload);
 
         try{
-            axiosClient.post('/scholarships', payload)
-            navigate('/scholarships')
+            axiosClient.put(`/scholarships/${id}`, payload)
+            alert('Scholarship successfully updated!!')
+            navigate(`/scholarships/${id}-${data.name}`)
         } catch(err ) {
             console.error('Error:', error.response ? error.response.data : error.message);
             const response = err.response;
@@ -251,7 +287,7 @@ export default function AddScholarship() {
                                         <li key={index}>
                                             <div className='flex flex-row items-center'>
                                                 <Button variant='destructive' className='rounded-full text-[13px] p-1.5 h-1 w-1' onClick={() => delRetention(r.name)}>x</Button>
-                                                <p className='mx-5'>{r}</p>
+                                                <p className='mx-5'>{r.text}</p>
                                             </div>
                                         </li>
                                     ))}
@@ -285,7 +321,7 @@ export default function AddScholarship() {
                                         <li key={index}>
                                             <div className='flex flex-row items-center'>
                                                 <Button variant='destructive' className='rounded-full text-[13px] p-1.5 h-1 w-1' onClick={() => delQualification(q.name)}>x</Button>
-                                                <p className='mx-5'>{q}</p>
+                                                <p className='mx-5'>{q.text}</p>
                                             </div>
                                         </li>
                                     ))}

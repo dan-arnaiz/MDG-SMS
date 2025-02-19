@@ -191,8 +191,6 @@ export default function EditStudentContact() {
             setBarangay(response.data.permanentAddress.barangayP);
             setBarangay2(response.data.mailAddress?.barangayM ?? "");
 
-            await new Promise((resolve) => setTimeout(resolve, 50));
-
             handleProvinceChange(response.data.permanentAddress.provinceP,'permanent');
             handleProvinceChange(response.data.mailAddress?.provinceM ?? "",'mailing');
 

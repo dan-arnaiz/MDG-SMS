@@ -92,6 +92,7 @@ const noMailingSchema = z.object({
     motherOccupation: z.string().min(2).optional().or(z.literal('')),
     motherOfficeNo: z.string().length(11, 'Invalid phone number').optional().or(z.literal('')),
     scholarship: z.string().min(1),
+    subtype: z.string().min(1),
     program: z.number().min(1),
     year: z.number().min(1),
     academicYear: z.number().min(1),
@@ -140,6 +141,7 @@ export default function AddStudent() {
     const [barangays2, setBarangays2] = useState([]);
     const [addressSimilarity, setAddressSimilarity] = useState(false);
     const [files, setFiles] = useState([]);
+    const [subtypes, setSubtypes] = useState([]);
     const [open, setOpen] = useState(false);
     const [programs, setPrograms] = useState([]);
     const [years, setYears] = useState([]);
@@ -336,8 +338,9 @@ export default function AddStudent() {
         if (scholarshipId) {
             axiosClient.get(`/reqfiles/${scholarshipId}`)
                 .then(({data}) => {
-                    setFiles(data.data);
                     console.log(data);
+                    setFiles(data.files);
+                    setSubtypes(data.types);                 
                 })
                 .catch(error => console.error('Error fetching cities:', error));
         } else {
@@ -374,18 +377,43 @@ export default function AddStudent() {
         trigger('semester');
     }
 
+    const handleSubtypeChange = (subtypeName) => {
+
+        setValue('subtype',subtypeName);
+        trigger('subtype');
+    }
+
+    const calculateAge = (dob) => {
+        const birthDate = new Date(dob);
+        const today = new Date();
+    
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+    
+        // Adjust age if birthday hasn't occurred yet this year
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age--;
+        }
+    
+        return age;
+    };
+
+    const navigate = useNavigate();
+
 
     const onSubmit = async (data) => {
 
         let userId = user?.id
 
-        const scholarshipId = scholarships.find((s) => s.name === data?.scholarship)?.id;
+
+        const subtypeId = subtypes.find((s) => s.name === data?.subtype)?.id;
 
         let scholarshipData = {
             prevSchool: data?.prevSchool?.trim(),
             prevSchoolLandline: data?.prevSchoolLandline ? data.prevSchoolLandline.trim() : null,
             prevSchoolEmail: data?.prevSchoolEmail?.toLowerCase().trim(),
-            scholarship: scholarshipId,
+            subtype: subtypeId
         };
 
         let organization = {
@@ -481,8 +509,6 @@ export default function AddStudent() {
 
         console.log(payload);
 
-        const navigate = useNavigate();
-
         try{
             await axiosClient.post('/addstudent', payload)
             alert('Student successfully added!')
@@ -553,7 +579,19 @@ export default function AddStudent() {
                                         ))}
                                     </SelectContent>                           
                                 </Select>                                
-                            </FormItem>                       
+                            </FormItem> 
+                            <FormItem>                     
+                                <Select value={getValues('subtype')} disabled={isSubmitting} onValueChange={(value) => handleSubtypeChange(value)}>
+                                    <SelectTrigger className={`w-[100%] mb-3 ${errors.subtype ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Select a Scholarship Type"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {subtypes.map((type, index) => (
+                                            <SelectItem key={index} value={type.name}>{type.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>                           
+                                </Select>                                
+                            </FormItem>                      
                         </CardContent>
                     </Card>
                     <Card>

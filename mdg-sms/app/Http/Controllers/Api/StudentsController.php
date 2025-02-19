@@ -35,7 +35,8 @@ class StudentsController extends Controller
                         ->join('programs','students.program_id','=','programs.id')
                         ->join('users','students.user_id','=','users.id')
                         ->join('scholarship_statuses','users.scholarship_status_id','=','scholarship_statuses.id')
-                        ->join('scholarships','applications.scholarship_id','=','scholarships.id')
+                        ->join('subtypes','applications.subtype_id','=','subtypes.id')
+                        ->join('scholarships','subtypes.scholarship_id','=','scholarships.id')
                         ->select(                         
                             'people.first_name',
                             'people.last_name',
@@ -43,6 +44,7 @@ class StudentsController extends Controller
                             'people.suffix',
                             'students.id as student_id',
                             'scholarships.name as scholarship',
+                            'subtypes.name as type',
                             'users.email',
                             'programs.name as program',
                             'scholarship_statuses.name as status'
@@ -144,7 +146,8 @@ class StudentsController extends Controller
                         ->join('addresses','address_person.address_id','=','addresses.id')
                         ->join('programs','students.program_id','=','programs.id')
                         ->join('applications','applications.student_id','=','students.id')
-                        ->join('scholarships','applications.scholarship_id','=','scholarships.id')                                              
+                        ->join('subtypes','applications.subtype_id','=','subtypes.id')    
+                        ->join('scholarships','subtypes.scholarship_id','scholarships.id')                                          
                         ->join('years','students.year_id','=','years.id')
                         ->select(
                             'students.id',
@@ -162,6 +165,7 @@ class StudentsController extends Controller
                             'scholarship_statuses.name as status',
                             'scholarships.id as scholarshipId',
                             'scholarships.name as scholarship',
+                            'subtypes.name as type',
                             'years.name as year'         
                         )
                         ->where('students.id','=',$id)
@@ -298,6 +302,7 @@ class StudentsController extends Controller
                 }
 
                 Person::where('id', $student->person_id)->delete();
+                User::where('id',$student->user_id)->delete();
             }
 
             DB::commit();

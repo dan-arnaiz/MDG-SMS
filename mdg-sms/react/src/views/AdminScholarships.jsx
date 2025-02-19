@@ -3,6 +3,7 @@ import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js"
+import { Button } from '@/components/ui/button';
 
 export default function AdminScholarships() {
 
@@ -44,9 +45,11 @@ export default function AdminScholarships() {
                 <div className="header-toolbar">
                     <h1 className='text-black font-bold font-sans text-lg'>Scholarships</h1>             
                 </div>
-                <div className="students-toolbar">                   
+                <div className="flex flex-row justify-end bg-white p-[10px] shadow-md rounded-[10px]">                   
                     <div className="students-toolbar-btns">
-                        <Link className='addstudent-btn' to="/add-scholarship">Add Scholarship</Link>
+                        <Link to="/add-scholarship">
+                            <Button variant='secondary'>Add Scholarship</Button>
+                        </Link>
                     </div>                          
                 </div>
                 <div className='scholarship-list'>

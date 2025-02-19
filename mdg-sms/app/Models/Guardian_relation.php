@@ -9,7 +9,7 @@ class Guardian_relation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id', 'guardian_id'];
+    protected $fillable = ['student_id', 'guardian_id','relation'];
 
     public function student()
     {

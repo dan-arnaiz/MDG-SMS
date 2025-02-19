@@ -11,6 +11,11 @@ class Subtype extends Model
 
     protected $fillable = ['name','scholarship_id', 'description'];
 
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);

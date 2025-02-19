@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Scholarship_status;
 use App\Models\Scholarship;
 use App\Models\Application;
+use App\Models\Subtype;
 use App\Models\Student;
 use App\Http\Resources\ProvinceResource;
 use App\Http\Resources\ScholarshipResource;
@@ -51,12 +52,14 @@ class EditStudScholarshipController
     {
         try{
             $details = DB::table('applications')
-            ->join('scholarships','applications.scholarship_id','=','scholarships.id')
+            ->join('subtypes','applications.subtype_id','subtypes.id')
+            ->join('scholarships','subtypes.scholarship_id','=','scholarships.id')
             ->join('students','applications.student_id','=','students.id')
             ->join('users','students.user_id','=','users.id')
             ->join('scholarship_statuses','users.scholarship_status_id','=','scholarship_statuses.id')
             ->select(
                 'scholarships.name',
+                'subtypes.name as type',
                 'scholarship_statuses.name as status'
             )
             ->where('applications.student_id','=',$id)
@@ -68,6 +71,7 @@ class EditStudScholarshipController
         
             return response()->json([
                 'scholarship' => $details->name,
+                'type' => $details->type,
                 'status' => $details->status
             ]);
 
@@ -100,10 +104,14 @@ class EditStudScholarshipController
                 return response()->json(['message' => 'No application found'], 404);
             }
 
-            $scholarship = Scholarship::where('id',$request->scholarship)->first();
+            $subtype = Subtype::where('id',$request->subtype)->first();
 
-            if (!$scholarship || $scholarship->is_full){
-                return response()->json(['message' => 'Scholarship is full or does not exist'], 404);
+            $is_full = $subtype->Scholarship->is_full;
+
+            if(!$subtype) return response()->json(['message' => 'Scholarship doesnt exist'], 404);
+
+            if ($is_full){
+                return response()->json(['message' => 'Scholarship is full'], 404);
             }
 
             $student = Student::where('id',$id)->first();
@@ -113,7 +121,7 @@ class EditStudScholarshipController
             }
 
             $application->update([
-                'scholarship_id' => $request->scholarship
+                'subtype_id' => $request->subtype
             ]);
 
             if ($student->user) { // Ensure user relationship exists

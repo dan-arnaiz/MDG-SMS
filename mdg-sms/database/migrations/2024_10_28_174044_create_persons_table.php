@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('middle_name', 50)->nullable();
             $table->string('suffix', 10)->nullable();
             $table->date('dob')->nullable();
-            $table->string('email', 100)->unique();
+            $table->string('email', 100)->unique()->nullable();
             $table->timestamps();
         });
 

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label"
+
 import {
     Card,
     CardContent,
@@ -38,6 +39,7 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
+import { DialogClose } from '@radix-ui/react-dialog';
 
 export default function AdminStudentProfile() {
 
@@ -128,6 +130,18 @@ export default function AdminStudentProfile() {
             });
     }
 
+    const deleteStudent = () => {
+        axiosClient.delete(`/addstudent/${id}`)
+        .then((request) => {
+            alert(`student ${id} was successfully deleted!`);
+            navigate("/students");
+        })
+        .catch((error) => {
+            console.error('Error:', error.response ? error.response.data : error.message);
+            setLoading(false); 
+        });
+    }
+
     const defaultProfilePic = '/images/default-profile.png';
     
     return(
@@ -136,11 +150,28 @@ export default function AdminStudentProfile() {
                 <div className="header-toolbar">
                     <h1 className='text-black font-bold font-sans text-lg'>Students</h1>             
                 </div>
-                <div className="students-toolbar">
+                <div className="students-toolbar justify-between">
                     <Button onClick={() => navigate("/students")}>Back</Button>                   
                     <div className="students-toolbar-btns">
                         <Button>Export</Button>
-                        <Button variant='destructive'>Delete</Button>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant='destructive'>Delete</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                <DialogDescription className='pt-5 pb-5'>
+                                    This action cannot be undone. This will permanently delete student {id}...
+                                </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button onClick={ev => deleteStudent()} variant='destructive'>Confirm</Button>
+                                    </DialogClose>                                     
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </div>                          
                 </div>
                 
@@ -213,6 +244,7 @@ export default function AdminStudentProfile() {
                             <CardContent className='flex flex-col gap-2 justify-center items-center text-center'>
                                 <div>
                                     <p className='text-black font-semibold text-2xl'>{student.scholarship}</p>
+                                    <p className='text-black text-xl'>{student.type}</p>
                                 </div> 
                                 <p className={student.status === "Active" ? "text-green-500 font-bold"  : "text-red-500 font-bold"}>{student.status}</p>   
                                 <Separator className='w-[80%]'/>                                                     

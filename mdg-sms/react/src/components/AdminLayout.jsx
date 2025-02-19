@@ -1,7 +1,7 @@
 import { Outlet, Navigate, NavLink } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client.js";
-import { Home, Users, FileChartPie, Mailbox, HandCoins } from 'lucide-react';
+import { Home, Users, FileChartPie, Mailbox, HandCoins, BookUser,Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -77,40 +77,54 @@ export default function AdminLayout() {
                     <ul>
                         <p className="sidebar-subtitle">Manage</p>
                         <li>
-                        <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <div className="nav-item">
-                                <Home size={24} /> Dashboard
-                            </div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/students" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <div className="nav-item">
-                                <Users size={24} /> Students
-                            </div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/scholarships" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <div className="nav-item">
-                                <HandCoins size={24} /> Scholarships
-                            </div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/applications" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <div className="nav-item">
-                                <Mailbox size={24} /> Applications
-                            </div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/reports" className={({ isActive }) => isActive ? 'active' : ''}>
-                            <div className="nav-item">
-                                <FileChartPie size={24} /> Reports
-                            </div>
-                        </NavLink>
-                    </li>
+                            <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <div className="nav-item">
+                                    <Home size={24} /> Dashboard
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/students" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <div className="nav-item">
+                                    <Users size={24} /> Students
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/scholarships" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <div className="nav-item">
+                                    <HandCoins size={24} /> Scholarships
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/employees" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <div className="nav-item">
+                                    <Briefcase size={24} /> Employees
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/applications" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <div className="nav-item">
+                                    <Mailbox size={24} /> Applications
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/reports" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <div className="nav-item">
+                                    <FileChartPie size={24} /> Reports
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/admin-tools" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <div className="nav-item">
+                                    <BookUser size={24} /> Admin Tools
+                                </div>
+                            </NavLink>
+                        </li>
                     </ul>
                     <footer className="sidebar-footer">
                         <div className="footer-wrapper">

@@ -10,6 +10,9 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\Api\EditStudProfileController;
 use App\Http\Controllers\Api\EditStudScholarshipController;
 use App\Http\Controllers\Api\EditStudContactController;
+use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\AddEmployeeController;
+use App\Http\Controllers\Api\AdminToolsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -29,7 +32,6 @@ Route::get('/cities/{provinceId}', [LocationController::class, 'getCities'])->mi
 Route::get('/barangays/{cityId}', [LocationController::class, 'getBarangays'])->middleware('auth:sanctum');
 Route::get('/reqfiles/{scholarshipId}', [LocationController::class, 'getFiles'])->middleware('auth:sanctum');
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
-
 Route::delete('/students', [StudentsController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::apiResource('/students', StudentsController::class)->middleware('auth:sanctum');
@@ -37,4 +39,7 @@ Route::apiResource('/addstudent', AddStudentController::class)->middleware('auth
 Route::apiResource('/editstudentprofile', EditStudProfileController::class)->middleware('auth:sanctum');
 Route::apiResource('/editstudentscholarship', EditStudScholarshipController::class)->middleware('auth:sanctum');
 Route::apiResource('/editstudentcontact', EditStudContactController::class)->middleware('auth:sanctum');
+Route::apiResource('/admintools', AdminToolsController::class)->middleware('auth:sanctum');
+Route::apiResource('/employees', EmployeeController::class)->middleware('auth:sanctum');
+Route::apiResource('/addemployee', AddEmployeeController::class)->middleware('auth:sanctum');
 Route::apiResource('/scholarships', ScholarshipsController::class)->middleware('auth:sanctum');

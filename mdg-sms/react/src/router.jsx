@@ -15,11 +15,15 @@ import AddStudent from "./views/Add-Student.jsx";
 import AdminApplications from "./views/AdminApplications.jsx";
 import AddStudentModal from "./components/dialogs/AddStudentModal.jsx";
 import ScholarshipProfile from "./views/ScholarshipProfile.jsx";
+import AdminTools from "./views/AdminTools.jsx";
 import AddScholarship from "./views/Add-Scholarship.jsx";
+import AddEmployee from "./views/Add-Employee.jsx";
+import Employees from "./views/Employees.jsx";
 import EditStudentProfile from "./views/EditStudentDetails/EditStudentProfile.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import EditStudentScholarship from "./views/EditStudentDetails/EditStudentScholarship.jsx";
 import EditStudentContact from "./views/EditStudentDetails/EditStudentContact.jsx";
+import EditScholarship from "./views/Edit-Scholarship.jsx";
 
 const router = createBrowserRouter([
     {
@@ -90,7 +94,22 @@ const router = createBrowserRouter([
                         path: '/edit-student-contact/:id',
                         element: <EditStudentContact/>
                     },
-
+                    {
+                        path: '/admin-tools',
+                        element: <AdminTools/>
+                    },
+                    {
+                        path: '/edit-scholarship/:id',
+                        element: <EditScholarship/>
+                    },
+                    {
+                        path: '/employees',
+                        element: <Employees/>
+                    },
+                    {
+                        path: '/add-employee',
+                        element: <AddEmployee/>
+                    },
 
                 ]
             }

@@ -247,7 +247,6 @@ export default function ScholarshipProfile() {
     }
 
     const profile = scholarship.profile || {};
-    const benefits = scholarship.benefits || [];
     const types = scholarship.types || [];
     const retentions = scholarship.retentions || [];
     const qualifications = scholarship.qualifications || [];
@@ -300,7 +299,7 @@ export default function ScholarshipProfile() {
 
     const handleAddStudent = () => {
 
-        if (profile.is_full) navigate(`/add-student/${scholarshipId}`);
+        if (!profile.is_full) navigate(`/add-student/${scholarshipId}`);
         else alert('This scholarship is already at its maximum capacity')
 
     }
@@ -334,27 +333,25 @@ export default function ScholarshipProfile() {
                 <div className="header-toolbar">
                     <h1 className='text-black font-bold font-sans text-lg'>Scholarships</h1>             
                 </div>
-                <div className="students-toolbar gap-2"> 
-                    <Button onClick={() => window.history.back()}>Back</Button>                 
+                <div className="students-toolbar justify-between gap-2"> 
+                    <Button onClick={() => navigate(`/scholarships`)}>Back</Button>                 
                     <div className="students-toolbar-btns">
+                        <Button onClick={() => navigate(`/edit-scholarship/${scholarshipId}`)}>Edit</Button>
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button variant='destructive'>Delete</Button>
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
-                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                    <DialogTitle>Are you absolutely sure?</DialogTitle>
                                 <DialogDescription className='pt-5 pb-5'>
                                     This action cannot be undone. This will permanently delete the scholarship option. Students enrolled in this scholarship will become inactive.
                                 </DialogDescription>
                                 </DialogHeader>
                                 <DialogFooter>
-                                    <div className="flex flex-row justify-between w-full pr-10 pl-10">
-                                        <DialogClose>
-                                            <Button className="hover:bg-slate-500 border hover:black hover:text-white">Cancel</Button>
-                                        </DialogClose>                                     
-                                        <Button onClick={ev => onDelete()} className='bg-[rgb(236,58,58)] text-white hover:bg-white hover:text-black'>Confirm</Button>
-                                    </div>
+                                    <DialogClose asChild>
+                                        <Button onClick={ev => onDelete()} variant='destructive'>Confirm</Button>
+                                    </DialogClose> 
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>                      
@@ -402,32 +399,22 @@ export default function ScholarshipProfile() {
                                         {types.length > 0 && (
                                             <Card>
                                             <CardHeader>
-                                                <CardTitle>TYPES</CardTitle>
+                                                <CardTitle>Benefits</CardTitle>
                                             </CardHeader>
                                             <CardContent>
                                                 <ul className="list-disc list-inside">
                                                     {types.map((t,index) =>(
-                                                        <li key={index}>{t.text}</li>
+                                                        <li key={index}>{t.name}
+                                                        <p className='text-gray-500'>{t.description}</p>
+                                                        </li>
                                                     ))}
                                                 </ul>
                                             </CardContent>
                                             </Card>
                                         )}                                   
-                                        <Card className>
-                                            <CardHeader>
-                                                <CardTitle>BENEFITS</CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <ul className="list-disc list-inside">
-                                                    {benefits.map((b,index) =>(
-                                                        <li key={index}>{b.text}</li>
-                                                    ))}
-                                                </ul>
-                                            </CardContent>
-                                        </Card>
                                         <Card>
                                             <CardHeader>
-                                                <CardTitle>RETENTION POLICY</CardTitle>
+                                                <CardTitle>Retention Policy</CardTitle>
                                             </CardHeader>
                                             <CardContent>
                                                 <ul className="list-disc list-inside">
@@ -439,7 +426,7 @@ export default function ScholarshipProfile() {
                                         </Card>
                                         <Card>
                                             <CardHeader>
-                                                <CardTitle>QUALIFICATIONS</CardTitle>
+                                                <CardTitle>Qualifications</CardTitle>
                                             </CardHeader>
                                             <CardContent>
                                                 <ul className="list-disc list-inside">
@@ -451,12 +438,14 @@ export default function ScholarshipProfile() {
                                         </Card>
                                         <Card>
                                             <CardHeader>
-                                                <CardTitle>REQUIREMENTS</CardTitle>
+                                                <CardTitle>Requirements</CardTitle>
                                             </CardHeader>
                                             <CardContent>
                                                 <ul className="list-disc list-inside">
                                                     {files.map((f,index) =>(
-                                                        <li key={index}>{f.name}</li>
+                                                        <li key={index}>{f.name}
+                                                        <p className='text-gray-500'>{f.description}</p>
+                                                        </li>
                                                     ))}
                                                 </ul>
                                             </CardContent>

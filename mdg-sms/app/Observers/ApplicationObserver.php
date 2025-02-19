@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Application;
+use App\Models\Subtype;
 
 class ApplicationObserver
 {
@@ -28,7 +29,7 @@ class ApplicationObserver
 
     private function updateScholarshipSlots(Application $application)
     {
-        $scholarship = $application->scholarship;
+        $scholarship = $application->subtype?->scholarship; // Get scholarship through subtype
         if ($scholarship) {
             $scholarship->taken_slots = $scholarship->applications()->count();
             $scholarship->is_full = $scholarship->taken_slots >= $scholarship->max_slots;
@@ -38,10 +39,9 @@ class ApplicationObserver
 
     private function handleInactiveOrTerminated(Application $application)
     {
-        if ($application->scholarship) {
-            $scholarship = $application->scholarship;
-            $application->scholarship_id = null; // Remove scholarship ID
-            $application->saveQuietly(); // Prevent infinite loop in observer
+        $scholarship = $application->subtype?->scholarship; // Access scholarship via subtype
+        if ($scholarship) {
+            $application->saveQuietly();
 
             // Recalculate taken slots
             $scholarship->taken_slots = $scholarship->applications()->whereNotIn('status', ['inactive', 'terminated'])->count();
