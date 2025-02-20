@@ -283,6 +283,7 @@ export default function EditStudentContact() {
         console.log('Dirty Fields:', dirtyFields);
 
         if (!isDirty) {
+            alert('No new details were detected...')
             navigate(-1); // Go back if no fields are dirty
             return;
         }

@@ -32,6 +32,7 @@ class StudentResource extends JsonResource
             'type' => $this -> type,
             'program' => $this->program,  
             'status' => $this->status,           // From scholarship_statuses
+            'created' => $this->created ?? null
         ];
     }
 }

@@ -158,14 +158,14 @@ class AddEmployeeController
 
                     $existingPersonAdd = Address_person::where('person_id',$person->id)
                     ->where('address_id',$mailAdd->id)
-                    ->where('type','Permanent Address')
+                    ->where('type','Mailing Address')
                     ->first();
 
                     if (!$existingPersonAdd){
                         Address_person::create([
                             'person_id' => $person->id,
                             'address_id' => $mailAdd->id,
-                            'type' => 'Permanent Address',
+                            'type' => 'Mailing Address',
                             'is_alsoMail' => $mailAddress['sameAddress'],
                             'house_num' => $mailAddress['houseBlockUnitNo']
                         ]);

@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\EditStudContactController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\AddEmployeeController;
 use App\Http\Controllers\Api\AdminToolsController;
+use App\Http\Controllers\Api\EditEmpProfileController;
+use App\Http\Controllers\Api\EditEmpContactsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -41,5 +43,7 @@ Route::apiResource('/editstudentscholarship', EditStudScholarshipController::cla
 Route::apiResource('/editstudentcontact', EditStudContactController::class)->middleware('auth:sanctum');
 Route::apiResource('/admintools', AdminToolsController::class)->middleware('auth:sanctum');
 Route::apiResource('/employees', EmployeeController::class)->middleware('auth:sanctum');
+Route::apiResource('/editemployeeprofile', EditEmpProfileController::class)->middleware('auth:sanctum');
+Route::apiResource('/editemployeecontacts', EditEmpContactsController::class)->middleware('auth:sanctum');
 Route::apiResource('/addemployee', AddEmployeeController::class)->middleware('auth:sanctum');
 Route::apiResource('/scholarships', ScholarshipsController::class)->middleware('auth:sanctum');

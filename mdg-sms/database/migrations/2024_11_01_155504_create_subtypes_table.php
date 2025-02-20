@@ -14,13 +14,13 @@ return new class extends Migration
 
         Schema::create('retentions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
             $table->timestamps();
         });
         Schema::create('qualifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
             $table->timestamps();
         });

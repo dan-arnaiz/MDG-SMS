@@ -42,22 +42,22 @@ export default function AdminDash() {
                         <Chart1 className="mx-12 h-4"/>
                     </div>
                     <div className="cards-container">
-                        <div className="active-card mb-2 border hover:border-blue-100 w-10 grid">
+                        <div className="active-card mb-2 border hover:border-blue-100 w-10 grid overflow-hidden">
                                 <h2 className="font-semibold  text-right mr-6">{scholars.activeScholars ?? 0}</h2>
                                 <p className="font-semibold  text-right mr-8">Active Scholars</p>
                         </div>
-                        <div className="inactive-card mb-2 border hover:border-blue-100">
+                        <div className="inactive-card mb-2 border hover:border-blue-100 overflow-hidden">
                             <h2 className="font-semibold  text-right mr-6">{scholars.inactiveScholars ?? 0}</h2>
                             <p className="font-semibold  text-right mr-8">Inactive Scholars</p>
                         </div>
                         
                     </div>
                     <div className="cards-container pb-2">
-                        <div className="card mb-2 border hover:border-blue-100">
+                        <div className="card mb-2 border hover:border-blue-100 overflow-hidden">
                             <h2 className="font-semibold  text-right mr-6">{scholars.scholarships ?? 0}</h2>
                             <p className="font-semibold  text-right mr-8">Scholarships</p>
                         </div>
-                        <div className="card mb-2 border hover:border-blue-100">
+                        <div className="card mb-2 border hover:border-blue-100 overflow-hidden">
                         <h2 className="font-semibold  text-right mr-6">{scholars.scholarsTotal ?? 0}</h2>
                         <p className="font-semibold  text-right mr-8">Total Scholars</p>
                         </div>

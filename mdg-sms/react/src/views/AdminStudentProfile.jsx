@@ -282,7 +282,7 @@ export default function AdminStudentProfile() {
                                     <p className='text-gray-500 text-xs'>Personal Email Address</p>
                                 </div>
                                 <div>
-                                    <ul>
+                                    <ul className='flex flex-col gap-5'>
                                         {contactNums.map((contactnum, index) => (
                                             <li key={index}>
                                                 <p className='text-black text-sm font-semibold'>{contactnum.nums}</p>

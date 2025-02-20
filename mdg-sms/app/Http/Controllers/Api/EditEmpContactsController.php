@@ -3,16 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\People;
-use App\Models\User;
-use App\Models\Student;
-use App\Models\Contact_num;
-use App\Models\Address_person;
-use App\Models\Address;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
-class EditStudContactController
+class EditEmpContactsController
 {
     /**
      * Display a listing of the resource.
@@ -35,29 +30,28 @@ class EditStudContactController
      */
     public function show(string $id)
     {
-        $student = Student::where('id',$id)->first();
-
-        if (!$student) {
-            return response()->json(['message' => 'Student not found'], 404);
-        }
-
-        $person = $student->Person;
-
-        if (!$person) {
-            return response()->json(['message' => 'Student not found'], 404);
-        }
-
-        $studentEmail = $student->User->email;
-        $personalEmail = $person->email;
-
-        $mobile = Contact_num::where('person_id', $person->id)
-        ->where('title', 'Mobile Number')
+        $emails = DB::table('employees')
+        ->join('users','employees.user_id','=','users.id')
+        ->join('people','employees.person_id','=','people.id')
+        ->select([
+            'people.id',
+            'people.email as email',
+            'users.email as employeeEmail'
+        ])
+        ->where('employees.id',$id)
         ->first();
 
-        $landline= Contact_num::where('person_id', $person->id)
-        ->where('title', 'Landline')
+        $mobile = DB::table('contact_nums')
+        ->select('nums')
+        ->where('title','Mobile Number')
+        ->where('person_id',$emails->id)
         ->first();
 
+        $landline = DB::table('contact_nums')
+        ->select('nums')
+        ->where('title','Landline')
+        ->where('person_id',$emails->id)
+        ->first();
 
         $permanentAddress = DB::table('addresses')
         ->join('address_person','address_person.address_id','=','addresses.id')
@@ -74,7 +68,7 @@ class EditStudContactController
             'addresses.zipcode as permZip',
             'address_person.is_alsoMail as addressSimilarity'
         )
-        ->where('address_person.person_id',$person->id)
+        ->where('address_person.person_id',$emails->id)
         ->where('address_person.type','Permanent Address')
         ->first();
 
@@ -96,22 +90,21 @@ class EditStudContactController
                 'barangays.name as barangayM',
                 'addresses.zipcode as mailZip',
             )
-            ->where('address_person.person_id',$person->id)
+            ->where('address_person.person_id',$emails->id)
             ->where('address_person.type','Mailing Address')
             ->first();
 
         }
 
         $response = [
-            'studentEmail' => $studentEmail,
-            'email' => $personalEmail,
+            'emails' => $emails,
             'mobileNum' => $mobile,
             'landline' => $landline,
             'permanentAddress' => $permanentAddress,
             'mailAddress' => $mailAddress
         ];
 
-        return response()->json($response);
+        return response()->json($response);   
     }
 
     /**
@@ -121,24 +114,24 @@ class EditStudContactController
     {
         DB::beginTransaction();
         try{
-            $student = Student::where('id',$id)->first();
+            $employee = Employee::where('id',$id)->first();
 
-            if (!$student) {
-                response()->json(['error' => 'student not found'],400);
+            if (!$employee) {
+                throw new Exception("Employee not found");
             }
 
-            $person = $student->Person;
+            $person = $employee->Person;
 
             if (!$person) {
-                response()->json(['error' => 'Person not found'],400);
+                response()->json(['error' => 'Personnot found'],400);
             }
 
             $person->update([
                 'email' => $request->personal['email']
             ]);
 
-            if ($student->user) {
-                $student->user->update([
+            if ($employee->user) {
+                $employee->user->update([
                     'email' => $request->personal['studentEmail']
                 ]);
             }
@@ -227,6 +220,8 @@ class EditStudContactController
             ]);
             return response()->json(['error' => $e->getMessage()], 500);
         } 
+
+
     }
 
     /**

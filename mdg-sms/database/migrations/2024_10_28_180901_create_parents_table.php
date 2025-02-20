@@ -60,7 +60,7 @@ return new class extends Migration
             $table->id();
             $table->string('student_id',10);
             $table->foreignId('guardian_id')->constrained()->onDelete('cascade');
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
             $table->string('relation', 100);
             $table->timestamps();
         });
@@ -68,7 +68,7 @@ return new class extends Migration
             $table->id();
             $table->string('student_id',10);
             $table->foreignId('sibling_id')->constrained()->onDelete('cascade');
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
 

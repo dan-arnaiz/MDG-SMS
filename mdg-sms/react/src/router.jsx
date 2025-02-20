@@ -24,6 +24,9 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import EditStudentScholarship from "./views/EditStudentDetails/EditStudentScholarship.jsx";
 import EditStudentContact from "./views/EditStudentDetails/EditStudentContact.jsx";
 import EditScholarship from "./views/Edit-Scholarship.jsx";
+import EmployeeProfile from "./views/EmployeeProfile.jsx";
+import EditEmployeeProfile from "./views/EditEmployeeDetails/EditEmployeeProfile.jsx";
+import EditEmployeeContacts from "./views/EditEmployeeDetails/EditEmployeeContacts.jsx";
 
 const router = createBrowserRouter([
     {
@@ -109,6 +112,18 @@ const router = createBrowserRouter([
                     {
                         path: '/add-employee',
                         element: <AddEmployee/>
+                    },
+                    {
+                        path: '/employee/:id',
+                        element: <EmployeeProfile/>
+                    },
+                    {
+                        path: '/edit-employee-profile/:id',
+                        element: <EditEmployeeProfile/>
+                    },
+                    {
+                        path: '/edit-employee-contacts/:id',
+                        element: <EditEmployeeContacts/>
                     },
 
                 ]

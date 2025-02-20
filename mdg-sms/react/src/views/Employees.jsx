@@ -51,15 +51,15 @@ export default function Employees() {
                 </Card>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                     {employees.map((employee, index) => (
-                        <div key={index}>
-                            <Card className='flex flex-row p-5'>
-                            <img src={defaultProfilePic} alt='profile-pic' className="w-32 h-32 object-cover border border-black"/>
-                            <div className="px-3">
-                                <h1 className="font-bold">{employee.fullName}</h1>
-                                <p>{employee.id}</p>
-                                <p>{employee.job}</p>
-                                <p>{employee.email}</p>
-                            </div>
+                        <div key={index} className="hover:-translate-y-1.5 transition-transform duration-300">
+                            <Card className='flex flex-row p-5 overflow-hidden' onDoubleClick={() => navigate(`/employee/${employee.id}`)}>                          
+                                <img src={defaultProfilePic} alt='profile-pic' className="w-32 h-32 object-cover border border-black"/>
+                                <div className="px-3">
+                                    <h1 className="font-bold text-xl">{employee.fullName}</h1>
+                                    <p>{employee.id}</p>
+                                    <p>{employee.job}</p>
+                                    <p>{employee.email}</p>
+                                </div>
                             </Card>
                         </div>
                     ))}
