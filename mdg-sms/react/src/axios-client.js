@@ -52,7 +52,7 @@ axiosClient.interceptors.response.use(
 
             // Try refreshing the token
             try {
-                const { data } = await axiosClient.post('/refresh-token');
+                const { data } = await axiosClient.post('/auth/refresh-token');
                 localStorage.setItem('ACCESS_TOKEN', data.access_token);
 
                 // Retry the original request with new token
@@ -65,5 +65,45 @@ axiosClient.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+// API Endpoints
+export const authApi = {
+    login: (credentials) => axiosClient.post('/auth/login', credentials),
+    register: (userData) => axiosClient.post('/auth/register', userData),
+    logout: () => axiosClient.post('/auth/logout'),
+    getUser: () => axiosClient.get('/auth/user'),
+};
+
+export const userApi = {
+    getAll: () => axiosClient.get('/users'),
+    get: (id) => axiosClient.get(`/users/${id}`),
+    create: (data) => axiosClient.post('/users', data),
+    update: (id, data) => axiosClient.put(`/users/${id}`, data),
+    delete: (id) => axiosClient.delete(`/users/${id}`),
+};
+
+export const studentApi = {
+    getAll: () => axiosClient.get('/students'),
+    get: (id) => axiosClient.get(`/students/${id}`),
+    create: (data) => axiosClient.post('/students', data),
+    update: (id, data) => axiosClient.put(`/students/${id}`, data),
+    delete: (id) => axiosClient.delete(`/students/${id}`),
+};
+
+export const relativeApi = {
+    getAll: () => axiosClient.get('/relatives'),
+    get: (id) => axiosClient.get(`/relatives/${id}`),
+    create: (data) => axiosClient.post('/relatives', data),
+    update: (id, data) => axiosClient.put(`/relatives/${id}`, data),
+    delete: (id) => axiosClient.delete(`/relatives/${id}`),
+};
+
+export const scholarshipApi = {
+    getAll: () => axiosClient.get('/scholarships'),
+    get: (id) => axiosClient.get(`/scholarships/${id}`),
+    create: (data) => axiosClient.post('/scholarships', data),
+    update: (id, data) => axiosClient.put(`/scholarships/${id}`, data),
+    delete: (id) => axiosClient.delete(`/scholarships/${id}`),
+};
 
 export default axiosClient;
