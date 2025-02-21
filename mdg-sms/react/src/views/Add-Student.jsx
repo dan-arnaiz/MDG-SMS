@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Form, FormItem } from '@/components/ui/form';
 import { useForm, Controller } from 'react-hook-form'; // Import useForm
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod'; // Import zodResolver
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -91,7 +91,8 @@ const noMailingSchema = z.object({
     motherLandline: z.string().min(7,'Invalid phone number').max(8,'Invalid phone number').optional().or(z.literal('')),
     motherOccupation: z.string().min(2).optional().or(z.literal('')),
     motherOfficeNo: z.string().length(11, 'Invalid phone number').optional().or(z.literal('')),
-    scholarship: z.number().min(1),
+    scholarship: z.string().min(1),
+    subtype: z.string().min(1),
     program: z.number().min(1),
     year: z.number().min(1),
     academicYear: z.number().min(1),
@@ -123,6 +124,7 @@ const formSchema = z.discriminatedUnion('addressSimilarity', [
 export default function AddStudent() {
 
     const [siblings, setSiblings] = useState([]);
+    const { id } = useParams();
     const [siblingInput, setSiblingInput] = useState({
         firstName: '',
         middleName: '',
@@ -139,6 +141,7 @@ export default function AddStudent() {
     const [barangays2, setBarangays2] = useState([]);
     const [addressSimilarity, setAddressSimilarity] = useState(false);
     const [files, setFiles] = useState([]);
+    const [subtypes, setSubtypes] = useState([]);
     const [open, setOpen] = useState(false);
     const [programs, setPrograms] = useState([]);
     const [years, setYears] = useState([]);
@@ -150,26 +153,13 @@ export default function AddStudent() {
     useEffect(() => {
             loadFirstResources();
             setAddressSimilarity(false);
-        }, []);
+    }, []);
 
-    const calculateAge = (dob) => {
-      
-        const birthDate = new Date(dob);
-        const today = new Date();
-      
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDifference = today.getMonth() - birthDate.getMonth();
-      
-        // Adjust age if the birthday hasn't occurred yet this year
-        if (
-          monthDifference < 0 || 
-          (monthDifference === 0 && today.getDate() < birthDate.getDate())
-        ) {
-          age--;
+    useEffect(() => {
+        if (id && scholarships.length > 0) {
+            loadScholarship(id);
         }
-      
-        return age;
-    };
+    }, [scholarships]);
 
     const loadFirstResources = () => {
         axiosClient.get('/addstudent')
@@ -183,7 +173,12 @@ export default function AddStudent() {
         console.log(response.data);
       })
       .catch((error) => console.error("Error fetching data:", error));
-    }   
+    }  
+    
+    const loadScholarship = (id) => {
+        const scholarship = scholarships.find((s) => String(s.id) === String(id))?.name;
+        handleScholarshipChange(scholarship);
+    }
 
     const addSibling = () => {
         const { firstName, middleName, lastName, suffix, dob, educationalAttainment } =
@@ -234,7 +229,7 @@ export default function AddStudent() {
       setOpen(false);
     };
 
-    const { register, handleSubmit, setValue, watch, control, setError, formState: { errors, isSubmitting }, trigger } = useForm({
+    const { register, handleSubmit, setValue, getValues, setError, formState: { errors, isSubmitting }, trigger } = useForm({
             resolver: zodResolver(formSchema),
             defaultValues: {
                 addressSimilarity: false,
@@ -337,14 +332,15 @@ export default function AddStudent() {
     const handleScholarshipChange = (scholarshipName) => {
         const scholarshipId = scholarships.find((s) => s.name === scholarshipName)?.id;
 
-        setValue('scholarship', scholarshipId);
+        setValue('scholarship', scholarshipName);
         trigger('scholarship');
 
         if (scholarshipId) {
             axiosClient.get(`/reqfiles/${scholarshipId}`)
                 .then(({data}) => {
-                    setFiles(data.data);
                     console.log(data);
+                    setFiles(data.files);
+                    setSubtypes(data.types);                 
                 })
                 .catch(error => console.error('Error fetching cities:', error));
         } else {
@@ -381,16 +377,43 @@ export default function AddStudent() {
         trigger('semester');
     }
 
+    const handleSubtypeChange = (subtypeName) => {
+
+        setValue('subtype',subtypeName);
+        trigger('subtype');
+    }
+
+    const calculateAge = (dob) => {
+        const birthDate = new Date(dob);
+        const today = new Date();
+    
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+    
+        // Adjust age if birthday hasn't occurred yet this year
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age--;
+        }
+    
+        return age;
+    };
+
+    const navigate = useNavigate();
+
 
     const onSubmit = async (data) => {
 
         let userId = user?.id
 
+
+        const subtypeId = subtypes.find((s) => s.name === data?.subtype)?.id;
+
         let scholarshipData = {
             prevSchool: data?.prevSchool?.trim(),
             prevSchoolLandline: data?.prevSchoolLandline ? data.prevSchoolLandline.trim() : null,
             prevSchoolEmail: data?.prevSchoolEmail?.toLowerCase().trim(),
-            scholarship: data?.scholarship,
+            subtype: subtypeId
         };
 
         let organization = {
@@ -537,7 +560,7 @@ export default function AddStudent() {
                                 </FormItem>
                             </div>                           
                             <FormItem>                     
-                                <Select disabled={isSubmitting} onValueChange={(value) => handleScholarshipChange(value)}>
+                                <Select value={getValues('scholarship')} disabled={isSubmitting} onValueChange={(value) => handleScholarshipChange(value)}>
                                     <SelectTrigger className={`w-[100%] mb-3 ${errors.scholarship ? 'border-red-500' : ''}`}>
                                         <SelectValue placeholder="Select a Scholarship"/>
                                     </SelectTrigger>
@@ -556,7 +579,19 @@ export default function AddStudent() {
                                         ))}
                                     </SelectContent>                           
                                 </Select>                                
-                            </FormItem>                       
+                            </FormItem> 
+                            <FormItem>                     
+                                <Select value={getValues('subtype')} disabled={isSubmitting} onValueChange={(value) => handleSubtypeChange(value)}>
+                                    <SelectTrigger className={`w-[100%] mb-3 ${errors.subtype ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Select a Scholarship Type"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {subtypes.map((type, index) => (
+                                            <SelectItem key={index} value={type.name}>{type.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>                           
+                                </Select>                                
+                            </FormItem>                      
                         </CardContent>
                     </Card>
                     <Card>

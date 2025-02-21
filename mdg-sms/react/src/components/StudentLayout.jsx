@@ -3,33 +3,48 @@ import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client.js";
 import { Home, Users, FileChartPie, Mailbox, HandCoins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {useEffect} from 'react';
 
 
 
 export default function StudentLayout() {
 
-    const {token} = useStateContext();
-    if (token) {
-        return <Navigate to="/" />
+    const {user,token} = useStateContext();
+
+    console.log("🔹 StudentLayout Rendered");
+    console.log("🔹 Token:", token);
+    console.log("🔹 User:", user);
+    
+    if (!token) {
+        return <Navigate to="/login" />
+    }
+
+    const onLogout = async (ev) => {
+        ev.preventDefault();
+
+        try {
+            await axiosClient.post('/logout'); // Ensure logout request completes
+    
+            setToken(null);
+            setUser(null);
+            localStorage.removeItem("ACCESS_TOKEN");
+            localStorage.removeItem("USER");
+    
+            window.location.href = "/login"; // Redirect to login
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     }
 
     return (
-        <div className="grid h-screen bg-slate-300">
-            <div className="bg-white h-14 mt-5 mx-5 rounded-xl">
-                <div className="flex ">
-                   
-                        <p className="flex-auto ml-5 mt-3">Profile</p>
-                        <p >Settings</p>
-                        
-                   
-                   
-
-                </div>
-
-            </div>
-
+        <div>
+            <h1>Welcome, {user.name}!</h1>
             <main>
-                <Outlet/>
+                <p>This section is still under construction :)</p>
+                <p>Log out mate!</p>
+                <Button onClick={onLogout}>Logout</Button>
+
+                <Outlet></Outlet>
             </main>
         </div>      
     )

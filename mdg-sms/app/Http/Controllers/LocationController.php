@@ -29,7 +29,17 @@ class LocationController
                     )
                     ->where('file_reqs.scholarship_id', $scholarshipId)
                     ->get();
+        
+        $subtypes = DB::table('subtypes')
+        ->select('id','name','description')
+        ->where('scholarship_id',$scholarshipId)
+        ->get();
 
-        return addStudentFileResource::collection($files);
+        $response = [
+            'files' => addStudentFileResource::collection($files),
+            'types' => $subtypes
+        ];
+
+        return response()->json($response);
     }
 }

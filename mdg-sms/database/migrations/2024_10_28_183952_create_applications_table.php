@@ -42,8 +42,16 @@ return new class extends Migration
 
         Schema::create('file_reqs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('subtypes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->string('name',150);
+            $table->text('description');
             $table->timestamps();
         });
    
@@ -51,9 +59,9 @@ return new class extends Migration
             $table->string('id',10)->primary();
             $table->string('student_id',10);
             $table->string('employee_id',10)->nullable();
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('employee_id')->references('id')->on('employees')->nullOnDelete();
-            $table->foreignId('scholarship_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->onUpdate('cascade')->nullOnDelete();
+            $table->foreignId('subtype_id')->nullable()->constrained()->restrictOnDelete();
             $table->foreignId('semester_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('academic_year_id')->nullable()->constrained()->nullOnDelete();
             $table->datetime('date_filed');
@@ -86,5 +94,6 @@ return new class extends Migration
         Schema::dropIfExists('semesters');
         Schema::dropIfExists('terms');
         Schema::dropIfExists('files_submitted');
+        Schema::dropIfExists('subtypes');
     }
 };

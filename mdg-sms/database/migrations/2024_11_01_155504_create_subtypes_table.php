@@ -11,29 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subtypes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->string('name',150);
-            $table->text('description');
-            $table->timestamps();
-        });
 
-        Schema::create('benefits', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->text('description');
-            $table->timestamps();
-        });
         Schema::create('retentions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
             $table->timestamps();
         });
         Schema::create('qualifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
             $table->timestamps();
         });
@@ -44,8 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subtypes');
-        Schema::dropIfExists('benefits');
         Schema::dropIfExists('retentions');
         Schema::dropIfExists('qualifications');
         Schema::dropIfExists('files_submitted');

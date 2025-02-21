@@ -24,7 +24,6 @@ export default function Login() {
             .then(({ data }) => {
                 setUser(data.user);
                 setToken(data.token);
-                navigate('/dashboard'); // Navigate to /dashboard on successful login
             })
             .catch(err => {
                 const response = err.response;

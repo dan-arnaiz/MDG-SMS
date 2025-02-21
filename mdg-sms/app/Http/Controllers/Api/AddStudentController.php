@@ -30,7 +30,7 @@ use App\Http\Resources\ProvinceResource;
 use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Support\Facades\Log;
 
-class AddStudentController
+class AddStudentController extends controller
 {
     /**
      * Display a listing of the resource.
@@ -181,8 +181,7 @@ class AddStudentController
 
             $scholarship = $data->input('scholarshipData') ?? [];
 
-            $existingPrevSchool = Prev_school::where('landline', $scholarship['prevSchoolLandline'])
-                 ->where('name', $scholarship['prevSchool'])
+            $existingPrevSchool = Prev_school::where('name', $scholarship['prevSchool'])
                  ->where('email', $scholarship['prevSchoolEmail'])
                  ->first();
  
@@ -205,7 +204,7 @@ class AddStudentController
                  'email' => $organization['studentEmail'],
                  'password' => bcrypt($organization['studentNo']),
                  'scholarship_status_id' => 1,
-                 'role_id' => null
+                 'role_id' => 3 //3 = Student Role
              ]);
 
             DB::afterCommit(function () use ($scholarship, $employee,$data,$organization,$studentPerson, $permAddress, $permanentAddress, $mailAddress, $mailingAddress, $studentUser, $prevSchool, $personal) {
@@ -262,8 +261,8 @@ class AddStudentController
                     $father = $data->input('father');
                     $mother = $data->input('mother');
 
-                    $this->createGuardian($father, $organization);
-                    $this->createGuardian($mother, $organization);
+                    $this->createGuardian($father, $organization,'father');
+                    $this->createGuardian($mother, $organization,'mother');
 
     
                     //create siblings
@@ -353,7 +352,7 @@ class AddStudentController
                         'id' => $newId,
                         'student_id' => $organization['studentNo'],
                         'employee_id' => $employee->id,
-                        'scholarship_id' => $scholarship['scholarship'],
+                        'subtype_id' => $scholarship['subtype'],
                         'semester_id' => $organization['semester'],
                         'academic_year_id' => $organization['academicYear'],
                         'date_filed' => now(),
@@ -386,15 +385,19 @@ class AddStudentController
 
             DB::rollBack();
 
-            Log::error('Exception caught: ' . $e->getMessage(), [
-                'exception' => $e
+            Log::error('Detailed Error:', [
+                'message' => $e->getMessage(), // Error message
+                'file' => $e->getFile(),       // File where the error happened
+                'line' => $e->getLine(),       // Line number of error
+                'code' => $e->getCode(),       // Error code
+                'trace' => $e->getTraceAsString() // Full stack trace
             ]);
 
             return response()->json(['error' => 'Something went wrong'], 500);
         }
     }
 
-    private function createGuardian($guardian, $organization){
+    private function createGuardian($guardian, $organization, $relation){
 
         if ($guardian == null) return;
 
@@ -411,7 +414,8 @@ class AddStudentController
 
                 Guardian_relation::Create([
                     'student_id' => $organization['studentNo'],
-                    'guardian_id' => $existGuardian->id
+                    'guardian_id' => $existGuardian->id,
+                    'relation' => $relation
                 ]);
 
             } else{
@@ -422,10 +426,11 @@ class AddStudentController
                     'office_num' => $guardian['officeNo']
                 ]);
 
-                DB::afterCommit(function () use ($newGuardian, $organization){
+                DB::afterCommit(function () use ($newGuardian, $organization,$relation){
                     Guardian_relation::Create([
                         'student_id' => $organization['studentNo'],
-                        'guardian_id' => $newGuardian->id
+                        'guardian_id' => $newGuardian->id,
+                        'relation' => $relation
                     ]);
                 });                   
             }
@@ -439,17 +444,18 @@ class AddStudentController
                 'email' => $guardian['email'],
             ]);
 
-            DB::afterCommit(function () use ($newPerson, $organization, $guardian){
+            DB::afterCommit(function () use ($newPerson, $organization, $guardian,$relation){
                 $newGuardian = Guardian::Create([
                     'person_id' => $newPerson->id,
                     'occupation' => $guardian['occupation'],
                     'office_num' => $guardian['officeNo']
                 ]);
 
-                DB::afterCommit(function () use ($newGuardian, $organization){
+                DB::afterCommit(function () use ($newGuardian, $organization,$relation){
                     Guardian_relation::Create([
                         'student_id' => $organization['studentNo'],
-                        'guardian_id' => $newGuardian->id
+                        'guardian_id' => $newGuardian->id,
+                        'relation' => $relation
                     ]);
                 });            
             });            
@@ -459,9 +465,9 @@ class AddStudentController
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -475,8 +481,22 @@ class AddStudentController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy(string $id)
     {
-        //
+        try{
+            
+            $student = Student::find($id);
+
+            if (!$student) {
+                return response()->json(['error' => 'Student not found'], 404);
+            }
+
+            $student->delete();
+
+            return response()->json(['message' => 'Student deleted successfully'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 }

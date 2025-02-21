@@ -16,24 +16,20 @@ class ScholarshipProfileResource extends JsonResource
     {
         return [
             'profile' => [
-                'name' => $this->resource['profile']->name ?? null,
+                'name' => $this->resource['profile']->name ?? "",
                 'available_slots' => $this->getAvailableSlots(),
+                'description' => $this->resource['profile']->description ?? "",
                 'max_slots' => $this->resource['profile']->max_slots ?? null,
                 'taken_slots' => $this->resource['profile']->taken_slots ?? null,
                 'is_full' => $this->resource['profile']->is_full ?? null,
             ],
-            'types' => ($this->resource['types'] ?? collect())->map(function ($type) {
+            'types' => ($this->resource['types'] ?? collect())->values()->map(function ($type, $index) {
                 return [
-                    'id' => $type->id,
-                    'text' => $type->name,
+                    'id' => $index + 1, // Using the index as ID
+                    'name' => $type->name,
+                    'description' => $type->description
                 ];
-            })->toArray(),
-            'benefits' => ($this->resource['benefits'] ?? collect())->map(function ($benefit) {
-                return [
-                    'id' => $benefit->id,
-                    'text' => $benefit->description,
-                ];
-            })->toArray(), // Convert collection to array
+            })->toArray(), 
             'retentions' => ($this->resource['retentions'] ?? collect())->map(function ($retention) {
                 return [
                     'id' => $retention->id,

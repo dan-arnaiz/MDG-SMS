@@ -3,7 +3,6 @@ import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 import axiosClient from "../axios-client.js";
 import {Link, useNavigate} from "react-router-dom"
-import { DataTable } from "./Tables/Students-Data-Table.jsx";
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -180,6 +179,21 @@ export default function Students() {
 
         },
         {
+          accessorKey: 'type',
+          header: ({ column }) => {
+              return (
+                <Button
+                  variant="ghost"
+                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                  Type
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+              )
+            },
+
+        },
+        {
             accessorKey: 'program',
             header: ({ column }) => {
                 return (
@@ -318,7 +332,7 @@ export default function Students() {
                       <Button className="border hover:border-blue-900">Import</Button>
                       <Button className="border hover:border-blue-900">Export</Button>   
                       <Button
-                      className='bg-[#0F2554] text-white border hover:border-blue-600 hover:bg-blue-800'
+                      variant='secondary'
                       onClick={() => navigate('/add-student')}
                       >
                         Add Student
@@ -326,7 +340,7 @@ export default function Students() {
                       <Dialog>
                         {table.getFilteredSelectedRowModel().rows.length > 0 && (
                         <DialogTrigger asChild>                        
-                          <Button className='bg-[rgb(236,58,58)] text-white' onClick={getSelectedRows}>Delete Student(s)</Button> 
+                          <Button variant='destructive' onClick={getSelectedRows}>Delete Student(s)</Button> 
                         </DialogTrigger>
                         )}
                         <DialogContent>
@@ -363,9 +377,9 @@ export default function Students() {
                     </div>
                   </div>
                 </Card>
-                <Card className='flex flex-col gap-3 p-5 h-[100%]'>
+                <Card className='flex flex-col gap-3 p-5 h-screen'>
                   <div className="rounded-md border h-[100%]">
-                      <Table> 
+                      <Table className="h=[100%]"> 
                           <TableHeader>                       
                               {table.getHeaderGroups().map((headerGroup) => (
                               <TableRow key={headerGroup.id}>

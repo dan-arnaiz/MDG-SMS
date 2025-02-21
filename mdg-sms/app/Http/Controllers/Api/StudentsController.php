@@ -35,7 +35,8 @@ class StudentsController extends Controller
                         ->join('programs','students.program_id','=','programs.id')
                         ->join('users','students.user_id','=','users.id')
                         ->join('scholarship_statuses','users.scholarship_status_id','=','scholarship_statuses.id')
-                        ->join('scholarships','applications.scholarship_id','=','scholarships.id')
+                        ->join('subtypes','applications.subtype_id','=','subtypes.id')
+                        ->join('scholarships','subtypes.scholarship_id','=','scholarships.id')
                         ->select(                         
                             'people.first_name',
                             'people.last_name',
@@ -43,12 +44,14 @@ class StudentsController extends Controller
                             'people.suffix',
                             'students.id as student_id',
                             'scholarships.name as scholarship',
+                            'subtypes.name as type',
                             'users.email',
                             'programs.name as program',
                             'scholarship_statuses.name as status'
                         )
                         ->where('applications.is_current','=','1')
                         ->get();
+                        
             return StudentResource::collection($students);     
         } catch (\Exception $e) {
             return response()->json(['error' => 'Something went wrong'], 500);
@@ -143,7 +146,8 @@ class StudentsController extends Controller
                         ->join('addresses','address_person.address_id','=','addresses.id')
                         ->join('programs','students.program_id','=','programs.id')
                         ->join('applications','applications.student_id','=','students.id')
-                        ->join('scholarships','applications.scholarship_id','=','scholarships.id')                                              
+                        ->join('subtypes','applications.subtype_id','=','subtypes.id')    
+                        ->join('scholarships','subtypes.scholarship_id','scholarships.id')                                          
                         ->join('years','students.year_id','=','years.id')
                         ->select(
                             'students.id',
@@ -159,7 +163,9 @@ class StudentsController extends Controller
                             'people.email as personalEmail', 
                             'applications.id as applicationId', 
                             'scholarship_statuses.name as status',
+                            'scholarships.id as scholarshipId',
                             'scholarships.name as scholarship',
+                            'subtypes.name as type',
                             'years.name as year'         
                         )
                         ->where('students.id','=',$id)
@@ -169,7 +175,7 @@ class StudentsController extends Controller
             }
 
             $files = File_submitted::where('application_id',$profile->applicationId)
-                    ->select(['name','is_submitted'])
+                    ->select(['id','name','is_submitted'])
                     ->get();
             
             $contactNums = Contact_num::where('person_id',$profile->personId)
@@ -199,6 +205,7 @@ class StudentsController extends Controller
             ];
 
             return response()->json($response);
+            
         } catch (\Exception $e){
             return response()->json(['error' => $e], 500);
         }
@@ -209,7 +216,67 @@ class StudentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if ($request == "reset"){
+            DB::beginTransaction();
+            try{
+
+                $student = Student::where('id',$id)->first();
+
+                if(!$student) return response()->json(['message' => 'Student not found'], 404);
+
+                $student->User->update(['password' => bcrypt($student->id)]);
+
+                DB::commit();
+
+            } catch (\Exception $e) {
+
+                DB::rollBack();
+    
+                Log::error('Detailed Error:', [
+                    'message' => $e->getMessage(), // Error message
+                    'file' => $e->getFile(),       // File where the error happened
+                    'line' => $e->getLine(),       // Line number of error
+                    'code' => $e->getCode(),       // Error code
+                    'trace' => $e->getTraceAsString() // Full stack trace
+                ]);
+                return response()->json(['error' => $e->getMessage()], 500);
+            } 
+        } else{
+            DB::beginTransaction();
+            try{
+                $application = Application::where('student_id',$id)->first();
+
+                if (!$application) {
+                    return response()->json(['error' => 'Application not found'], 404);
+                }           
+
+                $files = $request->input('files');
+
+                foreach ($files as $file) {
+                    if (!isset($file['id']) || !isset($file['is_submitted'])) {
+                        throw new \Exception("Missing required fields 'id' or 'is_submitted'");
+                    }
+            
+                    File_submitted::where('id', $file['id'])
+                        ->update(['is_submitted' => $file['is_submitted']]);
+                }
+
+                DB::commit();
+
+            } catch (\Exception $e) {
+
+                DB::rollBack();
+    
+                Log::error('Detailed Error:', [
+                    'message' => $e->getMessage(), // Error message
+                    'file' => $e->getFile(),       // File where the error happened
+                    'line' => $e->getLine(),       // Line number of error
+                    'code' => $e->getCode(),       // Error code
+                    'trace' => $e->getTraceAsString() // Full stack trace
+                ]);
+                return response()->json(['error' => $e->getMessage()], 500);
+            } 
+        }
     }
 
     /**
@@ -235,6 +302,7 @@ class StudentsController extends Controller
                 }
 
                 Person::where('id', $student->person_id)->delete();
+                User::where('id',$student->user_id)->delete();
             }
 
             DB::commit();

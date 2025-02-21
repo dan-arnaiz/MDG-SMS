@@ -341,7 +341,6 @@ header {
 
 .navbar {
     position: fixed; /* Fix the sidebar in place */
-    height: 100vh; /* Set the sidebar height to 100% of the viewport height */
     background: #0F2554;
     width: 20%;
     text-align: center;
@@ -511,7 +510,7 @@ header {
     border-radius: 15px;
     box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
     display: flex;
-    justify-content: space-between;
+    justify-content: between;
     align-items: center;
 }
 

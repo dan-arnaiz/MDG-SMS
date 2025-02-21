@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('scholarship_statuses', function (Blueprint $table) {
             $table->id();
-            $table->char('name',8);
+            $table->char('name',12);
             $table->text('description');
             $table->timestamps();
         });

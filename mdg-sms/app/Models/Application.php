@@ -13,7 +13,7 @@ class Application extends Model
     public $incrementing = false; 
     protected $keyType = 'string';
 
-    protected $fillable = ['id','student_id', 'employee_id', 'scholarship_id', 'semester_id', 'academic_year_id', 'date_filed', 'date_terminated', 'is_current'];
+    protected $fillable = ['id','student_id', 'employee_id', 'subtype_id', 'semester_id', 'academic_year_id', 'date_filed', 'date_terminated', 'is_current'];
 
     public function student()
     {
@@ -25,9 +25,9 @@ class Application extends Model
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 
-    public function scholarship()
+    public function subtype()
     {
-        return $this->belongsTo(Scholarship::class, 'scholarship_id');
+        return $this->belongsTo(Subtype::class, 'subtype_id');
     }
 
     public function academic_year()

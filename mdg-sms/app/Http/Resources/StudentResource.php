@@ -29,8 +29,10 @@ class StudentResource extends JsonResource
             'full_name' => $fullName,           // From people   
             'email' => $this->email,             // From users
             'scholarship' => $this->scholarship, // From scholarships
+            'type' => $this -> type,
             'program' => $this->program,  
             'status' => $this->status,           // From scholarship_statuses
+            'created' => $this->created ?? null
         ];
     }
 }
