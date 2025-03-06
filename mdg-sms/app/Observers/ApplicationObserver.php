@@ -31,8 +31,15 @@ class ApplicationObserver
     {
         $scholarship = $application->subtype?->scholarship; // Get scholarship through subtype
         if ($scholarship) {
-            $scholarship->taken_slots = $scholarship->applications()->count();
+            // Get all subtype IDs under this scholarship
+            $subtypeIds = $scholarship->subtypes()->pluck('id');
+
+            // Count all applications linked to these subtypes
+            $scholarship->taken_slots = \App\Models\Application::whereIn('subtype_id', $subtypeIds)->count();
+
+            // Check if full
             $scholarship->is_full = $scholarship->taken_slots >= $scholarship->max_slots;
+
             $scholarship->save();
         }
     }
@@ -43,9 +50,17 @@ class ApplicationObserver
         if ($scholarship) {
             $application->saveQuietly();
 
-            // Recalculate taken slots
-            $scholarship->taken_slots = $scholarship->applications()->whereNotIn('status', ['inactive', 'terminated'])->count();
+            // Get all subtypes under this scholarship
+            $subtypeIds = $scholarship->subtypes()->pluck('id'); 
+
+            // Count applications related to these subtypes, excluding inactive/terminated ones
+            $scholarship->taken_slots = \App\Models\Application::whereIn('subtype_id', $subtypeIds)
+                ->whereNotIn('status', ['inactive', 'terminated'])
+                ->count();
+
+            // Check if full
             $scholarship->is_full = $scholarship->taken_slots >= $scholarship->max_slots;
+
             $scholarship->save();
         }
     }

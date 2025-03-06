@@ -97,11 +97,11 @@ class AddStudentController extends controller
 
             $data = $request;
 
-            $employeeUserId = $data->userId;
-
             $personal = $data->input('personal');
 
-            $employee= Employee::where('user_id', $employeeUserId)->first();
+            $employee= Employee::where('user_id', $data->userId)->first();
+
+            Log::info($employee);
 
             if (!$employee) return response()->json(['error' => 'Invalid Access'], 400);
 
